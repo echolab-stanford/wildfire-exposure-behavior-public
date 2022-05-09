@@ -1,0 +1,31 @@
+\begin{table}[!htbp] \centering 
+  \caption{Models of infiltration} 
+  \label{sumstats} 
+\begin{tabular}{@{\extracolsep{5pt}} rc|c|c} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+&Model description && Equation \\ 
+\hline \\[-1.8ex]
+1&Distributed Lag &Regression:& $PM^{in}_{ihdt} = \sum_{k = 0}^{12} \alpha_k PM^{out}_{i,h-k,dt} +  \gamma_i + \delta_h +  \eta_d  + \theta_t  + \varepsilon_{ihdt}$\\
+&&&\\
+&&Infiltration&\\
+&&measure:& $\sum_{k=0}^{12} \alpha_k$\\
+&&&\\&&&\\
+2&Lagged Dependent &Regression:& $PM^{in}_{ihdt} = \alpha PM^{out}_{ihdt} + \beta PM^{in}_{i,h-1,dt} + \gamma_i + \delta_h +  \eta_d  + \theta_t  + \varepsilon_{ihdt}$\\
+&Variable&&\\
+&&Infiltration&\\
+&&measure:&$\alpha \cdot \left( \sum_{k=0}^{\infty} \beta^k \right)$\\
+&&&\\&&&\\
+3&No Lags&Regression:&$PM^{in}_{ihdt} = \alpha PM^{out}_{ihdt} + \gamma_i + \delta_h +  \eta_d  + \theta_t  + \varepsilon_{ihdt}$\\
+&&&\\&&Infiltration&\\
+&&measure:&$\alpha$\\
+&&&\\&&&\\
+4&All Lags&Regression:&$PM^{in}_{ihdt} =  \sum_{k = 0}^{12} \alpha_k PM^{out}_{i,h-k,dt} +\beta PM^{in}_{i,h-1,dt} + \gamma_i + \delta_h +  \eta_d  + \theta_t  + \varepsilon_{ihdt}$\\
+&&&\\&&Infiltration&\\
+&&measure:&$ \left(\sum_{k=0}^{12} \alpha_k \right) \cdot \left( \sum_{k=0}^{\infty} \beta^k \right)$\\
+&&&\\
+&&&\\\hline
+\hline \\[-1.8ex] 
+\end{tabular} 
+
+\end{table} 
