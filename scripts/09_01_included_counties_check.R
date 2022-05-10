@@ -1,13 +1,17 @@
 counties = readRDS(file.path(path_dropbox, "all_national_counties.RDS"))
 counties = counties[!counties$STATEFP %in% c("02", 15, 57:78), ]
 
-epa_ll = readOGR(file.path(path_dropbox, "epa_station_locations"), "epa_station_locations")
+epa = readRDS(file.path(path_dropbox, "epa_station_level_pm25_data.rds"))
+epa = epa %>% filter(year %in% 2016:2020)
+epa_ll =  epa[!duplicated(epa$id), c("lon", "lat", "id")]
+epa_ll = SpatialPointsDataFrame(epa_ll[, c("lon", "lat")], data=epa_ll)
+crs(epa_ll) = "+proj=longlat +datum=WGS84"
 epa_ll = spTransform(epa_ll, crs(counties))
 
 o = over(epa_ll, counties)
 counties_inc = unique(o$GEOID)
 
-pdf(file.path(path_github, "figures/included_counties.pdf"), 
+pdf(file.path(path_github, "figures/figureED01a.pdf"), 
      width=8, height=5)
 plot(counties)
 plot(add=T, counties[counties$GEOID %in% counties_inc, ], col="red")
