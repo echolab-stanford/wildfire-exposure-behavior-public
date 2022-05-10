@@ -14,12 +14,13 @@ time = time %>%
            age=AGE, sex=SEX, race=RACE, hispanic=HISPAN, citizen=CITIZEN,
            weekly_wage=EARNWEEK, hhld_income=FAMINCOME, weight=WT06)
 
-#split out household level records
+# Split out household level records
 home = time %>%
     dplyr::filter(RECTYPE == 1) %>% 
     dplyr::select(id, year, state, county, hhld_income) %>%
     mutate(hhld_income=as_label(hhld_income))
-#split out individual level records
+
+# Split out individual level records
 ppl = time %>%
     dplyr::filter(RECTYPE == 2) %>%
     select(id, year, age, sex, race, hispanic, citizen, month, dow, weight) %>%
@@ -29,13 +30,13 @@ ppl = time %>%
            season=ifelse(month %in% c(3, 4, 5), "spring", season), 
            season=ifelse(month %in% c(6, 7, 8), "summer", season), 
            season=ifelse(month %in% c(9, 10, 11), "fall", season))
-ppl = merge(ppl, home, by=c("id", "year"), all=T) #combine hhld and person
+ppl = merge(ppl, home, by=c("id", "year"), all=T) # Combine hhld and person
 
-#split out actual time observations
+# Split out actual time observations
 time = time %>%
     dplyr::filter(RECTYPE == 3) %>%
     rename(activity=ACTIVITY, where=WHERE, minutes=DURATION) %>%
-    dplyr::select(id, year, activity, where, minutes) 
+    dplyr::select(id, year, activity, where, minutes)
 
 #-------------------------------------------------------------------------------
 #### Figure out what % of time individuals spend outside ####
@@ -82,7 +83,6 @@ person_time = time %>%
 person_time[is.na(person_time)] = 0
 person_time = merge(person_time, ppl, by=c("id", "year"))
 
-
 #-------------------------------------------------------------------------------
 #### Plot state level estimates ####
 state_time = person_time %>%
@@ -90,8 +90,8 @@ state_time = person_time %>%
     summarise(inside=wtd.mean(inside, weight, normwt=T, na.rm=T), 
               outside=wtd.mean(outside, weights=weight, normwt=T, na.rm=T), 
               travel=wtd.mean(travel, weights=weight, normwt=T, na.rm=T), 
-              perc_out=mean(perc_out, na.rm=T), 
-              perc_home=mean(perc_home, na.rm=T)) %>%
+              perc_out=mean(perc_out, na.rm=T)*100, 
+              perc_home=mean(perc_home, na.rm=T)*100) %>%
     mutate(state=str_pad(state, 2, "left", "0"))
 
 states = readOGR(file.path(path_dropbox, "tl_2019_us_state"), "tl_2019_us_state")
@@ -119,27 +119,11 @@ ggplot(states_geo, aes(long,lat,group=group, fill=perc_home)) + # the data
           axis.title=element_blank(),
           panel.background = element_blank()) + 
     coord_map("bonne", mean(states_geo$lat)) + labs(fill="")
-ggsave(file.path(path_github, "figures/perc_time_home_map.jpg"), width=8, height=5)
-
+ggsave(file.path(path_github, "figures/figureED02e.jpg"), width=8, height=5)
 
 #-------------------------------------------------------------------------------
 #### Plot temporal variation ####
-age_time = person_time %>%
-    mutate(age=ifelse(age<=24, "<=24", age), age=ifelse(age>24&age<65, "25-64", age), 
-           age=ifelse(age>=65, "65+", age)) %>%
-    group_by(year, age) %>%
-    summarise(inside=wtd.mean(inside, weight, normwt=T, na.rm=T), 
-              outside=wtd.mean(outside, weights=weight, normwt=T, na.rm=T), 
-              travel=wtd.mean(travel, weights=weight, normwt=T, na.rm=T), 
-              perc_out=mean(perc_out, na.rm=T), 
-              perc_home=mean(perc_home, na.rm=T)) 
-ggplot(age_time) + 
-    geom_line(aes(x=year, y=perc_home, group=age, color=age), size=1.5) + 
-    ylim(0.63, 0.835) + theme_anne(size=25) + 
-    xlab("Year") + ylab("% of time spent at home") 
-ggsave(file.path(path_github, "figures/Figure1b_perc_time_home_age.jpg"), width=6.5, height=5)
-
-
+# Income
 inc_time = person_time %>%
     mutate(income=ifelse(hhld_income %in% 
                              c("Less than $5,000", "$5,000 to $7,499", "$7,500 to $9,999", 
@@ -161,16 +145,48 @@ inc_time = person_time %>%
     summarise(inside=wtd.mean(inside, weight, normwt=T, na.rm=T), 
               outside=wtd.mean(outside, weights=weight, normwt=T, na.rm=T), 
               travel=wtd.mean(travel, weights=weight, normwt=T, na.rm=T), 
-              perc_out=wtd.mean(perc_out, weight, normwt=T, na.rm=T), 
-              perc_home=wtd.mean(perc_home, weight, normwt=T, na.rm=T)) %>%
+              perc_out=wtd.mean(perc_out, weight, normwt=T, na.rm=T)*100, 
+              perc_home=wtd.mean(perc_home, weight, normwt=T, na.rm=T)*100) %>%
     filter(!is.na(income))
 
 ggplot(inc_time) + 
     geom_line(aes(x=year, y=perc_home, group=income, color=income), size=1.5) + 
-    ylim(0.63, 0.835) + theme_anne(size=25) + 
+    ylim(63, 83.5) + theme_anne(size=25) + 
     xlab("Year") + ylab("% of time spent at home") 
-ggsave(file.path(path_github, "figures/Figure1a_perc_time_home_income.jpg"), width=6.5, height=5)
+ggsave(file.path(path_github, "figures/figureED02a.jpg"), width=6.5, height=5)
 
+# Age
+age_time = person_time %>%
+    mutate(age=ifelse(age<=24, "<=24", age), age=ifelse(age>24&age<65, "25-64", age), 
+           age=ifelse(age>=65, "65+", age)) %>%
+    group_by(year, age) %>%
+    summarise(inside=wtd.mean(inside, weight, normwt=T, na.rm=T), 
+              outside=wtd.mean(outside, weights=weight, normwt=T, na.rm=T), 
+              travel=wtd.mean(travel, weights=weight, normwt=T, na.rm=T), 
+              perc_out=mean(perc_out, na.rm=T)*100, 
+              perc_home=mean(perc_home, na.rm=T)*100) 
+ggplot(age_time) + 
+    geom_line(aes(x=year, y=perc_home, group=age, color=age), size=1.5) + 
+    ylim(63, 83.5) + theme_anne(size=25) + 
+    xlab("Year") + ylab("% of time spent at home") 
+ggsave(file.path(path_github, "figures/figureED02b.jpg"), width=6.5, height=5)
+
+# Season
+season_time = person_time %>%
+    group_by(year, season) %>%
+    summarise(inside=wtd.mean(inside, weight, normwt=T, na.rm=T), 
+              outside=wtd.mean(outside, weights=weight, normwt=T, na.rm=T), 
+              travel=wtd.mean(travel, weights=weight, normwt=T, na.rm=T), 
+              perc_out=wtd.mean(perc_out, weight, normwt=T, na.rm=T)*100, 
+              perc_home=wtd.mean(perc_home, weight, normwt=T, na.rm=T)*100)
+
+ggplot(season_time) + 
+    geom_line(aes(x=year, y=perc_home, group=season, color=season), size=1.5) + 
+    ylim(63, 83.5) + theme_anne(size=25) + 
+    xlab("Year") + ylab("% of time spent at home")
+ggsave(file.path(path_github, "figures/figureED02c.jpg"), width=6.5, height=5)
+
+# Race/ethnicity
 race_time = person_time %>%
     mutate(race=as.character(race)) %>%
     filter(race %in% c("Black only", "White only", "Asian only", "Hispanic"))  %>%
@@ -178,8 +194,8 @@ race_time = person_time %>%
     summarise(inside=wtd.mean(inside, weight, normwt=T, na.rm=T), 
               outside=wtd.mean(outside, weights=weight, normwt=T, na.rm=T), 
               travel=wtd.mean(travel, weights=weight, normwt=T, na.rm=T), 
-              perc_out=wtd.mean(perc_out, weight, normwt=T, na.rm=T), 
-              perc_home=wtd.mean(perc_home, weight, normwt=T, na.rm=T))
+              perc_out=wtd.mean(perc_out, weight, normwt=T, na.rm=T)*100, 
+              perc_home=wtd.mean(perc_home, weight, normwt=T, na.rm=T)*100)
 hisp_time = person_time %>%
     mutate(race=as.character(race), 
            race=ifelse(hispanic!="Not Hispanic", "Hispanic", race)) %>%
@@ -188,28 +204,19 @@ hisp_time = person_time %>%
     summarise(inside=wtd.mean(inside, weight, normwt=T, na.rm=T), 
               outside=wtd.mean(outside, weights=weight, normwt=T, na.rm=T), 
               travel=wtd.mean(travel, weights=weight, normwt=T, na.rm=T), 
-              perc_out=wtd.mean(perc_out, weight, normwt=T, na.rm=T), 
-              perc_home=wtd.mean(perc_home, weight, normwt=T, na.rm=T))
+              perc_out=wtd.mean(perc_out, weight, normwt=T, na.rm=T)*100, 
+              perc_home=wtd.mean(perc_home, weight, normwt=T, na.rm=T)*100)
 race_time = rbind(race_time, hisp_time)
 
 ggplot(race_time) + 
     geom_line(aes(x=year, y=perc_home, group=race, color=race), size=1.5) + 
-    ylim(0.63, 0.835) + theme_anne(size=25) + 
+    ylim(63, 83.5) + theme_anne(size=25) + 
     xlab("Year") + ylab("% of time spent at home") + labs(color="race/ethnicity")
-ggsave(file.path(path_github, "figures/Figure1d_perc_time_home_race.jpg"), width=7.5, height=5)
+ggsave(file.path(path_github, "figures/figureED02d.jpg"), width=7.5, height=5)
 
-
-
-season_time = person_time %>%
-    group_by(year, season) %>%
-    summarise(inside=wtd.mean(inside, weight, normwt=T, na.rm=T), 
-              outside=wtd.mean(outside, weights=weight, normwt=T, na.rm=T), 
-              travel=wtd.mean(travel, weights=weight, normwt=T, na.rm=T), 
-              perc_out=wtd.mean(perc_out, weight, normwt=T, na.rm=T), 
-              perc_home=wtd.mean(perc_home, weight, normwt=T, na.rm=T))
-
-ggplot(season_time) + 
-    geom_line(aes(x=year, y=perc_home, group=season, color=season), size=1.5) + 
-    ylim(0.63, 0.835) + theme_anne(size=25) + 
-    xlab("Year") + ylab("% of time spent at home")
-ggsave(file.path(path_github, "figures/Figure1c_perc_time_home_season.jpg"), width=6.5, height=5)
+# Convert to PDF
+image_write(image_convert(image_read(file.path(path_github, "figures/figureED02a.jpg")), "pdf"), file.path(path_github, "figures/figureED02a.pdf"))
+image_write(image_convert(image_read(file.path(path_github, "figures/figureED02b.jpg")), "pdf"), file.path(path_github, "figures/figureED02b.pdf"))
+image_write(image_convert(image_read(file.path(path_github, "figures/figureED02c.jpg")), "pdf"), file.path(path_github, "figures/figureED02c.pdf"))
+image_write(image_convert(image_read(file.path(path_github, "figures/figureED02d.jpg")), "pdf"), file.path(path_github, "figures/figureED02d.pdf"))
+image_write(image_convert(image_read(file.path(path_github, "figures/figureED02e.jpg")), "pdf"), file.path(path_github, "figures/figureED02e.pdf"))
