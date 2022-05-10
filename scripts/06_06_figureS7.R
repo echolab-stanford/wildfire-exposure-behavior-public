@@ -10,12 +10,9 @@ v1 <- read_rds(file.path(path_infiltration, "PA_monitor_level_infiltration_estim
 v2 <- read_rds(file.path(path_infiltration, "PA_monitor_level_infiltration_estimates_sfr_clean.rds")) %>% 
       rename(est_dl2 = est_dl, est_ldv2 = est_ldv, est_nl2 = est_nl, est_al2 = est_al) %>% 
       dplyr::select(id, starts_with("est"))
-v3 <- read_rds(file.path(path_infiltration, "purpleair_infiltration_estimates_by_model.rds")) %>% 
+v3 <- read_rds(file.path(path_infiltration, "PA_monitor_level_infiltration_estimates_sfr_clean_uncorrected.rds")) %>% 
    rename(est_dl3 = est_dl, est_ldv3 = est_ldv, est_nl3 = est_nl, est_al3 = est_al) %>% 
    dplyr::select(id, starts_with("est"))
-# v3 <- read_rds(file.path(path_infiltration, "PA_monitor_level_infiltration_estimates_sfr_clean_uncorrected.rds")) %>% 
-#       rename(est_dl3 = est_dl, est_ldv3 = est_ldv, est_nl3 = est_nl, est_al3 = est_al) %>% 
-#       dplyr::select(id, starts_with("est"))
 
 # Join infiltration estimates
 dat <- v1 %>% 
@@ -26,7 +23,7 @@ dat <- dat %>%
 names(dat)[2:ncol(dat)] <-paste(1:4, rep(c("a","b","c"), each = 4), sep ="")
 
 # Plot correlations
-pdf(file = file.path(path_github, "figures/figureED10.pdf"), width = 8, height = 8)
-corrplot.mixed(cor(dat[,2:ncol(dat)], use = 'complete.obs'), 
+pdf(file = file.path(path_github, "figures/raw/figureED10-raw.pdf"), width = 8, height = 8)
+corrplot::corrplot.mixed(cor(dat[,2:ncol(dat)], use = 'complete.obs'), 
                lower = "number", upper = "square", tl.col ='black')
 dev.off()
