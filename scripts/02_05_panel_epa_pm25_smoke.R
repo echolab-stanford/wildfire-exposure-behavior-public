@@ -51,8 +51,9 @@ years = 2006:2020
 for (i in 1:length(years)) {
   year = years[i]
   
-  precipitation = readRDS(file.path(path_era5_precipitation_grid, 
-                                    paste0("grid_precipitation_", year, ".rds")))
+  precipitation = list.files(path_era5_precipitation_grid, 
+                             pattern = as.character(year), full.names = T) %>% 
+    map_dfr(readRDS) %>% rename(precipitation = total_precipitation)
   temperature = readRDS(file.path(path_era5_temperature_grid, 
                                   paste0("grid_temperature_", year, ".rds")))
   

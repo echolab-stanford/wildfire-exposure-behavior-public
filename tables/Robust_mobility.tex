@@ -1,0 +1,24 @@
+\begin{table}
+\centering
+\begin{tabular}[t]{lccccccccccc}
+\toprule
+  & baseline & temp/prec & distance > 50 & distance < 50 & FE1 & FE2 & smokeweek & away & away\_week & away\_FE1 & away\_FE2\\
+\midrule
+smokePM & 0.023*** & 0.023*** & 0.026*** & 0.018*** & 0.001 & 0.012*** &  & 0.005** &  & 0.005* & 0.002*\\
+ & (0.004) & (0.003) & (0.004) & (0.004) & (0.003) & (0.001) &  & (0.001) &  & (0.002) & (0.001)\\
+temperature &  & -0.072*** &  &  &  &  &  &  &  &  & \\
+ &  & (0.005) &  &  &  &  &  &  &  &  & \\
+precipitation &  & 98.210*** &  &  &  &  &  &  &  &  & \\
+ &  & (1.445) &  &  &  &  &  &  &  &  & \\
+smokePM\_lastweek &  &  &  &  &  &  & 0.031*** &  & 0.005* &  & \\
+ &  &  &  &  &  &  & (0.006) &  & (0.002) &  & \\
+\midrule
+Num.Obs. & 678970 & 645141 & 538717 & 132494 & 678970 & 678970 & 608771 & 678970 & 608771 & 678970 & 678970\\
+FE: fipsmonthyear &  &  &  &  &  & X &  &  &  &  & X\\
+FE: date & X & X & X & X &  & X & X & X & X &  & X\\
+FE: fipsmonth & X & X & X & X & X &  & X & X & X & X & \\
+FE: date^State_FIPS &  &  &  &  & X &  &  &  &  & X & \\
+\bottomrule
+\multicolumn{12}{l}{\rule{0pt}{1em}+ p $<$ 0.1, * p $<$ 0.05, ** p $<$ 0.01, *** p $<$ 0.001}\\
+\end{tabular}
+\end{table}

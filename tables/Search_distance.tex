@@ -1,0 +1,20 @@
+\begin{table}
+\centering
+\begin{tabular}[t]{lccc}
+\toprule
+  & air quality & air pollution & smoke\\
+\midrule
+smokePM & 1.065*** & 0.489*** & 0.741***\\
+ & (0.115) & (0.116) & (0.084)\\
+distance & -0.001* & 0.000 & 0.000\\
+ & (0.001) & (0.001) & (0.000)\\
+smokePM × distance & 0.000 & 0.000 & 0.000\\
+ & (0.000) & (0.000) & (0.000)\\
+\midrule
+Num.Obs. & 40913 & 36072 & 41963\\
+FE: dmamonth & X & X & X\\
+FE: date & X & X & X\\
+\bottomrule
+\multicolumn{4}{l}{\rule{0pt}{1em}+ p $<$ 0.1, * p $<$ 0.05, ** p $<$ 0.01, *** p $<$ 0.001}\\
+\end{tabular}
+\end{table}

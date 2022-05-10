@@ -1,0 +1,22 @@
+\begin{table}
+\centering
+\begin{tabular}[t]{lcccccccc}
+\toprule
+  & sent\_inc & sent\_avgsmoke & sent\_avgpm & sent\_all & mob\_inc & mob\_avgsmoke & mob\_avgpm & mob\_all\\
+\midrule
+smokevar & -0.070*** & -0.097*** & -0.083*** & -0.058** & 0.007* & 0.032*** & 0.027*** & 0.009*\\
+ & (0.013) & (0.012) & (0.012) & (0.018) & (0.003) & (0.005) & (0.004) & (0.004)\\
+smokevar × median\_income & -0.001** &  &  & -0.002** & 0.002*** &  &  & 0.002***\\
+ & (0.000) &  &  & (0.001) & (0.000) &  &  & (0.000)\\
+smokevar × avgsmokepm &  & 0.050 &  & -0.026 &  & -0.048*** &  & 0.003\\
+ &  & (0.042) &  & (0.049) &  & (0.011) &  & (0.008)\\
+smokevar × avgpm &  &  & 0.016*** & 0.016*** &  &  & 0.006*** & 0.007***\\
+ &  &  & (0.004) & (0.004) &  &  & (0.002) & (0.002)\\
+\midrule
+Num.Obs. & 1239533 & 1239533 & 1117019 & 1117019 & 678970 & 678970 & 608831 & 608831\\
+FE: fipsmonth & X & X & X & X & X & X & X & X\\
+FE: date & X & X & X & X & X & X & X & X\\
+\bottomrule
+\multicolumn{9}{l}{\rule{0pt}{1em}+ p $<$ 0.1, * p $<$ 0.05, ** p $<$ 0.01, *** p $<$ 0.001}\\
+\end{tabular}
+\end{table}
