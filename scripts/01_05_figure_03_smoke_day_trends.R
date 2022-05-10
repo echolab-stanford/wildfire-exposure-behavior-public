@@ -45,10 +45,6 @@ for (i in 1:length(id_vec)) {
 end_time = Sys.time()
 end_time - start_time
 
-# TEMPORARY, CAN REMOVE LATER; SIMPLY HELPFUL FOR REFACTORING
-saveRDS(betas, file.path(path_github, "data/figure_smoke_day_trends_betas.rds"))
-betas = readRDS(file.path(path_github, "data/figure_smoke_day_trends_betas.rds"))
-
 # Prepare smoke day trends data for plotting
 grid_geo = fortify(grid, region="ID")
 data = merge(grid_geo, betas, by="id", all=T)
