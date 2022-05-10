@@ -1,6 +1,7 @@
 library(RCurl)
 library(httr)
 library(jsonlite)
+library(reticulate)
 
 library(tigris)
 library(tidycensus)

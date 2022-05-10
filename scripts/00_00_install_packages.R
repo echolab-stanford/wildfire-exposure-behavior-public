@@ -310,6 +310,9 @@ renv::install("ncdf4@1.17")
 renv::install("exactextractr@0.7.2")
 renv::install("ggthemes@4.2.4")
 renv::install("leaflet@2.0.4.1")
+renv::install("RcppTOML@0.1.7")
+renv::install("here@1.0.1")
+renv::install("reticulate@1.24")
 
 # base packages: tools, splines, grid, grDevices
 renv::install("grid@4.0.2") # * There are no packages to install.
