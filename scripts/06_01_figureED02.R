@@ -119,7 +119,7 @@ ggplot(states_geo, aes(long,lat,group=group, fill=perc_home)) + # the data
           axis.title=element_blank(),
           panel.background = element_blank()) + 
     coord_map("bonne", mean(states_geo$lat)) + labs(fill="")
-ggsave(file.path(path_github, "figures/figureED02e.jpg"), width=8, height=5)
+ggsave(file.path(path_github, "figures/raw/figureED02e.jpg"), width=8, height=5)
 
 #-------------------------------------------------------------------------------
 #### Plot temporal variation ####
@@ -153,7 +153,7 @@ ggplot(inc_time) +
     geom_line(aes(x=year, y=perc_home, group=income, color=income), size=1.5) + 
     ylim(63, 83.5) + theme_anne(size=25) + 
     xlab("Year") + ylab("% of time spent at home") 
-ggsave(file.path(path_github, "figures/figureED02a.jpg"), width=6.5, height=5)
+ggsave(file.path(path_github, "figures/raw/figureED02a.jpg"), width=6.5, height=5)
 
 # Age
 age_time = person_time %>%
@@ -169,7 +169,7 @@ ggplot(age_time) +
     geom_line(aes(x=year, y=perc_home, group=age, color=age), size=1.5) + 
     ylim(63, 83.5) + theme_anne(size=25) + 
     xlab("Year") + ylab("% of time spent at home") 
-ggsave(file.path(path_github, "figures/figureED02b.jpg"), width=6.5, height=5)
+ggsave(file.path(path_github, "figures/raw/figureED02b.jpg"), width=6.5, height=5)
 
 # Season
 season_time = person_time %>%
@@ -184,7 +184,7 @@ ggplot(season_time) +
     geom_line(aes(x=year, y=perc_home, group=season, color=season), size=1.5) + 
     ylim(63, 83.5) + theme_anne(size=25) + 
     xlab("Year") + ylab("% of time spent at home")
-ggsave(file.path(path_github, "figures/figureED02c.jpg"), width=6.5, height=5)
+ggsave(file.path(path_github, "figures/raw/figureED02c.jpg"), width=6.5, height=5)
 
 # Race/ethnicity
 race_time = person_time %>%
@@ -212,7 +212,7 @@ ggplot(race_time) +
     geom_line(aes(x=year, y=perc_home, group=race, color=race), size=1.5) + 
     ylim(63, 83.5) + theme_anne(size=25) + 
     xlab("Year") + ylab("% of time spent at home") + labs(color="race/ethnicity")
-ggsave(file.path(path_github, "figures/figureED02d.jpg"), width=7.5, height=5)
+ggsave(file.path(path_github, "figures/raw/figureED02d.jpg"), width=7.5, height=5)
 
 # Convert to PDF
 image_write(image_convert(image_read(file.path(path_github, "figures/figureED02a.jpg")), "pdf"), file.path(path_github, "figures/figureED02a.pdf"))

@@ -72,7 +72,7 @@ data <- data %>% dplyr::filter(ID_in %in% drop_ids == F)
 # }
 # 
 # 
-# write_rds(monloc_df, file = file.path(path_infiltration, "data/purpleAir_indoor_acs_medianIncome.rds"))
+# write_rds(monloc_df, file = file.path(path_infiltration, "purpleAir_indoor_acs_medianIncome.rds"))
 # 
 
 
@@ -334,7 +334,7 @@ bs_pm_list <- read_rds(file.path(path"~/Documents/GitHub/wildfire_home_leakage/d
                        poly_col0 <-add.alpha(wes_palette("Zissou1")[2], .6)
                        poly_col1 <-add.alpha(wes_palette("Zissou1")[3], .75)
                        
-                       pdf("figures/fig4-top-row.pdf", width =12.5, height = 6)
+                       pdf(file.path(path_github, "figures/raw/fig4a-b.pdf"), width =12.5, height = 6)
                        
                        
                        par(mar = c(4,5,2,2))

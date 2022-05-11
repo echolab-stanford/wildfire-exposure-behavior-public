@@ -74,14 +74,14 @@ g = ggplot() + # the data
         axis.title=element_blank(),
         panel.background = element_blank()) + 
   coord_map("bonne", mean(data$lat)) + labs(fill="")
-ggsave(file.path(path_github, "figures/smoke_day_trends.jpg"), 
-       plot = g, width=10, height=5, units="in")
-ggsave(file.path(path_github, "figures/smoke_day_trends.pdf"),
+# ggsave(file.path(path_github, "figures/raw/figure01a.jpg"), 
+#        plot = g, width=10, height=5, units="in")
+ggsave(file.path(path_github, "figures/raw/figure01a.pdf"),
        plot = g, width=10, height=5, units="in")
 
 # Save legend separately
 legend = cowplot::get_legend(g)
-pdf(file=file.path(path_github, "figures/smoke_day_trends_legend.pdf"), 
+pdf(file=file.path(path_github, "figures/raw/figure01a_legend.pdf"), 
     width=800, height=2000)
 ggpubr::as_ggplot(legend)
 dev.off()

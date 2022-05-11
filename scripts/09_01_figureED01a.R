@@ -11,7 +11,7 @@ epa_ll = spTransform(epa_ll, crs(counties))
 o = over(epa_ll, counties)
 counties_inc = unique(o$GEOID)
 
-pdf(file.path(path_github, "figures/figureED01a.pdf"), 
+pdf(file.path(path_github, "figures/raw/figureED01a.pdf"), 
      width=8, height=5)
 plot(counties)
 plot(add=T, counties[counties$GEOID %in% counties_inc, ], col="red")

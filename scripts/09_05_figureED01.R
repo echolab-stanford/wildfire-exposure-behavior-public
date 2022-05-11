@@ -1,5 +1,5 @@
-panel_a = image_read_pdf(file.path(path_github, "figures/figureED01a.pdf"))
-panel_b = image_read_pdf(file.path(path_github, "figures/figureED01b.pdf"))
+panel_a = image_read_pdf(file.path(path_github, "figures/raw/figureED01a.pdf"))
+panel_b = image_read_pdf(file.path(path_github, "figures/raw/figureED01b.pdf"))
 
 panel_a = image_trim(panel_a)
 panel_a = image_scale(panel_a, "x1500")
@@ -13,4 +13,4 @@ panel_b = image_annotate(panel_b, "b", font = "Arial", size = 12, weight = 700)
 
 fig = image_append(c(panel_a, panel_b))
 
-image_write(fig, path = file.path(path_github, "figures/figureED01.pdf"), format = "pdf")
+image_write(fig, path = file.path(path_github, "figures/raw/figureED01.pdf"), format = "pdf")

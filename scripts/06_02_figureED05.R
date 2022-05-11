@@ -47,7 +47,7 @@ df <- df %>%
   group_by(GEOID,device_location) %>% 
   summarise(median_income=mean(median_income))
 
-pdf(file=file.path(path_github, 'figures/PurpleAir_ACSIncome.pdf'),width=7,height=5)
+pdf(file=file.path(path_github, 'figures/raw/figureED05.pdf'),width=7,height=5)
 hist(acs$median_income/1000,breaks=50,las=1,main="",xlab="median household income (1000s)",border=NA,ylab="",axes=F)
 axis(1)
 abline(v=median(acs$median_income/1000,na.rm=T),lty=2)

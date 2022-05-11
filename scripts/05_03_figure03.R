@@ -35,7 +35,7 @@ mkplot2 <- function(toplot, xlab="smokePM", ylab="",title="",xlim=c(0,100),ylim=
 
 
 
-pdf(file.path(path_github, 'figures/Figure3.pdf'),width=8,height=8)
+pdf(file.path(path_github, 'figures/raw/figure03.pdf'),width=8,height=8)
 par(mfrow=c(2,2),mar=c(4,4,1,3))
 
 

@@ -70,7 +70,7 @@ dy <- dy %>% mutate(vbl = factor(vbl, levels = vbl_order))
 #-------------------------------------------------------------------------------
 #### Plot ####
 # Start drawing
-out_file <- file.path(path_github, paste0("figures/figSXa-c_", pm_method, "_shape_color.pdf"))
+out_file <- file.path(path_github, "figures/raw/figureED07a-c.pdf")
 pdf(out_file, width = 13, height = 6)
 
 # Partition space among panels

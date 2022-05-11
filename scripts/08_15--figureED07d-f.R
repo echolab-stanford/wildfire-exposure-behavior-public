@@ -242,7 +242,7 @@ pandat <- pandat %>% rename(temperature_out = Temp, precip_out = ppt)
     
     
     
-    pdf(file = "figures/figSX-low-behavior-income-housing.pdf", width = 12, height = 4)
+    pdf(file = file.path(path_github, "figures/raw/figureED07d-f.pdf"), width = 12, height = 4)
     par(mfrow = c(1,3))
     plot(1:4, rdat$est,xlim = c(0.5, 4.5),ylim = c(0, .3),axes = F, xlab = "",ylab = "",col = NA)
     segments(x0 = 1:4, y0 = rdat$low, y1 = rdat$high, col = 'gray75', lwd = 1.25)

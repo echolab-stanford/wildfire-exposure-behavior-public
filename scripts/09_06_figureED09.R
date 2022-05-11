@@ -151,13 +151,13 @@ p_indoor = base_map +
   labs(color = "AQI Category")
 
 l = get_legend(p_outdoor)
-ggsave(file.path(path_github, "figures/figureED08c.pdf"),
+ggsave(file.path(path_github, "figures/raw/figureED09_legend.pdf"),
        plot = l, width = 3, height = 3, units = "in")
 
 p_outdoor = p_outdoor + theme(legend.position = "none")
-ggsave(file.path(path_github, "figures/figureED08a.pdf"),
+ggsave(file.path(path_github, "figures/raw/figureED09a.pdf"),
        plot = p_outdoor, width = 10, height = 5, units = "in")
 
 p_indoor = p_indoor + theme(legend.position = "none")
-ggsave(file.path(path_github, "figures/figureED08b.pdf"),
+ggsave(file.path(path_github, "figures/raw/figureED09b.pdf"),
        plot = p_indoor, width = 10, height = 5, units = "in")

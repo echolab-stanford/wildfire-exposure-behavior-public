@@ -234,7 +234,7 @@
       
   ### and plot the right parts of panel ###
 
-          pdf( "~/Documents/GitHub/purple-air-infiltration/figures/Fig4-bottom-panel-insert.pdf",width = 1.5, height = 4)
+          pdf(file.path(path_github, "figures/raw/figure04d-f.pdf"),width = 1.5, height = 4)
           par(mfrow = c(2,1))
           par(mar = c(2,2,2,2))
           

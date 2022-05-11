@@ -8,7 +8,7 @@ bardata[nrow(bardata),"ht"]<-33 #fix wrong count in top bin
 
 
 
-pdf("figures/fig4-middle-row.pdf", width =11, height = 3)
+pdf(file.path(path_github, "figures/raw/fig4c.pdf"), width =11, height = 3)
 
     par(mar =c(3,3,0,0))
   

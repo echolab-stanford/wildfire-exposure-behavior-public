@@ -43,7 +43,7 @@ safe <- left_join(safe,dt,by=c("fips","date"))
 
 
 
-pdf(file.path(path_github, 'figures/Figure2.pdf'),width=8,height=8)
+pdf(file.path(path_github, 'figures/raw/figure02.pdf'),width=8,height=8)
 par(mfrow=c(2,2),mar=c(4,4,1,4))
 cll <- apply(sapply(c("orange"), col2rgb)/255, 2, function(x) rgb(x[1], x[2], x[3], alpha=0.5)) 
 

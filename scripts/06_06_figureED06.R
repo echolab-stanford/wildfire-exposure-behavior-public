@@ -23,7 +23,7 @@ dat <- dat %>%
 names(dat)[2:ncol(dat)] <-paste(1:4, rep(c("a","b","c"), each = 4), sep ="")
 
 # Plot correlations
-pdf(file = file.path(path_github, "figures/raw/figureED06-raw.pdf"), width = 8, height = 8)
+pdf(file = file.path(path_github, "figures/raw/figureED06.pdf"), width = 8, height = 8)
 corrplot::corrplot.mixed(cor(dat[,2:ncol(dat)], use = 'complete.obs'), 
                lower = "number", upper = "square", tl.col ='black')
 dev.off()

@@ -94,7 +94,7 @@ for(i in 1:7){combo[[i]]$bin = i}
 combo <- data.frame(data.table::rbindlist(combo))
 combo <- combo %>% drop_na(io_ratio, dido) %>% filter(io_ratio > 0 & io_ratio < 1 & dido > 0 & dido < 1)
 
-png(filename = "~/Desktop/io_vs_dido_by_pm.png", width = 1400, height = 750)
+png(filename = file.path(path_github, "figures/raw/figureED08.png"), width = 1400, height = 750)
 par(mfrow = c(2,4))
 for(i in 1:7){
   plot(combo$io_ratio[combo$bin==i], combo$dido[combo$bin==i], xlim= c(0,1), ylim= c(0,1), col = 'gray', pch = 16, xlab = "I/O ratio", ylab = "dI/dO")
