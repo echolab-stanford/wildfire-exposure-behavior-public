@@ -29,7 +29,7 @@ epa = epa %>%
 epa = merge(epa, panel, by=c("id", "date"), all=T)
 
 # Figure out the grid_id for each EPA ID
-grid = readRDS(file.path(path_github, "data/grid.RDS"))
+grid = readRDS(file.path(path_dropbox, "grid.RDS"))
 epa_ll = readOGR(file.path(path_dropbox, "epa_station_locations"), "epa_station_locations")
 epa_ll = spTransform(epa_ll, crs(grid))
 knn_ids = get.knnx(coordinates(grid), coordinates(epa_ll), k=1)$nn.index

@@ -4,7 +4,7 @@
 # Last edited by: Jessica Li
 #-------------------------------------------------------------------------------
 # Read in project grid
-project_grid0 <- readRDS(file.path(path_github, "data/grid.RDS"))
+project_grid0 <- readRDS(file.path(path_dropbox, "grid.RDS"))
 
 # Define function for getting an ERA5 variable over 10 km grid
 get_over_grid <- function(dataset, variable, statistic, time_zone, folder, path_era5 = file.path(path_dropbox, "ERA5")) {

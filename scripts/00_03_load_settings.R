@@ -1,7 +1,7 @@
 path_dropbox = "~/BurkeLab Dropbox/Projects/wildfire-exposure-behavior/"
 path_github = "~/Documents/GitHub/wildfire-exposure-behavior-public/"
 path_smoke = file.path(path_dropbox, "smoke")
-path_gtrends = file.path(path_github, "data/google_trends")
+path_gtrends = file.path(path_dropbox, "google_trends")
 # path_safegraph = "~/BurkeLab Dropbox/Projects/wildfire/data/safegraph/"
 path_safegraph = file.path(path_dropbox, "safegraph")
 # path_twitter = "~/BurkeLab Dropbox/Projects/wildfire/data/twitter/data/"

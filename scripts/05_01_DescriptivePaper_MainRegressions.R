@@ -102,7 +102,7 @@ twit$date <- as.Date(twit$date)
 dt <- left_join(dt,twit,by=c("fips","date"))
 
 # Google Trends
-goog <- read_rds(file.path(path_dropbox, "google_trends_smoke_DMA_normalized_with_covariates.RDS"))
+goog <- read_rds(file.path(path_gtrends, "google_trends_smoke_DMA_normalized_with_covariates.RDS"))
 goog <- goog %>% 
   mutate(month=month(date), 
          year=year(date)) %>% 

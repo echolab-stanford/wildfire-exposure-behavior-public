@@ -13,7 +13,7 @@ if (!dir.exists(path_fire_grid)) dir.create(path_fire_grid)
 years = 2006:2020
 
 # Load 10km grid
-grid = readRDS(file.path(path_github, "data/grid.RDS"))
+grid = readRDS(file.path(path_dropbox, "grid.RDS"))
 poly_grid = gBuffer(grid, byid=T, width=5000, capStyle="SQUARE") #slow
 
 # loop through years

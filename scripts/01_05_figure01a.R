@@ -50,7 +50,7 @@ grid_geo = fortify(grid, region="ID")
 data = merge(grid_geo, betas, by="id", all=T)
 data = data %>% arrange(id, piece, order)
 
-saveRDS(data, file.path(path_github, "data/figure_smoke_day_trends.RDS"))
+# saveRDS(data, "~/Desktop/figure_smoke_day_trends.RDS")
 
 # Read in EPA locations
 epa_ll = readOGR(file.path(path_dropbox, "epa_station_locations"), 
@@ -74,14 +74,5 @@ g = ggplot() + # the data
         axis.title=element_blank(),
         panel.background = element_blank()) + 
   coord_map("bonne", mean(data$lat)) + labs(fill="")
-# ggsave(file.path(path_github, "figures/raw/figure01a.jpg"), 
-#        plot = g, width=10, height=5, units="in")
 ggsave(file.path(path_github, "figures/raw/figure01a.pdf"),
        plot = g, width=10, height=5, units="in")
-
-# Save legend separately
-legend = cowplot::get_legend(g)
-pdf(file=file.path(path_github, "figures/raw/figure01a_legend.pdf"), 
-    width=800, height=2000)
-ggpubr::as_ggplot(legend)
-dev.off()

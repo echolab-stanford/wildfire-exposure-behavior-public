@@ -15,7 +15,7 @@ smoke = readRDS(file.path(path_smoke, "smoke_plumes_spdf.RDS")) # same as used i
 # doesn't include the manually downloaded smoke shapes Jessica later found
 
 # Get grid over which to query for smoke
-poly_grid = readRDS(file.path(path_github, "data/grid.RDS"))
+poly_grid = readRDS(file.path(path_dropbox, "grid.RDS"))
 poly_grid = gBuffer(poly_grid, byid=T, width=5000, capStyle="SQUARE") #slow
 
 #-------------------------------------------------------------------------------
