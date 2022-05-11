@@ -14,7 +14,7 @@ Results from the paper are in the `figures` and `tables` folders. Code to replic
 5. Run `scripts/run_all.R`.
 
 ## Data
-Certain data cannot be redistributed and thus are not included in the Dropbox folder or are provided only in processed form:
+Certain data cannot be redistributed or are too large and thus are not included in the Dropbox folder or are provided only in processed form:
 * Twitter
 * SafeGraph
 * SEDAC Population
