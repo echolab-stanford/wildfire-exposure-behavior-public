@@ -7,15 +7,14 @@
 project_grid0 <- readRDS(file.path(path_github, "data/grid.RDS"))
 
 # Define function for getting an ERA5 variable over 10 km grid
-get_over_grid <- function(dataset, variable, statistic, time_zone, path_era5 = file.path(path_dropbox, "ERA5")) {
+get_over_grid <- function(dataset, variable, statistic, time_zone, folder, path_era5 = file.path(path_dropbox, "ERA5")) {
   # Confirm dataset
   stopifnot(dataset %in% c("global", "land"))
   dataset_dir <- str_to_title(dataset)
   time_zone_dir <- gsub(":", "", time_zone)
   
   # Load ERA5 data
-  path_in <- file.path(path_era5, dataset_dir, variable, "USA", "raw", time_zone_dir,
-                       paste0(statistic, "_of_1-hourly"))
+  path_in <- file.path(path_era5, variable)
   file_names <- list.files(path_in, full.names = TRUE, pattern = "\\.nc$")
   dat_variable0 <- file_names %>% lapply(stack) %>% stack()
   
@@ -69,12 +68,12 @@ get_over_grid <- function(dataset, variable, statistic, time_zone, path_era5 = f
     # Save daily gridded values
     saveRDS(gridded_values, 
             file.path(
-              path_era5, dataset_dir, variable, "USA", "10km_grid", time_zone_dir, paste0(statistic, "_of_1-hourly"),
+              path_era5, variable, folder,
               paste0(paste("grid", variable, statistic, grid_year_month, sep = "_"), ".rds")
             ))
   }
 }
 
 # Get variables over project grid
-get_over_grid("land", "2m_temperature", "daily_mean", "UTC-06:00")
-get_over_grid("land", "total_precipitation", "daily_maximum", "UTC+00:00")
+get_over_grid("land", "2m_temperature", "daily_mean", "UTC-06:00", "grid_temperature")
+get_over_grid("land", "total_precipitation", "daily_maximum", "UTC+00:00", "grid_precipitation")

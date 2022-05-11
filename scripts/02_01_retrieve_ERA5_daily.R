@@ -65,8 +65,7 @@ retrieve_era5 <- function(variable, statistic, dataset, path_log = "~/Desktop/")
         month = month,
         time_zone = time_zone,
         area = area,
-        folder = file.path(path_out, dataset_dir, variable, "USA", "raw", time_zone_dir,
-                           paste0(statistic, "_of_1-hourly"))
+        folder = file.path(path_out, variable)
       )
 
       run_time <- print_time(start_time)
@@ -82,11 +81,6 @@ retrieve_era5 <- function(variable, statistic, dataset, path_log = "~/Desktop/")
   options(warn = warn_option)
 }
 
-# Set temporary working directory
-path_temp <- paste0(path_out, "temp/")
-if (!dir.exists(path_temp)) dir.create(path_temp)
-setwd(path_temp)
-
 #-------------------------------------------------------------------------------
 #### ERA5-Land ####
 # Takes 15-90 minutes per month
@@ -98,7 +92,3 @@ retrieve_era5("2m_temperature", "daily_mean", "land")
 # ERA5-Land total_precipitation is cumulative
 time_zone <- "UTC+00:00"
 retrieve_era5("total_precipitation", "daily_maximum", "land")
-
-# Remove temporary working directory
-setwd(path_github)
-unlink(path_temp, recursive = TRUE)
