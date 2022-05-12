@@ -22,7 +22,6 @@ counties = counties[counties$INTPTLAT > 24.7 & counties$INTPTLAT < 49.3 &
                       counties$INTPTLON > -125.2 & counties$INTPTLON < -66.4, ]
 counties = spTransform(counties, crs_m)
 
-
 # get the county to grid mapping
 crosswalk = over(counties, grid, returnList=T)
 for (i in 1:length(crosswalk)) {
@@ -35,7 +34,6 @@ w = sapply(crosswalk, nrow) > 0
 crosswalk = rbindlist(crosswalk[w])
 crosswalk = merge(crosswalk, grid_pop, by.x="ID", by.y="id", all.x=T)
 crosswalk = crosswalk %>% select(county, ID, pop)
-
 
 for (i in 1:length(years)) {
   
@@ -54,3 +52,13 @@ for (i in 1:length(years)) {
                                                        year, ".RDS")))
   
 }
+
+# combine
+df <- c()
+for (i in 2006:2020) {
+  dt <- read_rds(file.path(path_fire_processed, paste0('county_pop_weighted_dist_to_fire_',i,".RDS")))
+  df <- rbind(df,dt)
+  print(i)
+}
+df$date <- ymd(df$date)
+write_fst(df, file.path(path_fire_processed, "county_pop_weighted_dist_to_fire_2006_2020.fst"))

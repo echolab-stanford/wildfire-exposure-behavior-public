@@ -143,7 +143,7 @@ epa_c %<>%
 # Get Census data to merge
 county_income = get_acs("county", survey="acs5", 
                         variables=c("B19013_001", "B01003_001"), 
-                        year=2019) %>%#, key=census_api_key) %>%
+                        year=2019) %>% 
     select(GEOID, variable, estimate) %>%
     spread(variable, estimate) %>%
     rename(county=GEOID, median_household_income=B19013_001, 
