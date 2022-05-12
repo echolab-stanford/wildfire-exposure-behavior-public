@@ -152,16 +152,16 @@
       # for(i in 1:100){
       #   var_s <- sample(var, size = length(var), replace = T)
       # 
-      #   data_s <- left_join(data.frame(ID_in = var_s), pandat[,c("pm25_in","pm25_out","pm25_out2","pm25_out3","pm25_out4","heavy","ID_in","dow","hod","mos","time_hours")])
+      #   data_s <- left_join(data.frame(ID_in = var_s), pandat[,c("pm25_in","pm25_out","pm25_out2","pm25_out3","pm25_out4","smoke_day","ID_in","dow","hod","mos","time_hours")])
       #   data_s <- panel(data_s, panel.id = c("ID_in","time_hours"), duplicate.method = "first") 
       #   
-      #   mod_s <- feols(pm25_in ~ l(pm25_out,0:3) + l(pm25_out2, 0:3) + l(pm25_out3, 0:3) + l(pm25_out4, 0:3) + (l(pm25_out,0:3) + l(pm25_out2, 0:3) + l(pm25_out3, 0:3) + l(pm25_out4, 0:3)):heavy | ID_in + dow + hod + mos, data = data_s )
+      #   mod_s <- feols(pm25_in ~ l(pm25_out,0:3) + l(pm25_out2, 0:3) + l(pm25_out3, 0:3) + l(pm25_out4, 0:3) + (l(pm25_out,0:3) + l(pm25_out2, 0:3) + l(pm25_out3, 0:3) + l(pm25_out4, 0:3)):smoke_day | ID_in + dow + hod + mos, data = data_s )
       # 
       #   bootsamp_pm[[i]] <- coef(mod_s)
       #   print(i)
       # 
       # }
-      # write_rds(bootsamp_pm, file = "data/infiltration_smoke_pm_bootstrap_run_results.rds")
+      # write_rds(bootsamp_pm, file = "data/infiltration_smoke_pm_bootstrap_run_results_smokeday.rds")
 
       
      ### [3] income ######
@@ -176,10 +176,10 @@
       # for(i in 1:100){
       # var_s <- sample(var, size = length(var), replace = T)
       # 
-      # data_s <- left_join(data.frame(ID_in = var_s), pandat[,c("pm25_in","pm25_out","income","heavy","time_hours","ID_in","dow","hod","mos")])
+      # data_s <- left_join(data.frame(ID_in = var_s), pandat[,c("pm25_in","pm25_out","income","smoke_day","time_hours","ID_in","dow","hod","mos")])
       # data_s <- panel(data_s, panel.id = c("ID_in","time_hours"), duplicate.method = "first") 
       # 
-      # mod_s <- feols(pm25_in ~ l(pm25_out,0) + I(l(pm25_out,0)*income) + I(l(pm25_out, 0)*income*heavy) | ID_in + dow + hod + mos, data = data_s )
+      # mod_s <- feols(pm25_in ~ l(pm25_out,0) + I(l(pm25_out,0)*income) + I(l(pm25_out, 0)*income*smoke_day) | ID_in + dow + hod + mos, data = data_s )
       # 
       # 
       # bootsamp_inc[[i]] <- coef(mod_s)
@@ -188,24 +188,7 @@
       # }
       # 
       # 
-      # write_rds(bootsamp_inc, file = file.path(path_infiltration, "infiltration_smoke_income_bootstrap_run_results_linear.rds"))
-      # 
-      # bootsamp_pm <- list()
-      # 
-      # for(i in 1:100){
-      #   var_s <- sample(var, size = length(var), replace = T)
-      #   
-      #   data_s <- left_join(data.frame(ID_in = var_s), pandat[,c("pm25_in","pm25_out","pm25_out2","pm25_out3","pm25_out4","heavy","ID_in","dow","hod","mos","time_hours")])
-      #   data_s <- panel(data_s, panel.id = c("ID_in","time_hours"), duplicate.method = "first") 
-      #   
-      #   mod_s <- feols(pm25_in ~ l(pm25_out,0:3) + l(pm25_out2, 0:3) + l(pm25_out3, 0:3) + l(pm25_out4, 0:3) + (l(pm25_out,0:3) + l(pm25_out2, 0:3) + l(pm25_out3, 0:3) + l(pm25_out4, 0:3)):heavy | ID_in + dow + hod + mos, data = data_s )
-      #   
-      #   bootsamp_pm[[i]] <- coef(mod_s)
-      #   print(i)
-      #   
-      # }
-      # write_rds(bootsamp_pm, file = "data/infiltration_smoke_pm_bootstrap_run_results.rds")
-      # 
+      # write_rds(bootsamp_inc, file = file.path(path_infiltration, "infiltration_smoke_income_bootstrap_run_results_linear_smokeday.rds"))
       
       #####################################################################################################################      
       #####################################################################################################################
@@ -215,10 +198,11 @@
       
       #panel a - PM by smoke
       
-      bs_pm_list <- read_rds(file.path(path"~/Documents/GitHub/wildfire_home_leakage/data/infiltration_smoke_pm_bootstrap_run_results.rds")
-      xp1 <- (round(quantile(pandat$pm25_out[pandat$heavy==1], .01 , na.rm = T))):300#(round(quantile(pandat$pm25_out[pandat$heavy==1], .975 , na.rm = T)))
-      xp0 <- (round(quantile(pandat$pm25_out[pandat$heavy==0], .01 , na.rm = T))):(round(quantile(pandat$pm25_out[pandat$heavy==0], .99 , na.rm = T)))
-      
+      # bs_pm_list <- read_rds(file.path(path="~/Documents/GitHub/wildfire_home_leakage/data/infiltration_smoke_pm_bootstrap_run_results.rds")
+      # 
+      # xp1 <- (round(quantile(pandat$pm25_out[pandat$heavy==1], .01 , na.rm = T))):(round(quantile(pandat$pm25_out[pandat$heavy==1], .975 , na.rm = T)))
+      # xp0 <- (round(quantile(pandat$pm25_out[pandat$heavy==0], .01 , na.rm = T))):(round(quantile(pandat$pm25_out[pandat$heavy==0], .99 , na.rm = T)))
+      # 
       
       get_y_pm <- function(x, coefs, smoke = 0){
         
@@ -260,7 +244,7 @@
       
             
       #panel b - income by smoke (income doesn't really differ by smoke)
-      bs_inc_list <- read_rds("~/Documents/GitHub/wildfire_home_leakage/data/infiltration_smoke_income_bootstrap_run_results_linear.rds")
+      bs_inc_list <- read_rds("data/infiltration/infiltration_smoke_income_bootstrap_run_results_linear_smokeday.rds")
       xi1 <- seq(37000,235000, 2000)
       xi0 <- seq(37000,235000, 2000)
       
