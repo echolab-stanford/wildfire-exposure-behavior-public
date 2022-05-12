@@ -54,8 +54,9 @@ for (i in 1:length(years)) {
   precipitation = list.files(path_era5_precipitation_grid, 
                              pattern = as.character(year), full.names = T) %>% 
     map_dfr(readRDS) %>% rename(precipitation = total_precipitation)
-  temperature = readRDS(file.path(path_era5_temperature_grid, 
-                                  paste0("grid_temperature_", year, ".rds")))
+  temperature = list.files(path_era5_temperature_grid, 
+                           pattern = as.character(year), full.names = T) %>% 
+    map_dfr(readRDS) %>% rename(temperature = `2m_temperature`)
   
   cur = epa[year(epa$date) == year, 1:3]
   cur = cur %>% 
