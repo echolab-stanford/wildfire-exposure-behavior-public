@@ -29,7 +29,7 @@ epa = epa %>%
 epa = merge(epa, panel, by=c("id", "date"), all=T)
 
 # Figure out the grid_id for each EPA ID
-grid = readRDS(file.path(path_github, "data/grid.RDS"))
+grid = readRDS(file.path(path_dropbox, "grid.RDS"))
 epa_ll = readOGR(file.path(path_dropbox, "epa_station_locations"), "epa_station_locations")
 epa_ll = spTransform(epa_ll, crs(grid))
 knn_ids = get.knnx(coordinates(grid), coordinates(epa_ll), k=1)$nn.index
@@ -54,8 +54,9 @@ for (i in 1:length(years)) {
   precipitation = list.files(path_era5_precipitation_grid, 
                              pattern = as.character(year), full.names = T) %>% 
     map_dfr(readRDS) %>% rename(precipitation = total_precipitation)
-  temperature = readRDS(file.path(path_era5_temperature_grid, 
-                                  paste0("grid_temperature_", year, ".rds")))
+  temperature = list.files(path_era5_temperature_grid, 
+                           pattern = as.character(year), full.names = T) %>% 
+    map_dfr(readRDS) %>% rename(temperature = `2m_temperature`)
   
   cur = epa[year(epa$date) == year, 1:3]
   cur = cur %>% 
@@ -143,7 +144,7 @@ epa_c %<>%
 # Get Census data to merge
 county_income = get_acs("county", survey="acs5", 
                         variables=c("B19013_001", "B01003_001"), 
-                        year=2019) %>%#, key=census_api_key) %>%
+                        year=2019) %>% 
     select(GEOID, variable, estimate) %>%
     spread(variable, estimate) %>%
     rename(county=GEOID, median_household_income=B19013_001, 

@@ -1,7 +1,7 @@
 # source("scripts/00_00_install_packages.R")
 source("scripts/00_01_load_packages.R")
 source("scripts/00_02_load_functions.R")
-source("scripts/00_03_settings.R")
+source("scripts/00_03_load_settings.R")
 
 
 

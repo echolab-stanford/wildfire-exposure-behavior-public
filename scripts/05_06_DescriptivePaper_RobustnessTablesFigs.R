@@ -269,9 +269,9 @@ modelsummary(hetmodels,stars=TRUE,fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|A
 # dev.off()
 
 # make correlation plot of 3 heterogeneity variables
-toplot <- avgs %>% select(-county)
-M <- cor(toplot,use="complete.obs")
-corrplot(M,type="upper",diag = F,method="number")
+# toplot <- avgs %>% select(-county)
+# M <- cor(toplot,use="complete.obs")
+# corrplot(M,type="upper",diag = F,method="number")
 
 
 # robustness of heterogeneity to FE

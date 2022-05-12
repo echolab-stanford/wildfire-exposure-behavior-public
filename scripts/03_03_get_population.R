@@ -7,7 +7,7 @@
 pop = raster(file.path(path_dropbox, "gpw_v4_population_count_rev11_2010_2pt5_min.tif"))
 
 # define grid as shapes rather than points
-grid = readRDS(file.path(path_github, "data/grid.RDS"))
+grid = readRDS(file.path(path_dropbox, "grid.RDS"))
 grid = gBuffer(grid, byid=T, width=5000, capStyle="SQUARE") #slow
 grid = spTransform(grid, crs(pop))
 

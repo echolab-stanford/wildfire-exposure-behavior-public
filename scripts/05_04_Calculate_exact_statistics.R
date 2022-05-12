@@ -36,7 +36,7 @@ print(paste("t-test(df=",df,")=",round(ct[3],3),", p=",ct[4],", eff. size =",rou
 
 
 # google trends
-goog <- read_rds(file.path(path_dropbox, "google_trends_smoke_DMA_normalized_with_covariates.RDS"))
+goog <- read_rds(file.path(path_gtrends, "google_trends_smoke_DMA_normalized_with_covariates.RDS"))
 goog <- goog %>% mutate(month=month(date), year=year(date)) %>% mutate(dmamonth = paste(dma,month,sep="_"), dmamonthyear=paste(dma,year,month,sep="_"))
 goog_panel <- read_rds(file.path(path_dropbox, 'panel_dma_pm_smoke_day_weekly.RDS'))
 avgsmokepm <- goog_panel %>% mutate(year=year(week)) %>% filter(year<2016) %>% 

@@ -151,6 +151,8 @@ def retrieve_era5_daily(
 
     # Set name of output file
     file_name = file_name if file_name else dataset + '_' + variable + '_' + statistic + '_' + year + '_' + month + '.nc'
+    if folder:
+        file_name = os.path.join(os.path.abspath(os.path.expanduser(os.path.expandvars(folder))), file_name)
 
     # Write data to output file
     location = result[0]['location']
@@ -161,8 +163,4 @@ def retrieve_era5_daily(
             fh.write(r)
     fh.close()
 
-    # Move output file to output folder if specified
-    if folder:
-        cwd_file = os.path.join(os.getcwd(), file_name)
-        out_file = os.path.join(os.path.abspath(os.path.expanduser(os.path.expandvars(folder))), file_name)
-        shutil.move(cwd_file, out_file)
+    return file_name

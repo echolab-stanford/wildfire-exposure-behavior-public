@@ -352,15 +352,3 @@ bs_pm_list <- read_rds(file.path(path"~/Documents/GitHub/wildfire_home_leakage/d
                        
                        
                        dev.off()
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       

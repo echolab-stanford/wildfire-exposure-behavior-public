@@ -1,4 +1,3 @@
-path_gtrends = file.path(path_github, "data/google_trends")
 if (!dir.exists(path_gtrends)) dir.create(path_gtrends)
 
 #-------------------------------------------------------------------------------
