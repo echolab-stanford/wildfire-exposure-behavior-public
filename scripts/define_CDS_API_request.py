@@ -8,7 +8,6 @@ from tenacity import retry, stop_after_attempt, wait_random_exponential
 #-------------------------------------------------------------------------------
 # Define Function for Retrieving Daily ERA5* via CDS API
 # Modified by Jessica from script posted by Kevin Marsh
-# Last edited September 2021
 # 
 # Original script:
 # https://confluence.ecmwf.int/pages/viewpage.action?pageId=228867588
