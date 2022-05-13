@@ -271,7 +271,7 @@ ci <- c(est + qnorm(0.025)*se, est + qnorm(0.975)*se)
 poly_col0 <-add.alpha(wes_palette("Zissou1")[2], .6)
 poly_col1 <-add.alpha(wes_palette("Zissou1")[3], .75)
 
-pdf(file.path(path_github, "figures/raw/figure4a-b.pdf"), width =12.5, height = 6)
+pdf(file.path(path_github, "figures/raw/figure04a-b.pdf"), width =12.5, height = 6)
 
 par(mar = c(4,5,2,2))
 par(mfrow = c(1,2))
