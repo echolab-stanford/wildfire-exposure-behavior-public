@@ -4,17 +4,19 @@
 \toprule
   & air quality & air pollution & smoke\\
 \midrule
-smokePM & 1.065*** & 0.489*** & 0.741***\\
+smoke \pmt & 1.065 & 0.489 & 0.741\\
  & (0.115) & (0.116) & (0.084)\\
-distance & -0.001* & 0.000 & 0.000\\
+ & {}[0.000] & {}[0.000] & {}[0.000]\\
+distance to fire (km) & -0.001 & 0.000 & 0.000\\
  & (0.001) & (0.001) & (0.000)\\
-smokePM × distance & 0.000 & 0.000 & 0.000\\
+ & {}[0.032] & {}[0.529] & {}[0.844]\\
+smoke \pmt × distance to fire & 0.000 & 0.000 & 0.000\\
  & (0.000) & (0.000) & (0.000)\\
+ & {}[0.758] & {}[0.783] & {}[0.178]\\
 \midrule
 Num.Obs. & 40913 & 36072 & 41963\\
-FE: dmamonth & X & X & X\\
 FE: date & X & X & X\\
+FE: dmamonth & X & X & X\\
 \bottomrule
-\multicolumn{4}{l}{\rule{0pt}{1em}+ p $<$ 0.1, * p $<$ 0.05, ** p $<$ 0.01, *** p $<$ 0.001}\\
 \end{tabular}
 \end{table}

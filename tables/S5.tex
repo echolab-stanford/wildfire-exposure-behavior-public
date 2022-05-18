@@ -4,12 +4,15 @@
 \toprule
   & baseline & temp/prec & distance > 50 & distance < 50 & FE1 & FE2\\
 \midrule
-smokePMscale & -0.087*** & -0.092*** & -0.085*** & -0.082*** & -0.075*** & -0.082***\\
+smokePMscale & -0.087 & -0.092 & -0.085 & -0.082 & -0.075 & -0.082\\
  & (0.011) & (0.011) & (0.013) & (0.017) & (0.016) & (0.009)\\
+ & {}[0.000] & {}[0.000] & {}[0.000] & {}[0.000] & {}[0.000] & {}[0.000]\\
 temperature &  & 0.000 &  &  &  & \\
  &  & (0.000) &  &  &  & \\
-precipitation &  & -0.183*** &  &  &  & \\
+ &  & {}[0.834] &  &  &  & \\
+precipitation &  & -0.183 &  &  &  & \\
  &  & (0.005) &  &  &  & \\
+ &  & {}[0.000] &  &  &  & \\
 \midrule
 Num.Obs. & 1239534 & 1239534 & 1009458 & 211533 & 1239534 & 1239534\\
 FE: date & X & X & X & X &  & X\\
@@ -17,6 +20,5 @@ FE: date^state &  &  &  &  & X & \\
 FE: fipsmonth & X & X & X & X & X & \\
 FE: fipsmonthyear &  &  &  &  &  & X\\
 \bottomrule
-\multicolumn{7}{l}{\rule{0pt}{1em}+ p $<$ 0.1, * p $<$ 0.05, ** p $<$ 0.01, *** p $<$ 0.001}\\
 \end{tabular}
 \end{table}
