@@ -1,5 +1,3 @@
-num_cores <- 4
-
 #-------------------------------------------------------------------------------
 # Match PurpleAir Infiltration Estimates to ACS Characteristics
 # Written by: Jessica Li
@@ -16,12 +14,16 @@ points_pa <- SpatialPoints(dat_pa[c("lon", "lat")])
 
 # Get Census tract polygons for continental US
 conus <- sort(setdiff(states()$STUSPS, c("AK", "AS", "GU", "HI", "MP", "PR", "VI")))
-tracts_conus <- vector("list", length(conus))
-for (i in 1:length(conus)) tracts_conus[[i]] <- tracts(conus[i], class = "sp", year = 2019)
-tracts_conus <- bind(tracts_conus)
-tracts_conus <- SpatialPolygonsDataFrame(SpatialPolygons(tracts_conus@polygons), tracts_conus@data)
-# saveRDS(tracts_conus, "~/Desktop/tracts_conus.rds")
-# tracts_conus <- readRDS("~/Desktop/tracts_conus.rds")
+file_tracts_conus = file.path(path_dropbox, "tracts_conus.rds")
+if (!file.exists(file_tracts_conus)) {
+  tracts_conus <- vector("list", length(conus))
+  for (i in 1:length(conus)) tracts_conus[[i]] <- tracts(conus[i], class = "sp", year = 2019)
+  tracts_conus <- bind(tracts_conus)
+  tracts_conus <- SpatialPolygonsDataFrame(SpatialPolygons(tracts_conus@polygons), tracts_conus@data)
+  saveRDS(tracts_conus, file_tracts_conus)
+} else {
+  tracts_conus <- readRDS(file_tracts_conus)
+}
 
 # Overlay to match
 matches_acs <- bind_cols(dat_pa["id"], over(points_pa, tracts_conus)) %>%
@@ -67,18 +69,60 @@ matches_physio <- bind_cols(dat_pa["id"], over(points_pa, physio)) %>%
 nrow(matches_physio)
 
 #-------------------------------------------------------------------------------
+# Read in averaged CL data
+matches_cl_ctf = readRDS(file.path(path_dropbox, "matches_cl_ctf.rds"))
+matches_cl_nn = readRDS(file.path(path_dropbox, "matches_cl_nn.rds"))
+
 # Join matches together
-dat_matched <- list(dat_pa, matches_acs, matches_physio)
+matches_cl_ctf <- left_join(matches_cl_ctf, matches_cl_nn[c("id", "yrbuilt_fac")], by = "id") %>% 
+  mutate(cutoff = as.character(cutoff))
+dat_matched <- list(dat_pa, matches_acs, matches_physio, 
+                    bind_rows(matches_cl_nn, matches_cl_ctf))
 dat_matched <- Reduce(inner_join, dat_matched) %>% 
   mutate(total_val = total_val/1000,
          income_median = income_median/1000) %>% 
-  arrange(id)
+  arrange(id, cutoff)
+
+#-------------------------------------------------------------------------------
+# Standardize sample across cutoffs
+nc <- length(unique(dat_matched$cutoff))
+ids <- dat_matched %>% 
+  count(id) %>% 
+  filter(n == nc) %>% 
+  pull(id)
+
+# N = 1383
+dat_matched <- dat_matched %>% filter(id %in% ids)
+count(dat_matched, cutoff)
 
 #-------------------------------------------------------------------------------
 # Merge in mean outdoor PM2.5 at each indoor monitor
-dat_outdoor <- readRDS(file.path(path_dropbox, "purpleAir_meanOutdoorPM_by_indoorMonitor.rds"))
+dat_outdoor <- readRDS(paste0(path_dropbox, "purpleAir_meanOutdoorPM_by_indoorMonitor.rds"))
 dat_merged <- left_join(dat_matched, dat_outdoor, by = c("id" = "ID_in"))
 
 #-------------------------------------------------------------------------------
+# Generate housing and livelihood indices
+housing <- dat_merged %>% 
+  group_by(cutoff) %>% 
+  select(total_val, stories, baths, bedrooms, height, area) %>% 
+  mutate(across(everything(), scale)) %>% 
+  ungroup() %>% 
+  select(-cutoff)
+housing <- rowMeans(housing)
+livelihood <- dat_merged %>% 
+  group_by(cutoff) %>% 
+  select(poverty_below, food_stamps_received, occ_renter, income_median) %>% 
+  mutate(income_median = -income_median,
+         across(everything(), scale)) %>% 
+  ungroup() %>% 
+  select(-cutoff)
+livelihood <- rowMeans(livelihood)
+
+# Merge into matched data
+dat_merged <- dat_merged %>% 
+  mutate(housing_index = housing,
+         livelihood_index = livelihood)
+
+#-------------------------------------------------------------------------------
 # Save matched data
-saveRDS(dat_merged, file.path(path_infiltration, pm_path, post_path, "dat_pa_inf_acs_chars.rds"))
+saveRDS(dat_merged, file.path(path_infiltration, pm_path, post_path, "dat_pa_inf_cl_acs_chars_avg.rds"))
