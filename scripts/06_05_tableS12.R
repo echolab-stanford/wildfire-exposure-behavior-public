@@ -51,21 +51,46 @@ dat_matched <- dat_matched %>%  mutate(month_sample = format(date_time, "%Y-%m")
 
 # Fit regressions
 md1 <- feols(pm25_epa ~ pm25_uncorrected_out | 
-            (id_pa) + (scs_id_epa) + 
-            (month_sample) + (hour), 
-          data = dat_matched)
+               (scs_id_epa) + 
+               (month_sample) + (hour), 
+             data = dat_matched)
 
 md2 <- feols(pm25_epa ~ pm25_corrected_out | 
-               (id_pa) + (scs_id_epa) + 
+               (scs_id_epa) + 
                (month_sample) + (hour), 
              data = dat_matched)
 
 md3 <- feols(pm25_epa ~ pm25_out_pc | 
-               (id_pa) + (scs_id_epa) + 
+               (scs_id_epa) + 
                (month_sample) + (hour), 
              data = dat_matched)
+
 
 # Regression results
 summary(md1)
 summary(md2)
 summary(md3)
+
+# Save
+etable(md1, md2, md3, 
+       digits = "r3",
+       digits.stats = 2,
+       fitstat = c("r2", "n"),
+       dict = c(pm25_uncorrected_out = "Purple Air PM$_{2.5}$",
+                pm25_corrected_out = "Purple Air PM$_{2.5}$",
+                pm25_out_pc = "Purple Air PM$_{2.5}$",
+                scs_id_epa = "EPA monitor",
+                hour = "hour-of-day",
+                month_sample = "month-of-sample"),
+       file = file.path(path_github, "tables/S12.tex"),
+       style.tex = style.tex(depvar.title = "",
+                             model.title = "\\textbf{Purple Air PM2.5 Construction:}",
+                             line.top = "",
+                             line.bottom = "\\bottomrule",
+                             var.title = "",
+                             fixef.title = "",
+                             fixef.prefix = "FE: ",
+                             fixef.where = "stats",
+                             stats.title = "",
+                             tablefoot = F),
+       depvar = F)
