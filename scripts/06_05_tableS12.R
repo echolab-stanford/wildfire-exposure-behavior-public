@@ -31,7 +31,7 @@ pa_corrected1 <- pa_corrected1[,c("id_pa","date_time","pm25_out_pc")]
 
 dat_matched2 <- left_join(dat_matched2, pa_corrected1)
 
-rm(pa_corrected1, pa_corrected1)
+rm(pa_corrected, pa_corrected1)
 gc()
 
 # Discard monitors with too few observations
@@ -51,25 +51,28 @@ dat_matched <- dat_matched %>%  mutate(month_sample = format(date_time, "%Y-%m")
 
 # Fit regressions
 md1 <- feols(pm25_epa ~ pm25_uncorrected_out | 
-               (scs_id_epa) + 
+               (id_pa) + (scs_id_epa) + 
                (month_sample) + (hour), 
              data = dat_matched)
 
 md2 <- feols(pm25_epa ~ pm25_corrected_out | 
-               (scs_id_epa) + 
+               (id_pa) + (scs_id_epa) + 
                (month_sample) + (hour), 
              data = dat_matched)
 
 md3 <- feols(pm25_epa ~ pm25_out_pc | 
-               (scs_id_epa) + 
+               (id_pa) + (scs_id_epa) + 
                (month_sample) + (hour), 
              data = dat_matched)
-
 
 # Regression results
 summary(md1)
 summary(md2)
 summary(md3)
+
+r2(md1)
+r2(md2)
+r2(md3)
 
 # Save
 etable(md1, md2, md3, 
@@ -80,6 +83,7 @@ etable(md1, md2, md3,
                 pm25_corrected_out = "Purple Air PM$_{2.5}$",
                 pm25_out_pc = "Purple Air PM$_{2.5}$",
                 scs_id_epa = "EPA monitor",
+                id_pa = "Purple Air monitor",
                 hour = "hour-of-day",
                 month_sample = "month-of-sample"),
        file = file.path(path_github, "tables/S12.tex"),
