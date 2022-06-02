@@ -1,7 +1,6 @@
 #-------------------------------------------------------------------------------
 # Compare Infiltration Estimates
 # Written by: Sam Heft-Neal
-# Last edited by: Jessica Li
 #-------------------------------------------------------------------------------
 # Read in infiltration estimates
 v1 <- read_rds(file.path(path_infiltration, "PA_monitor_level_infiltration_estimates_sfr_clean_pc.rds")) %>% 

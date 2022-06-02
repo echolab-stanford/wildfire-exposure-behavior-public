@@ -1,7 +1,6 @@
 #-------------------------------------------------------------------------------
 # Compare PurpleAir and EPA PM2.5
 # Written by: Sam Heft-Neal
-# Last edited by: Jessica Li
 #-------------------------------------------------------------------------------
 # Set maximum distance (m) for matching
 within_m <- 1000

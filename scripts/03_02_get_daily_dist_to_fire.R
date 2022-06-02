@@ -1,12 +1,8 @@
-path_fire = file.path(path_dropbox, "fire")
-path_fire_processed = file.path(path_fire, "processed")
-path_fire_grid = file.path(path_fire_processed, "grid_dist_fire")
-if (!dir.exists(path_fire_grid)) dir.create(path_fire_grid)
+if (!dir.exists(file.path(path_fire, "processed", "grid_dist_fire"))) dir.create(file.path(path_fire, "processed", "grid_dist_fire"), recursive = T)
 
 #-------------------------------------------------------------------------------
 # Get Distance to Fire Over 10km Grid
 # Written by: Anne Driscoll
-# Last edited by: Jessica Li
 # 
 # Get distance to nearest fire point for all grid cell-days.
 #-------------------------------------------------------------------------------
@@ -55,7 +51,7 @@ for (i in 1:length(years)) {
   }
   
   out = rbindlist(out)
-  saveRDS(out, file.path(path_fire_grid, paste0("dist_to_fire_", year, ".RDS")))
+  saveRDS(out, file.path(path_fire, "processed", "grid_dist_fire", paste0("dist_to_fire_", year, ".RDS")))
   
   print(year)
   

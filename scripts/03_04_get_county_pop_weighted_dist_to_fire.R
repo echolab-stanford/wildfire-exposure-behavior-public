@@ -1,7 +1,3 @@
-path_fire = file.path(path_dropbox, "fire")
-path_fire_processed = file.path(path_fire, "processed")
-path_fire_grid = file.path(path_fire_processed, "grid_dist_fire")
-
 #-------------------------------------------------------------------------------
 # Get County Distance to Fire
 # Written by: Anne Driscoll
@@ -9,7 +5,7 @@ path_fire_grid = file.path(path_fire_processed, "grid_dist_fire")
 # 
 # Get population weighted distance to nearest fire point for all county-days.
 #-------------------------------------------------------------------------------
-# read in data
+# Read in data
 crs_m = "+proj=utm +zone=19 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0"
 years = 2006:2020
 
@@ -22,7 +18,7 @@ counties = counties[counties$INTPTLAT > 24.7 & counties$INTPTLAT < 49.3 &
                       counties$INTPTLON > -125.2 & counties$INTPTLON < -66.4, ]
 counties = spTransform(counties, crs_m)
 
-# get the county to grid mapping
+# Get the county to grid mapping
 crosswalk = over(counties, grid, returnList=T)
 for (i in 1:length(crosswalk)) {
   cur = crosswalk[[i]]
@@ -36,29 +32,26 @@ crosswalk = merge(crosswalk, grid_pop, by.x="ID", by.y="id", all.x=T)
 crosswalk = crosswalk %>% select(county, ID, pop)
 
 for (i in 1:length(years)) {
-  
   year = years[i]
   
-  dists = readRDS(file.path(path_fire_grid, paste0("dist_to_fire_",
-                                                   year, ".RDS")))
+  dists = readRDS(file.path(path_fire, "processed", "grid_dist_fire", 
+                            paste0("dist_to_fire_", year, ".RDS")))
   dists = merge(dists, crosswalk, by.x="id", by.y="ID",
                 all=T, allow.cartesian=T)
   dists = dists %>%
     group_by(county, date) %>%
     summarise(km_dist = wtd.mean(km_dist, weights=pop))
   
-  
-  saveRDS(dists, file.path(path_fire_processed, paste0("county_pop_weighted_dist_to_fire_",
-                                                       year, ".RDS")))
-  
+  saveRDS(dists, file.path(path_fire, "processed", 
+                           paste0("county_pop_weighted_dist_to_fire_", year, ".RDS")))
 }
 
-# combine
+# Combine
 df <- c()
 for (i in 2006:2020) {
-  dt <- read_rds(file.path(path_fire_processed, paste0('county_pop_weighted_dist_to_fire_',i,".RDS")))
+  dt <- read_rds(file.path(path_fire, "processed", paste0('county_pop_weighted_dist_to_fire_',i,".RDS")))
   df <- rbind(df,dt)
   print(i)
 }
 df$date <- ymd(df$date)
-write_fst(df, file.path(path_fire_processed, "county_pop_weighted_dist_to_fire_2006_2020.fst"))
+write_fst(df, file.path(path_fire, "processed", "county_pop_weighted_dist_to_fire_2006_2020.fst"))

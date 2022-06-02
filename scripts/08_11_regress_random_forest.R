@@ -1,7 +1,6 @@
 #-------------------------------------------------------------------------------
 # Regress Infiltration on House and Community Characteristics w/ Random Forest
 # Written by: Jessica Li
-# Last edited by: Jessica Li
 #-------------------------------------------------------------------------------
 # Read in train and test data
 dat_train <- readRDS(file.path(path_infiltration, pm_path, post_path, "dat_train.rds"))

@@ -6,7 +6,6 @@ source_python(file.path(path_github, "scripts/define_CDS_API_request.py"))
 #-------------------------------------------------------------------------------
 # Retrieve ERA5(-Land) Daily Aggregates
 # Written by: Jessica Li
-# Last edited by: Jessica Li
 # 
 # Download ERA5(-Land) daily aggregates using the "Daily statistics calculated 
 # from ERA5 data" application 
@@ -34,6 +33,8 @@ path_out <- file.path(path_dropbox, "ERA5/")
 #-------------------------------------------------------------------------------
 #### Retrieve data ####
 #-------------------------------------------------------------------------------
+# Define function for generic retrieval
+# Also logs output and messages
 retrieve_era5 <- function(variable, statistic, dataset, path_log = "~/Desktop/") {
   if (variable == "total_precipitation") stopifnot(time_zone == "UTC+00:00")
   time_zone_dir <- gsub(":", "", time_zone)
@@ -50,7 +51,7 @@ retrieve_era5 <- function(variable, statistic, dataset, path_log = "~/Desktop/")
   warn_option <- getOption("warn")
   options(warn = 1)
   log_file_name <- file.path(path_log, sprintf("%s_%s_%s.log", dataset, variable, statistic))
-  try(log_file <- file(log_file_name, open="at")) # open file for appending in text mode
+  try(log_file <- file(log_file_name, open="at")) # Open file for appending in text mode
   sink(log_file, type="output", append = TRUE, split = TRUE)
   sink(log_file, type="message", append = TRUE)
   
@@ -81,10 +82,8 @@ retrieve_era5 <- function(variable, statistic, dataset, path_log = "~/Desktop/")
   options(warn = warn_option)
 }
 
-#-------------------------------------------------------------------------------
-#### ERA5-Land ####
+# Run retrieval
 # Takes 15-90 minutes per month
-
 # 2-meter temperature
 retrieve_era5("2m_temperature", "daily_mean", "land")
 

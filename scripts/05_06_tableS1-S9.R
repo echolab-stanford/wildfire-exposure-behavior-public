@@ -1,23 +1,36 @@
+#-------------------------------------------------------------------------------
+# Robustness Tables S1-S9
+# Written by: Marshall Burke
+#-------------------------------------------------------------------------------
 options("modelsummary_format_numeric_latex" = "plain")
 
-##################################################################################################
-#    ROBUSTNESS Tables S1-S9
-##################################################################################################
-
-
-# load main datasets and merge with distance to fire
+# Load main datasets and merge with distance to fire
 dt <- read_rds(file.path(path_dropbox, "panel_county_pm_smoke_day.RDS"))
 dt$fips <- as.character(dt$county)
-dt <- dt %>% mutate(wday = wday(date), month=month(date), year=year(date), fipsmonth=paste(fips,month,sep="_"), fipsmonthyear=paste(fips,year,month,sep="_"),dayofmonth=day(date), state=substr(county,1,2)) %>%
+dt <- dt %>% 
+  mutate(wday = wday(date), 
+         month=month(date), 
+         year=year(date), 
+         fipsmonth=paste(fips,month,sep="_"), 
+         fipsmonthyear=paste(fips,year,month,sep="_"),
+         dayofmonth=day(date), 
+         state=substr(county,1,2)) %>%
   arrange(fips,date)
-df <- read_fst(file.path(path_dropbox, "fire/processed/county_pop_weighted_dist_to_fire_2006_2020.fst"))
+df <- read_fst(file.path(path_dropbox, "fire", "processed", "county_pop_weighted_dist_to_fire_2006_2020.fst"))
 dt <- left_join(dt,df)
-# avg smoke PM exposure pre 2016
-avgsmokepm <- dt %>% filter(year<2016) %>% group_by(fips) %>% summarise(avgsmokepm=mean(smokePM,na.rm=T), avgpm = mean(pm25,na.rm=T))
+
+# Avg smoke PM exposure pre 2016
+avgsmokepm <- dt %>% 
+  filter(year<2016) %>% 
+  group_by(fips) %>% 
+  summarise(avgsmokepm=mean(smokePM,na.rm=T), 
+            avgpm = mean(pm25,na.rm=T))
 dt <- left_join(dt,avgsmokepm)
-# region mapping
+
+# Region mapping
 regions <- read_rds(file.path(path_dropbox, 'stateFIPS_epaREGION_crosswalk.rds')) %>% 
-  select(`State Code`,`EPA Region`) %>% rename(state=`State Code`, epa_region=`EPA Region`) %>%
+  select(`State Code`,`EPA Region`) %>% 
+  rename(state=`State Code`, epa_region=`EPA Region`) %>%
   distinct()
 dt <- left_join(dt,regions)
 safe <- read_rds(file.path(path_safegraph, 'safegraph_completely_home_ALL.rds'))
@@ -29,24 +42,34 @@ anscols = paste0("smokePM_lag",lgs)
 safe_dt[, (anscols) := shift(.SD, 1:7, fill=NA, "lag"), .SDcols="smokePM"]
 safe_dt <- as.data.frame(safe_dt)
 safe_dt <- safe_dt %>% mutate(smokePM_lastweek = (smokePM + smokePM_lag1 + smokePM_lag2 + smokePM_lag3 + smokePM_lag4 + smokePM_lag5 + smokePM_lag6 + smokePM_lag7)/8)
-# twitter
+
+# Twitter
 twit <- read_fst(file.path(path_twitter, "county-sentiment.fst"))
 twit$date <- as.Date(twit$date)
 dt <- left_join(dt,twit,by=c("fips","date"))
-# google
+
+# Google Trends
 goog <- read_rds(file.path(path_gtrends, "google_trends_smoke_DMA_normalized_with_covariates.RDS"))
-goog <- goog %>% mutate(month=month(date), year=year(date)) %>% mutate(dmamonth = paste(dma,month,sep="_"), dmamonthyear=paste(dma,year,month,sep="_"))
+goog <- goog %>% 
+  mutate(month=month(date), 
+         year=year(date)) %>% 
+  mutate(dmamonth = paste(dma,month,sep="_"), 
+         dmamonthyear=paste(dma,year,month,sep="_"))
 goog_panel <- read_rds(file.path(path_dropbox, 'panel_dma_pm_smoke_day_weekly.RDS'))
-avgsmokepm <- goog_panel %>% mutate(year=year(week)) %>% filter(year<2016) %>% 
-  group_by(dma) %>% summarise(avgsmokepm=mean(smokePM,na.rm=T), avgpm = mean(pm25,na.rm=T))
+avgsmokepm <- goog_panel %>% 
+  mutate(year=year(week)) %>% 
+  filter(year<2016) %>% 
+  group_by(dma) %>% 
+  summarise(avgsmokepm=mean(smokePM,na.rm=T), 
+            avgpm = mean(pm25,na.rm=T))
 goog <- left_join(goog,avgsmokepm)
-gf <- read_rds(file.path(path_dropbox, 'fire/processed/dma_weekly_dist_to_fire_cluster.RDS'))
+gf <- read_rds(file.path(path_dropbox, "fire", "processed", "dma_weekly_dist_to_fire_cluster.RDS"))
 gf <- gf %>% rename(date=week)
 goog <- left_join(goog,gf)
 
-
+#-------------------------------------------------------------------------------
 # Table S5
-dt$smokePMscale = dt$smokePM/1000  #rescaling so coefficients are legible. remember to note in table
+dt$smokePMscale = dt$smokePM/1000  # Rescaling so coefficients are legible. remember to note in table
 df1 <- filter(dt,km_dist>50)
 df2 <- filter(dt,km_dist<=50)
 models <- list()
@@ -58,7 +81,6 @@ models[["FE1"]] <- feols(sent ~ smokePMscale | fipsmonth + date^state, data=dt, 
 models[["FE2"]] <- feols(sent ~ smokePMscale | fipsmonthyear + date, data=dt, weights = dt$population)
 modelsummary(models,stars=F, statistic=c("({std.error})","[{p.value}]"),
              fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',output = file.path(path_github, 'tables/S5.tex'))
-
 
 # Table S7
 df1 <- filter(safe_dt,km_dist>50)
@@ -77,7 +99,6 @@ models[["away_FE1"]] <- feols(completely_away_perc ~ smokePM | fipsmonth + date^
 models[["away_FE2"]] <- feols(completely_away_perc ~ smokePM | fipsmonthyear + date, data=safe_dt, weights=safe_dt$population)
 modelsummary(models,stars=F, statistic=c("({std.error})","[{p.value}]"),
              fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',output = file.path(path_github, 'tables/S7.tex'))
-
 
 # Table S2
 df <- filter(goog,keyword=="air quality")
@@ -101,8 +122,6 @@ models[["AF_FE"]] <- feols(hits ~ smokePM | dmamonthyear + date, weights=df$popu
 modelsummary(models,stars=F, statistic=c("({std.error})","[{p.value}]"),
              fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',output = file.path(path_github, 'tables/S2.tex'))
 
-
-
 # Table S1
 models <- list()
 ys <- c("air quality","smoke", "air pollution","calidad del aire","humo")
@@ -124,7 +143,6 @@ options("modelsummary_format_numeric_latex" = "plain")
 modelsummary(models,stars=F, statistic=c("({std.error})","[{p.value}]"),
              fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',output = file.path(path_github, 'tables/S6.tex'))
 
-
 # Table S4
 models <- list()
 ys <- c("floods","hurricanes","dinosaurs","USWNT","steph curry")
@@ -139,7 +157,6 @@ options("modelsummary_format_numeric_latex" = "plain")
 modelsummary(models,stars=F, statistic=c("({std.error})","[{p.value}]"),
              fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',output = file.path(path_github, 'tables/S4.tex'))
 
-
 # Table S3
 models <- list()
 ys <- c("air quality","air pollution","smoke")
@@ -151,9 +168,7 @@ options("modelsummary_format_numeric_latex" = "plain")
 modelsummary(models,stars=F, statistic=c("({std.error})","[{p.value}]"),
              fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',output = file.path(path_github, 'tables/S3.tex'))
 
-
-
-
+#-------------------------------------------------------------------------------
 # Heterogenetiy analyses
 dt$smokevar = dt$smokePM/1000  #rescaling so coefficients are legible in sentiment regressions. 
 dt$median_income = dt$median_household_income/1000  #rescale income as well
@@ -162,13 +177,13 @@ safe_dt$smokevar = safe_dt$smokePM  #renaming so table works out
 goog$median_income <- goog$median_household_income/1000
 goog$smokevar = goog$smokePM
 
-# recenter moderators at their mean
+# Recenter moderators at their mean
 recenter <- function(x) {x = x - mean(x,na.rm=T)}
 dt <- dt %>% mutate(across(c(median_income, avgpm, avgsmokepm,km_dist), recenter))
 safe_dt <- safe_dt %>% mutate(across(c(median_income, avgpm, avgsmokepm,km_dist), recenter))
 goog <- goog %>% mutate(across(c(median_income, avgpm, avgsmokepm,distance), recenter))
 
-# Table 
+# Table S8
 hetmodels <- list()
 df <- filter(goog,keyword=="air quality")
 hetmodels[["sal_inc"]] <-feols(hits ~ smokevar*median_income | dmamonth + date, weights=df$population, data=df)
@@ -198,11 +213,3 @@ hetmodels[["mob_all"]] <- feols(completely_home_device_perc ~ smokevar*(median_i
 
 modelsummary(hetmodels,stars=F, statistic=c("({std.error})","[{p.value}]"),
              fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',coef_omit = "^(?!.*smokevar)",output = file.path(path_github, 'tables/S9.tex'))
-
-
-
-
-
-
-
-

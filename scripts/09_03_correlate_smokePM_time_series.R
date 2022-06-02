@@ -1,9 +1,6 @@
-num_cores = 6
-
 #-------------------------------------------------------------------------------
 # Correlate Smoke PM Time Series Across Pairs of Stations
 # Written by: Jessica Li
-# Last edited by: Jessica Li
 # 
 # Running this script may require a large amount of computing resources. The use
 # of high-performance computing is recommended.

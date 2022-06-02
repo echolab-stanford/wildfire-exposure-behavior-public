@@ -1,11 +1,10 @@
 #-------------------------------------------------------------------------------
 # Main Regressions for Figures 2 and 3
 # Written by: Marshall Burke
-# Last edited by: Jessica Li
 #-------------------------------------------------------------------------------
 options("modelsummary_format_numeric_latex" = "plain")
 
-# function to do bootstrap on spline
+# Function to do bootstrap on spline
 bootspline <- function(data,
                        boot=100,
                        xx=0:150,
@@ -27,20 +26,20 @@ bootspline <- function(data,
   for (i in 1:boot) {
     samp <- data.frame(xunit=sample(cc,length(cc),replace=T))  
     subdata <- inner_join(data,samp,by="xunit")
-    #splines wont work if top knot is larger than max of RHS, which 
+    # splines won't work if top knot is larger than max of RHS, which 
     # occasionally happens in small samples
     if (max(kts) < max(subdata$smokePM)) {
       cf <- coef(feols(fmla, data=subdata,weights = subdata$population))
       yy = as.numeric(t(as.matrix(cf[1:nn]))%*%t(matrix(nrow=length(xx),ncol=nn,
                                                         data=ns(xx,knots=kts))))
       out <- cbind(out,yy)}
-    if (round(i,-1)==i) {print(i)}  #print every 10
+    if (round(i,-1)==i) {print(i)}  # Print every 10
   }
   toplot <- data.frame(xx,out)
   return(toplot)
 }
 
-# function to do bootstrap income interaction
+# Function to do bootstrap income interaction
 bootinteract <- function(data,
                          boot=100,
                          xx=0:150,
@@ -63,14 +62,14 @@ bootinteract <- function(data,
     cf <- c(cf[xvar],cf[paste0(xvar,":",intervar)])
     yy= cf[1] + cf[2]*xx
     out <- cbind(out,yy)
-    if (round(i,-1)==i) {print(i)}  #print every 10
+    if (round(i,-1)==i) {print(i)}  # Print every 10
   }
   toplot <- data.frame(xx,out)
   return(toplot)
 }
 
-
-# load main datasets and merge with distance to fire
+#-------------------------------------------------------------------------------
+# Load main datasets and merge with distance to fire
 dt <- read_rds(file.path(path_dropbox, 'panel_county_pm_smoke_day.RDS'))
 dt$fips <- as.character(dt$county)
 dt <- dt %>% 
@@ -115,9 +114,8 @@ avgsmokepm <- goog_panel %>%
   summarise(avgsmokepm=mean(smokePM,na.rm=T), avgpm = mean(pm25,na.rm=T))
 goog <- left_join(goog,avgsmokepm)
 
-
-
-# SENTIMENT BOOTSTRAPS - somewhat slow, hr or 2..
+#-------------------------------------------------------------------------------
+# Sentiment bootstraps - somewhat slow, maybe 1-2 hours
 dts <- dt %>% 
   drop_na(c(sent,smokePM)) %>% 
   select(sent,smokePM,fipsmonth,date, 
@@ -143,7 +141,7 @@ toplot <- bootinteract(dts,
 write.csv(toplot,file=file.path(path_output, "bootstraps_twitter_incomeinteract.csv"),row.names = F)
 
 
-# MOBILITY BOOTSTRAPS
+# Mobility bootstraps
 dts <- safe_dt %>% 
   drop_na(smokePM_lastweek,
           completely_home_device_perc,
@@ -152,7 +150,7 @@ dts <- safe_dt %>%
          completely_home_device_perc,completely_away_perc, 
          fipsmonth,date,population,fips,median_household_income)
 
-# smoke day
+# Smoke day
 toplot <- bootspline(dts,
                      yvar="completely_home_device_perc",
                      xvar="smokePM",
@@ -191,8 +189,7 @@ toplot <- bootinteract(dts,
                        xx=seq(20000,140000,5000))
 write.csv(toplot,file=file.path(path_output, "bootstraps_safegraph_incomeinteract_away_simpleFE.csv"),row.names = F)
 
-
-# smoke week
+# Smoke week
 toplot <- bootspline(dts,
                      yvar="completely_home_device_perc",
                      xvar="smokePM_lastweek",
@@ -231,15 +228,28 @@ toplot <- bootinteract(dts,
                        xx=seq(20000,140000,5000))
 write.csv(toplot,file=file.path(path_output, "bootstraps_safegraph_incomeinteract_away_smokeweek_simpleFE.csv"),row.names = F)
 
-toplot <- bootinteract(safe_dt,yvar="completely_home_device_perc",xvar="smokePM_lastweek",xunit="fips",controls="",boot=100,fe="fipsmonth + date^state + wday",intervar = "median_household_income",xx=seq(20000,140000,5000))
+toplot <- bootinteract(safe_dt,
+                       yvar="completely_home_device_perc",
+                       xvar="smokePM_lastweek",
+                       xunit="fips",
+                       controls="",
+                       boot=100,
+                       fe="fipsmonth + date^state + wday",
+                       intervar = "median_household_income",
+                       xx=seq(20000,140000,5000))
 write.csv(toplot,file=file.path(path_output, "bootstraps_safegraph_incomeinteract_home_smokeweek.csv"),row.names = F)
-toplot <- bootinteract(safe_dt,yvar="completely_away_perc",xvar="smokePM_lastweek",xunit="fips",controls="",boot=100,fe="fipsmonth + date^state + wday",intervar = "median_household_income",xx=seq(20000,140000,5000))
+toplot <- bootinteract(safe_dt,
+                       yvar="completely_away_perc",
+                       xvar="smokePM_lastweek",
+                       xunit="fips",
+                       controls="",
+                       boot=100,
+                       fe="fipsmonth + date^state + wday",
+                       intervar = "median_household_income",
+                       xx=seq(20000,140000,5000))
 write.csv(toplot,file=file.path(path_output, "bootstraps_safegraph_incomeinteract_away_smokeweek.csv"),row.names = F)
 
-  
-
 # Google Trends
-
 goog <- goog %>% drop_na(hits,smokePM)
 #  vars <- c("air filter","air purifier","air quality","calidad del aire","filtro de aire","purificador de aire","smoke","humo","smoke mask","wildfire","incendio")
 vars <- c("air filter","air purifier","air quality")
@@ -261,6 +271,3 @@ for (outc in vars) {
   write.csv(toplot,file=file.path(path_output, paste0("bootstraps_gtrends_",outc,"_incomeinteract.csv")),row.names = F)
   print(outc)
 }
-
-  
-  

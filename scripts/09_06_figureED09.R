@@ -1,7 +1,6 @@
 #-------------------------------------------------------------------------------
 # Plot Map of Indoor and Outdoor PM2.5
 # Written by: Jessica Li
-# Last edited by: Jessica Li
 # 
 # Plot a map of PM2.5 at indoor and outdoor PurpleAir monitors in the Bay Area 
 # at a particular date-time.

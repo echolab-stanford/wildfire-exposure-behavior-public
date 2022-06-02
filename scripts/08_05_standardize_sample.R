@@ -1,7 +1,6 @@
 #-------------------------------------------------------------------------------
 # Standardize Sample
 # Written by: Jessica Li
-# Last edited by: Jessica Li
 #-------------------------------------------------------------------------------
 # Read in PurpleAir data frames
 pm_paths <- c("PA/", "EPA/", "PC/")

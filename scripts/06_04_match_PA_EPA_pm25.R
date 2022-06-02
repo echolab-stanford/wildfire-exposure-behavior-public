@@ -1,9 +1,6 @@
-num_cores <- 6
-
 #-------------------------------------------------------------------------------
 # Match PurpleAir and EPA PM2.5
 # Written by: Jessica Li
-# Last edited by: Jessica Li
 # 
 # For each PurpleAir monitor, match the nearest EPA station within a fixed
 # distance and at the same date-time.

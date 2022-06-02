@@ -1,19 +1,18 @@
-
-
+#-------------------------------------------------------------------------------
+# Table S10
+# Written by: Sam Heft-Neal
+#-------------------------------------------------------------------------------
+# Load data
 dat <- read_rds(file.path(path_dropbox, "epa_smoke_clean.rds"))
-
 
 dat$unitFE <- dat$id
 dat$unitmonthFE <- as.numeric(as.factor(paste(dat$id, dat$month, sep = "-")))
 dat$timeFE <- as.numeric(dat$date - as.Date("2005-12-31"))
 
-
-#smoke day
-
+# Smoke day
 mod1 <- (feols(pm25 ~ smoke_day | unitmonthFE + timeFE, data = dat[!is.na(dat$low_count),], cluster = "county"))
 
-#plume counts by density
-
+# Plume counts by density
 dat$low_dummy <- as.numeric(dat$low_count >0)
 dat$low_dummy[is.na(dat$low_count)]<-NA
 
@@ -23,14 +22,10 @@ dat$med_dummy[is.na(dat$med_count)]<-NA
 dat$high_dummy <- as.numeric(dat$high_count >0)
 dat$high_dummy[is.na(dat$high_count)]<-NA
 
-
-
 mod2 <- (feols(pm25 ~ low_dummy + med_dummy + high_dummy |   unitmonthFE + timeFE, data = dat[!is.na(dat$low_count),], cluster = "county"))
-
 
 # Save
 etable(mod1, mod2, file = file.path(path_github, "tables/S10.tex"))
-
 
 xx = dat[!is.na(dat$low_count),]
 

@@ -1,6 +1,5 @@
 // Download tract-level CDD and HDD
 // Written by: Anne Driscoll
-// Last edited by: Jessica Li
 // 
 // Upload all_nationl_tracts shapefile as an asset to Google Earth Engine. 
 // Run this in Google Earth Engine code editor.
@@ -39,7 +38,7 @@ for (var i = 2000; i < 2021; i++) {
   var cdd = subtracted.map(fix_cdd)
   var hdd = subtracted.map(fix_hdd)
 
-  cdd = cdd.sum().abs() // now that it's subtracted, the cdd and hdd don't even out in the mean/sum
+  cdd = cdd.sum().abs() // Now that it's subtracted, the cdd and hdd don't even out in the mean/sum
   hdd = hdd.sum().abs()
 
   cdd = cdd.reduceRegions({reducer: ee.Reducer.mean(),

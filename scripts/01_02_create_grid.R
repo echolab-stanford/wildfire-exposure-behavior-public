@@ -1,10 +1,10 @@
 #-------------------------------------------------------------------------------
-# Create 10 km Grid
+# Create 10km Grid
 # Written by: Anne Driscoll
-# Last edited by: Jessica Li
 # 
 # Create a 10 km grid across the contiguous US.
 #-------------------------------------------------------------------------------
+# Set projections and grid resolution
 proj = "+proj=utm +zone=19 +datum=NAD83 +units=m +no_defs"
 county_proj = "+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs"
 res = 10000
@@ -26,7 +26,7 @@ saveRDS(data_ll, file.path(path_dropbox, "grid.RDS"))
 
 # Make into an actual grid rather than points
 data_ll = spTransform(data_ll, proj)
-data_ll = gBuffer(data_ll, byid=T, width=res/2, capStyle="SQUARE") #slow
+data_ll = gBuffer(data_ll, byid=T, width=res/2, capStyle="SQUARE")
 data_ll = st_as_sf(data_ll)
 st_write(obj=data_ll, dsn=paste0(path_dropbox, "10km_grid"),
          layer="10km_grid", driver="ESRI Shapefile", append=F)

@@ -1,7 +1,6 @@
 #-------------------------------------------------------------------------------
 # Prepare PurpleAir and EPA Data
 # Written by: Jessica Li
-# Last edited by: Jessica Li
 # 
 # For PurpleAir data:
 # 1. Drop suspicious observations based on repeated consecutive PM2.5 values

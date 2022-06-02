@@ -1,7 +1,6 @@
 #-------------------------------------------------------------------------------
 # Compute Average County Width
 # Written by: Jessica Li
-# Last edited by: Jessica Li
 #-------------------------------------------------------------------------------
 # Get counties include in analysis
 counties = readRDS(file.path(path_dropbox, "all_national_counties.RDS"))

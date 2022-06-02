@@ -50,28 +50,27 @@ full_output = as.list(rep(NA, length(keywords)))
 
 #-------------------------------------------------------------------------------
 #### Loop through keywords and locations, normalizing within DMA ####
-
 prog = txtProgressBar(min=0, max=length(keywords), initial=0, style = 3)
 for (i in 1:length(keywords)) {
   
   word = keywords[i]
   variable = as.list(rep(NA, n))
   locs_cur = unique(locs$sub_code)
-  w = 1 #used to iterate over locations
+  w = 1 # Used to iterate over locations
   
   for (j in 1:n) {
     
-    #get the locations we want to pull data for
+    # Get the locations we want to pull data for
     loc_cur = as.character(locs$sub_code[w:min(c(w+4, nrow(locs)))])
     w = w+5
     
-    #pull the data
+    # Pull the data
     cur = gtrends(keyword=word, geo=loc_cur, time=time, onlyInterest=T)
     cur = cur$interest_over_time
     
-    if (is.null(cur)) { print(paste0("No data returned for '", word, "'.")); next} #make sure we got data back
+    if (is.null(cur)) { print(paste0("No data returned for '", word, "'.")); next} # Make sure we got data back
     
-    cur = cur %>% #clean the data so that hits is numeric 
+    cur = cur %>% # Clean the data so that hits is numeric
       dplyr::select(date, hits, keyword, geo) %>%
       mutate(hits=as.numeric(gsub("[a-zA-Z<>=!]", "", hits))) 
     
@@ -99,7 +98,7 @@ for (i in 1:length(keywords)) {
 }
 
 #-------------------------------------------------------------------------------
-#### combine all the searches ####
+#### Combine all the searches ####
 f = list.files(path_gtrends)
 f = f[grepl("smoke_DMA_normalized_keyword", f)]
 f = f[!grepl('\"', f)]
@@ -109,9 +108,7 @@ temp = readRDS(file.path(path_gtrends, f[1]))
 panel = expand.grid(geo=locs$sub_code, keyword=NA, date=unique(temp$date))
 
 for (i in 1:length(t)) {
-
   cur = readRDS(file.path(path_gtrends, f[i]))
-  
   print(summary(cur))
   
   geos = unique(cur$geo)
@@ -121,35 +118,34 @@ for (i in 1:length(t)) {
   
   print(keyword)
   
-  if (nrow(cur) == 0) { # if no locations have data put empty panel
-    
+  if (nrow(cur) == 0) { # If no locations have data, put empty panel
+
     cur = panel
     cur$hits = NA
     t[[i]] = cur
-    
-  } else { # if anywhere has data
-    
+
+  } else { # If anywhere has data
+
     for (j in 1:length(geos)) { 
-      # if no data in geo set to NA, since querying multiple locs at a time it 
-      #   returns 0 instead of NA in the group. 
+      # If no data in geo, set to NA, since querying multiple locs at a time
+      # it returns 0 instead of NA in the group
       hit_vec = cur$hits[cur$geo == geos[j]]
       if (sd(hit_vec) == 0 | all(is.na(hit_vec))) {
         cur$hits[cur$geo == geos[j]] = NA
       }
+
     }
-    
-    # combine with panel
+
+    # Combine with panel
     cur = merge(cur, panel, by=c("geo", "keyword", "date"), all=T)
     
     t[[i]] = cur
-    
+
   }
-  
 }
 
 t = rbindlist(t)
 saveRDS(t, file.path(path_gtrends, "google_trends_smoke_DMA_normalized_complete.RDS"))
-
 
 dma_data = readRDS(file.path(path_dropbox, "panel_dma_pm_smoke_day_weekly.RDS"))
 combined = t %>% 

@@ -1,7 +1,6 @@
 #-------------------------------------------------------------------------------
 # Get Posterior Infiltration Estimates
 # Written by: Jessica Li, Marissa Childs
-# Last edited by: Jessica Li
 # 
 # Be sure to run with posterior set to FALSE in settings.
 #-------------------------------------------------------------------------------

@@ -1,7 +1,6 @@
 #-------------------------------------------------------------------------------
 # Get ERA5 Variables Over 10 km Grid
 # Written by: Jessica Li
-# Last edited by: Jessica Li
 #-------------------------------------------------------------------------------
 # Read in project grid
 project_grid0 <- readRDS(file.path(path_dropbox, "grid.RDS"))

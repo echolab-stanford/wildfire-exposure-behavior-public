@@ -1,7 +1,6 @@
 #-------------------------------------------------------------------------------
 # Tune num.trees in Random Forest
 # Written by: Jessica Li
-# Last edited by: Jessica Li
 # 
 # Set tree hyperparameters to some constants. Vary num.trees. Choose num.trees
 # that sufficiently optimizes metrics.

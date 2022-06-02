@@ -1,13 +1,6 @@
-path_era5 = file.path(path_dropbox, "ERA5")
-path_era5_precipitation = file.path(path_era5, "total_precipitation")
-path_era5_precipitation_grid = file.path(path_era5_precipitation, "grid_precipitation")
-path_era5_temperature = file.path(path_era5, "2m_temperature")
-path_era5_temperature_grid = file.path(path_era5_temperature, "grid_temperature")
-
 #-------------------------------------------------------------------------------
 # Build EPA Station-Day Panel and Calculate Smoke PM at County Level
 # Written by: Anne Driscoll
-# Last edited by: Jessica Li
 #-------------------------------------------------------------------------------
 # Load EPA PM2.5 data
 epa = readRDS(file.path(path_dropbox, "epa_station_level_pm25_data.rds"))
@@ -51,10 +44,10 @@ years = 2006:2020
 for (i in 1:length(years)) {
   year = years[i]
   
-  precipitation = list.files(path_era5_precipitation_grid, 
+  precipitation = list.files(file.path(path_era5, "total_precipitation", "grid_precipitation"), 
                              pattern = as.character(year), full.names = T) %>% 
     map_dfr(readRDS) %>% rename(precipitation = total_precipitation)
-  temperature = list.files(path_era5_temperature_grid, 
+  temperature = list.files(file.path(path_era5, "2m_temperature", "grid_temperature"), 
                            pattern = as.character(year), full.names = T) %>% 
     map_dfr(readRDS) %>% rename(temperature = `2m_temperature`)
   
@@ -108,21 +101,21 @@ epa_c = readRDS(file.path(path_dropbox, "panel_station_pm_smoke_day_w_county.RDS
 pm_medians = epa_c %>% 
   mutate(month = month(date), year = year(date)) %>%
   group_by(county, month, year) %>% 
-  summarise(pm25 = list(pm25[which(!is.na(pm25) & smoke_day == 0)])) %>% # grab the non NA and non-smoke day PM obs
+  summarise(pm25 = list(pm25[which(!is.na(pm25) & smoke_day == 0)])) %>% # Grab the non NA and non-smoke day PM obs
   rowwise() %>%
-  mutate(nobs = length(pm25)) %>% # for each station-month year, how many obs meet criteria?
+  mutate(nobs = length(pm25)) %>% # For each station-month year, how many obs meet criteria?
   ungroup %>%
   arrange(county, month, year) %>%
   group_by(county, month) %>%
-  # add leads and lags
-  mutate(pm25_lead = lead(pm25, n = 1, default = list(NA)), # add NAs if there is no previous year which we can ignore while taking medians
-         pm25_lag = lag(pm25, n = 1, default = list(NA)), # add NAs if there is no future year which we can ignore while taking medians
+  # Add leads and lags
+  mutate(pm25_lead = lead(pm25, n = 1, default = list(NA)), # Add NAs if there is no previous year which we can ignore while taking medians
+         pm25_lag = lag(pm25, n = 1, default = list(NA)), # Add NAs if there is no future year which we can ignore while taking medians
          nobs_lead = lead(nobs, n = 1, default = 0), 
          nobs_lag = lag(nobs, n = 1, default = 0))  %>% 
   ungroup %>%
   rowwise %>%
-  mutate(pm25_3yr = list(c(pm25, pm25_lag, pm25_lead)), # combine pm from current, lag, and lead
-         nobs_3yr = nobs + nobs_lead + nobs_lag) %>% # add up the obs
+  mutate(pm25_3yr = list(c(pm25, pm25_lag, pm25_lead)), # Combine pm from current, lag, and lead
+         nobs_3yr = nobs + nobs_lead + nobs_lag) %>% # Add up the obs
   rowwise() %>%
   mutate(pm25_med_3yr = median(unlist(pm25_3yr), na.rm = T)) %>%
   select(county, year, month, pm25_med_3yr)

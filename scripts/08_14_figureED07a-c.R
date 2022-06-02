@@ -1,7 +1,6 @@
 #-------------------------------------------------------------------------------
 # Make Figure with Panels for Prior-Posterior Scatter, dY, and R2
 # Written by: Jessica Li
-# Last edited by: Jessica Li
 #-------------------------------------------------------------------------------
 # Choose lag structure
 est <- paste0("est_", lag_structure)
@@ -39,25 +38,22 @@ dy <- lapply(models, function(x) x[-1]) %>%
       "occ_renter", "pm", "pop_density", "poverty_below", "race_aian", 
       "race_asian", "race_black", "race_nhpi", "race_other", "stories", 
       "total_val", "yrbuilt", "housing_index", "livelihood_index"),
-    # c("Air Conditioning", "Area", "Baths", "Bedrooms", "Cooling Degree Days", 
-    #   "% Hispanic", "% Receiving Food Stamps", "Heating Degree Days",
-    #   "Height", "Median Income", "Latitude", "Longitude", "Renters", "PM", 
-    #   "Population Density", "% Below Poverty", "% American Indian/ Alaska Native", 
-    #   "% Asian", "% Black", "% Native Hawaiian Pacific Islander", 
-    #   "% Other Race", "Stories", "Home Value", "Year Built", "Housing Index", 
-    #   "Livelihood Index")
-    c("AC", "Area", "Baths", "Bedrooms", "CDD", "Hispanic", "Food Stamps", "HDD",
+    c("A/C", "Area", "Baths", "Bedrooms", "CDD", "Hispanic", "Food Stamps", "HDD",
       "Height", "Median Income", "Latitude", "Longitude", "Renters", "PM",
-      "Population Density", "Below Poverty", "AI/AN", "Asian", "Black", "NHPI",
+      "Pop. Density", "Below Poverty", "AI/AN", "Asian", "Black", "NHPI",
       "Other Race", "Stories", "Home Value", "Year Built", "Housing Index",
       "Livelihood Index")
   )) %>% 
-  mutate(category = case_when(vbl %in% c("Hispanic", "Black", "Asian", "NHPI", "AI/AN", "Other Race") ~
-                                "Demographic",
-                              vbl %in% c("CDD", "HDD", "Latitude", "Longitude", "PM") ~ "Environmental",
-                              vbl %in% c("Food Stamps", "Median Income", "Renters", "Population Density", "Below Poverty", "Livelihood Index") ~ "Socioeconomic",
-                              vbl %in% c("AC", "Area", "Baths", "Bedrooms", "Height", "Stories", "Home Value", "Year Built", "Housing Index") ~ "Housing"),
-         category = factor(category, levels = c("Housing", "Socioeconomic", "Demographic", "Environmental")))
+  mutate(category = case_when(
+    vbl %in% c("Hispanic", "Black", "Asian", "NHPI", "AI/AN", "Other Race") ~
+      "Demographic",
+    vbl %in% c("CDD", "HDD", "Latitude", "Longitude", "PM") ~ "Environmental",
+    vbl %in% c("Food Stamps", "Median Income", "Renters", "Population Density", 
+               "Below Poverty", "Livelihood Index") ~ "Socioeconomic",
+    vbl %in% c("A/C", "Area", "Baths", "Bedrooms", "Height", "Stories", 
+               "Home Value", "Year Built", "Housing Index") ~ "Housing"
+  ),
+  category = factor(category, levels = c("Housing", "Socioeconomic", "Demographic", "Environmental")))
 vbl_order <- dy %>% 
   group_by(category, vbl) %>%
   summarize(dY = median(dY)) %>%
@@ -69,7 +65,6 @@ dy <- dy %>% mutate(vbl = factor(vbl, levels = vbl_order))
 
 #-------------------------------------------------------------------------------
 #### Plot ####
-# Start drawing
 out_file <- file.path(path_github, "figures/raw/figureED07a-c.pdf")
 pdf(out_file, width = 13, height = 6)
 
@@ -129,5 +124,4 @@ axis(1, at = unique(dy$vbl)[str_which(unique(dy$vbl), "PM")], labels = expressio
 par(mgp = c(3, 1.85, 0))
 axis(1, at = sort(unique(dy$vbl)), labels = ifelse(str_detect(dy_labels, "PM"), NA, dy_labels))
 
-# Stop drawing
 dev.off()

@@ -1,7 +1,6 @@
 #-------------------------------------------------------------------------------
 # Tune eta and nrounds in Gradient Boosted Trees
 # Written by: Jessica Li
-# Last edited by: Jessica Li
 # 
 # Set tree hyperparameters to some constants. Vary eta and nrounds. Find metric-
 # optimizing combinations for tuning (low nrounds) and training (low eta).

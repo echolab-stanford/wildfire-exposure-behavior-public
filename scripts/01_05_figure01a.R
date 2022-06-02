@@ -1,7 +1,6 @@
 #-------------------------------------------------------------------------------
 # Plot Map of Smoke Day Trends
 # Written by: Anne Driscoll
-# Last edited by: Jessica Li
 #-------------------------------------------------------------------------------
 # Load grid
 grid = readOGR(file.path(path_dropbox, "10km_grid"), "10km_grid")
@@ -27,12 +26,12 @@ sparse_smoke_days %<>%
          heavy_days = ifelse(is.na(heavy_days), 0, heavy_days))
 
 # Calculate smoke day trends
+# Takes ~ 10 minutes
 id_vec = unique(grid$ID)
 betas = data.frame(id=as.character(id_vec), 
                    beta_days_16_27=as.numeric(NA), 
                    beta_days_27=as.numeric(NA))
 start_time = Sys.time()
-# Takes ~ 10 minutes
 for (i in 1:length(id_vec)) {
   cur_id = id_vec[i]
   cur_smoke = sparse_smoke_days[sparse_smoke_days$id == cur_id,]
@@ -50,8 +49,6 @@ grid_geo = fortify(grid, region="ID")
 data = merge(grid_geo, betas, by="id", all=T)
 data = data %>% arrange(id, piece, order)
 
-# saveRDS(data, "~/Desktop/figure_smoke_day_trends.RDS")
-
 # Read in EPA locations
 epa_ll = readOGR(file.path(path_dropbox, "epa_station_locations"), 
                  "epa_station_locations") 
@@ -66,10 +63,10 @@ diff = c(seq(lim[1], 0, length.out=4), 0, seq(0, lim[2], length.out=4))
 
 # Plot map and save
 g = ggplot() + # the data
-  geom_polygon(data=data, aes(long,lat,group=group, fill=beta_days_27)) + # make polygons 
+  geom_polygon(data=data, aes(long,lat,group=group, fill=beta_days_27)) + # Make polygons 
   geom_point(aes(lon, lat), size=0.0001, data=epa_ll@data) + 
   scale_fill_gradientn(limits=lim, colors=cols, values=scales::rescale(diff), n.breaks = 6) + 
-  theme(line = element_blank(),  # remove the background, tickmarks, etc
+  theme(line = element_blank(),  # Remove the background, tickmarks, etc
         axis.text=element_blank(),
         axis.title=element_blank(),
         panel.background = element_blank()) + 

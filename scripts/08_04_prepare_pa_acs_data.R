@@ -1,7 +1,6 @@
 #-------------------------------------------------------------------------------
 # Prepare PurpleAir, CoreLogic, and ACS Data
 # Written by: Jessica Li
-# Last edited by: Jessica Li
 #-------------------------------------------------------------------------------
 # Read in PA data
 bad_est <- function(est) return(est < 0 | est > 1)

@@ -2,7 +2,6 @@
 # Regress Infiltration on House and Community Characteristics w/ Gradient 
 # Boosted Trees
 # Written by: Jessica Li
-# Last edited by: Jessica Li
 #-------------------------------------------------------------------------------
 # Read in train and test data
 dat_train <- readRDS(file.path(path_infiltration, pm_path, post_path, "dat_train.rds"))
@@ -27,7 +26,9 @@ spec <- c(
 cutoffs <- c("100", "250", "500", "nn")
 mdls <- vector("list", length(cutoffs))
 m <- 1
-try(log_file <- file(paste0("~/Desktop/gradient_boosted_trees_", format(Sys.time(), "%Y-%m-%d-%H-%M-%OS"), ".log"), open = "at"))
+try(log_file <- file(paste0("~/Desktop/gradient_boosted_trees_", 
+                            format(Sys.time(), "%Y-%m-%d-%H-%M-%OS"), ".log"), 
+                     open = "at"))
 sink(log_file, type="output", append = TRUE, split = TRUE)
 sink(log_file, type="message", append = TRUE)
 

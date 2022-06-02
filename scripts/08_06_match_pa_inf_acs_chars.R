@@ -1,7 +1,6 @@
 #-------------------------------------------------------------------------------
-# Match PurpleAir Infiltration Estimates to ACS Characteristics
+# Match PurpleAir Infiltration Estimates to Characteristics
 # Written by: Jessica Li
-# Last edited by: Jessica Li
 #-------------------------------------------------------------------------------
 # Read in PA and ACS data
 dat_pa <- readRDS(file.path(path_infiltration, pm_path, post_path, "dat_pa_inf.rds"))

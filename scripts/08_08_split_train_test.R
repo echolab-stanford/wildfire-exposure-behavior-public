@@ -1,7 +1,6 @@
 #-------------------------------------------------------------------------------
 # Split Data into Train/Test
 # Written by: Jessica Li
-# Last edited by: Jessica Li
 #-------------------------------------------------------------------------------
 # Read in matched data
 dat_matched <- readRDS(file.path(path_infiltration, pm_path, post_path, "dat_pa_inf_cl_acs_chars_avg.rds"))

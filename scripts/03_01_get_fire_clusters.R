@@ -1,32 +1,28 @@
-path_fire = file.path(path_dropbox, "fire")
-path_fire_processed = file.path(path_fire, "processed")
-if (!dir.exists(path_fire_processed)) dir.create(path_fire_processed)
-
 #-------------------------------------------------------------------------------
 # Get Fire Clusters
 # Written by: Anne Driscoll
-# Last edited by: Jessica Li
 # 
 # Gets clusters from the fire points to try to identify large fires (eg Camp Fire).
 #-------------------------------------------------------------------------------
 # Read in data
 # Original fire data at: https://www.ospo.noaa.gov/Products/land/hms.html
 # here all the individual day files are stored in a list
+# As used in Burke et al 2021 "The changing risk and burden of wildfire in the United States"
 fire = read_rds(file.path(path_fire, "hms_fires.RDS"))
 years = 2006:2020
 fire = fire[names(fire) < paste0(max(as.numeric(years))+1,"0101")]
 
 # width is the number fire points are buffered to merge into fire clusters
-width = 2.9/111 #km/number of km at eq (to get in lat lon units)
-#2.9 because it's a 4km grid cell, to reach diagonal need sqrt(2^2+2^2)
+width = 2.9/111 # km/number of km at eq (to get in lat lon units)
+# 2.9 because it's a 4km grid cell, to reach diagonal need sqrt(2^2+2^2)
 
-# get data for each grid cell, for each year. 
+# Get data for each grid cell, for each year. 
 j = 1
 
-# loop through years
+# Loop through years
 for (i in 1:length(years)) {
     
-    # get the fires that happened during the year of interest
+    # Get the fires that happened during the year of interest
     y = years[i]
     year_fire = grepl(paste0("^", y), names(fire))
     first = max(c(1, Position(function(x){x==T}, year_fire)-3))
@@ -35,15 +31,15 @@ for (i in 1:length(years)) {
     year_fire_sp = as.list(rep(NA, length(year_fire)))
     start_loop = ifelse(first == 1, 1, 4)
 
-    # loop through days in the year
+    # Loop through days in the year
     prog = txtProgressBar(min=0, max=length(year_fire), initial=0, char="-", style=3)
     for (k in start_loop:length(year_fire)) {
         
-        #sf to sp
+        # sf to sp
         date = names(year_fire)[[k]]
         
-        # using fire data for the 3 days previous as well to capture long burning fires. 
-        # figure out which days to combine to get the correct set.
+        # Using fire data for the 3 days previous as well to capture long burning fires
+        # Figure out which days to combine to get the correct set
         if (k>4) {
             f = year_fire[(k-3):k]
             for (z in 1:4) {
@@ -56,7 +52,7 @@ for (i in 1:length(years)) {
         } else {f = year_fire[[k]][,  c("geometry")]}
         if (nrow(f)==0) {next}
         
-        # convert f to an SP object
+        # Convert f to an SP object
         f = tryCatch({
             as_Spatial(f)
         }, error = function(e) {
@@ -65,7 +61,7 @@ for (i in 1:length(years)) {
             as_Spatial(f)
         })
         
-        #buffer by 'width' to merge adjacent pixels
+        # Buffer by 'width' to merge adjacent pixels
         f_buf = gBuffer(f, byid=T,  width=width, capStyle="SQUARE", quadsegs=1)
         f_buf = st_cast(st_union(st_as_sf(f_buf)), "POLYGON")
         f_buf = SpatialPolygonsDataFrame(as_Spatial(f_buf), data.frame(id=1:length(f_buf)), match.ID=F)
@@ -73,7 +69,7 @@ for (i in 1:length(years)) {
         f_buf$date = date
         f = f_buf
         
-        #create new ids for clustered fires so that they can all be merged at the end
+        # Create new ids for clustered fires so that they can all be merged at the end
         f$ID = j:(nrow(f)+j-1)
         row.names(f) = as.character(j:(length(f$ID)+j-1))
         j = length(f$ID)+j
@@ -88,7 +84,7 @@ for (i in 1:length(years)) {
     year_fire_df = rbindlist(lapply(year_fire, function(x){x@data}), fill=T)
     year_fire = unlist(lapply(year_fire, function(x){x@polygons}))
     
-    # convert to a SpatialPolygonsDataFrame
+    # Convert to a SpatialPolygonsDataFrame
     row.names(year_fire_df) = year_fire_df$ID
     year_fire = SpatialPolygonsDataFrame(SpatialPolygons(year_fire), year_fire_df)
     crs(year_fire) = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"

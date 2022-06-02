@@ -1,7 +1,6 @@
 #-------------------------------------------------------------------------------
 # Process National ATUS
 # Written by: Anne Driscoll
-# Last edited by: Jessica Li
 # 
 # Get the time Americans spend outside.
 #-------------------------------------------------------------------------------
