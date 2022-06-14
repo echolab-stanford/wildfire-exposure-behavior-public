@@ -176,7 +176,7 @@ saveRDS(mdls, file.path(path_infiltration, paste0("models/models_", pm_method, "
 
 # Add to list of models
 file_models <- file.path(path_infiltration, "models.rds")
-if (file.exists(file_models)) mdls <- readRDS(file_models) %>% setdiff(mdls) %>% c(mdls)
+if (file.exists(file_models)) mdls <- readRDS(file_models) %>% setdiff(mdls) %>% c(mdls) # slow
 
 # Save all models
 # Takes ~10 minutes

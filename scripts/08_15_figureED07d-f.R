@@ -1,6 +1,7 @@
 #-------------------------------------------------------------------------------
 # Figure ED 7 Panels d-f
 # Written by: Sam Heft-Neal
+# Requires large computer memory.
 #-------------------------------------------------------------------------------
 #### Read in and clean up briefly ####
 data <- read_rds(file.path(path_infiltration, "analysis_data_clean_all.rds")) %>% mutate(pm25_out = pm25_out_mean)
@@ -78,7 +79,7 @@ pooled_model_tmp_out <- feols(pm25_in ~ l(pm25_out,0)*temperature_out | ID_in + 
 pooled_model_rain <- feols(pm25_in ~ l(pm25_out,0) +  l(pm25_out,0):raining | ID_in + dow + hod + mos, data = pandat)
 pooled_model_night <- feols(pm25_in ~ l(pm25_out,0) + l(pm25_out,0):night | ID_in + dow + hod + mos, data = pandat)
 
-pandat_full <- pandat; rm(pandat)
+pandat_full <- pandat#; rm(pandat)
 
 run_reg_nolag <- function(id){
   

@@ -214,8 +214,8 @@ ggplot(race_time) +
 ggsave(file.path(path_github, "figures/raw/figureED02d.jpg"), width=7.5, height=5)
 
 # Convert to PDF
-image_write(image_convert(image_read(file.path(path_github, "figures/figureED02a.jpg")), "pdf"), file.path(path_github, "figures/figureED02a.pdf"))
-image_write(image_convert(image_read(file.path(path_github, "figures/figureED02b.jpg")), "pdf"), file.path(path_github, "figures/figureED02b.pdf"))
-image_write(image_convert(image_read(file.path(path_github, "figures/figureED02c.jpg")), "pdf"), file.path(path_github, "figures/figureED02c.pdf"))
-image_write(image_convert(image_read(file.path(path_github, "figures/figureED02d.jpg")), "pdf"), file.path(path_github, "figures/figureED02d.pdf"))
-image_write(image_convert(image_read(file.path(path_github, "figures/figureED02e.jpg")), "pdf"), file.path(path_github, "figures/figureED02e.pdf"))
+image_write(image_convert(image_read(file.path(path_github, "figures/raw/figureED02a.jpg")), "pdf"), file.path(path_github, "figures/raw/figureED02a.pdf"))
+image_write(image_convert(image_read(file.path(path_github, "figures/raw/figureED02b.jpg")), "pdf"), file.path(path_github, "figures/raw/figureED02b.pdf"))
+image_write(image_convert(image_read(file.path(path_github, "figures/raw/figureED02c.jpg")), "pdf"), file.path(path_github, "figures/raw/figureED02c.pdf"))
+image_write(image_convert(image_read(file.path(path_github, "figures/raw/figureED02d.jpg")), "pdf"), file.path(path_github, "figures/raw/figureED02d.pdf"))
+image_write(image_convert(image_read(file.path(path_github, "figures/raw/figureED02e.jpg")), "pdf"), file.path(path_github, "figures/raw/figureED02e.pdf"))

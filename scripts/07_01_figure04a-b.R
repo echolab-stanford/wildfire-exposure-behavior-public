@@ -1,6 +1,7 @@
 #-------------------------------------------------------------------------------
 # Figure 4 Panels a-b
 # Written by: Sam Heft-Neal
+# Requires large computer memory.
 #-------------------------------------------------------------------------------
 #### Read in and clean up briefly ####
 # Read in data and rename pm25_out
@@ -227,9 +228,8 @@ yi1 <- apply(bs_i1, 1, function(x){quantile(x, .5)})
 yi1_low <- apply(bs_i1, 1, function(x){quantile(x, .025)})
 yi1_high <- apply(bs_i1, 1, function(x){quantile(x, .975)})
 
-histbin2 <- statar::xtile(pandat$income[pandat$heavy==0], cutpoints = seq(50000,250000,5000)); histbin2 <- c(as.numeric(table(histbin2))[1:41], 0, as.numeric(table(histbin2))[43:45])
+histbin2 <- statar::xtile(pandat$income[pandat$heavy==0], cutpoints = seq(50000,250000,5000)); histbin2 <- c(as.numeric(table(histbin2))[1:38], 0, as.numeric(table(histbin2))[39:41])
 hist_inc0 <- data.frame(xleft = seq(50000,255000,5000)-2500,xright = seq(50000,255000,5000)+2500, ht = histbin2 )
-hist_inc0 <- hist_inc0[1:44,]
 
 plot_poly <- function(x,ylow, yhigh, col){
   polygon(x = c(x[1], x, x[length(x)], rev(x)),y = c(ylow[1], yhigh, ylow[length(ylow)],rev(ylow) ), border = NA, col = col)

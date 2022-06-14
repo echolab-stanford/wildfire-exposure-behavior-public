@@ -1,6 +1,7 @@
 #-------------------------------------------------------------------------------
 # Figure 4 Panels d-f
 # Written by: Sam Heft-Neal
+# Requires large computer memory.
 #-------------------------------------------------------------------------------
 #### Read in and clean up briefly ####
 # Read in data and rename pm25_out

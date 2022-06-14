@@ -4,6 +4,7 @@
 # 
 # Plot a map of PM2.5 at indoor and outdoor PurpleAir monitors in the Bay Area 
 # at a particular date-time.
+# Commented out parts require large computer memory.
 #-------------------------------------------------------------------------------
 # Choose subset of data based on time
 chosen_year = 2020
