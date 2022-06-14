@@ -1,7 +1,7 @@
 # use_condaenv("r-reticulate")
 if (!py_module_available("cdsapi")) py_install("cdsapi", pip = TRUE)
 if (!py_module_available("tenacity")) py_install("tenacity", pip = TRUE)
-source_python(file.path(path_github, "scripts/define_CDS_API_request.py"))
+source_python(file.path(path_github, "scripts/supplementary/define_CDS_API_request.py"))
 
 #-------------------------------------------------------------------------------
 # Retrieve ERA5(-Land) Daily Aggregates
