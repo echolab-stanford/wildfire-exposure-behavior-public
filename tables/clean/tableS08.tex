@@ -1,0 +1,27 @@
+\begin{sidewaystable}
+\centering
+\caption{\textbf{Heterogeneity in salience and health protection measures.} Each column is a separate regression using the word in the column header as the moderator (interaction term in the regression), with searches for 'air quality' in the first four columns and searches for 'air filter' in the last four. Moderators are centered at their mean value. Columns marked ``all" include all three moderators interacted with smoke \pmt.  Observations are marketing area by week. Standard errors are shown in parentheses, clustered at marketing area month, and p-values on two-sided t-test are shown in brackets.}
+\footnotesize
+\begin{tabular}[t]{lcccc | cccc}
+\multicolumn{1}{r}{\textbf{Outcome:}} & \multicolumn{4}{c}{\textbf{searches for 'air quality'}} & \multicolumn{4}{c}{\textbf{searches for 'air filter' }} \\
+\multicolumn{1}{r}{\textbf{Interaction variable:}}  & income & avg smoke \pmt & avg \pmt & all & income & avg smoke \pmt & avg \pmt & all\\
+\hline
+smoke \pmt & 0.701 & 0.873 & 0.659 & 0.973 & 0.330 & 0.637 & 0.556 & 0.463\\
+ & (0.124) & (0.117) & (0.073) & (0.156) & (0.061) & (0.114) & (0.066) & (0.089)\\
+ & {}[$<$0.001] & {}[$<$0.001] & {}[$<$0.001] & {}[$<$0.001] & {}[$<$0.001] & {}[$<$0.001] & {}[$<$0.001] & {}[$<$0.001]\\
+smoke \pmt × income & -0.001 &  &  & -0.009 & 0.018 &  &  & 0.015\\
+ & (0.006) &  &  & (0.006) & (0.003) &  &  & (0.004)\\
+ & {}[0.850] &  &  & {}[0.102] & {}[$<$0.001] &  &  & {}[$<$0.001]\\
+smoke \pmt × avg smoke \pmt &  & -0.723 &  & -0.753 &  & -0.381 &  & -0.309\\
+ &  & (0.202) &  & (0.228) &  & (0.211) &  & (0.189)\\
+ &  & {}[$<$0.001] &  & {}[0.001] &  & {}[0.070] &  & {}[0.102]\\
+smoke \pmt × avg \pmt &  &  & 0.041 & 0.024 &  &  & -0.024 & -0.034\\
+ &  &  & (0.022) & (0.023) &  &  & (0.013) & (0.012)\\
+ &  &  & {}[0.057] & {}[0.297] &  &  & {}[0.054] & {}[0.005]\\
+\hline
+Num.Obs. & 50600 & 50600 & 49573 & 49573 & 50343 & 50343 & 49316 & 49316\\
+FE: date & X & X & X & X & X & X & X & X\\
+FE: DMA x month & X & X & X & X & X & X & X & X\\
+\hline
+\end{tabular}
+\end{sidewaystable}

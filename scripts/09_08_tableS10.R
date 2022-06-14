@@ -25,7 +25,7 @@ dat$high_dummy[is.na(dat$high_count)]<-NA
 mod2 <- (feols(pm25 ~ low_dummy + med_dummy + high_dummy |   unitmonthFE + timeFE, data = dat[!is.na(dat$low_count),], cluster = "county"))
 
 # Save
-etable(mod1, mod2, file = file.path(path_github, "tables/S10.tex"))
+etable(mod1, mod2, file = file.path(path_github, "tables/raw/tableS10.tex"))
 
 xx = dat[!is.na(dat$low_count),]
 

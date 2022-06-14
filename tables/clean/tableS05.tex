@@ -1,0 +1,25 @@
+\begin{table}
+\centering
+\caption{\textbf{Sentiment results are robust to alternate samples, FE, and controls}. Each column is a separate linear regression of sentiment on smoke \pmt. Column 1 is baseline specification, column 2 includes controls for daily temperature and precipitation,  columns 3-4 restrict panel to county-days $<$ or $>$ 50km from an active wildfire fire, columns 5-6 uses more restrictive time FE; m.o.s = month of sample, m.o.y = month of year. Smoke \pmt is measured in $\mu$g/m$^3$, with coefficients multiplied by 1000 to make them legible. Dependent variable is average sentiment on a county-day. Included fixed effects in each regression are shown at bottom. Standard errors are shown in parenthesis, clustered at the county-month, and p-values on two-sided t-test are shown in brackets.}
+\footnotesize
+\begin{tabular}[t]{lcccccc}
+\multicolumn{1}{r}{\textbf{Model:}}  & baseline & +controls & distance > 50 & distance < 50 & alt FE & alt FE\\
+\hline
+smoke \pmt & -0.087 & -0.092 & -0.085 & -0.082 & -0.075 & -0.082\\
+ & (0.011) & (0.011) & (0.013) & (0.017) & (0.016) & (0.009)\\
+ & {}[$<$0.001] & {}[$<$0.001] & {}[$<$0.001] & {}[$<$0.001] & {}[$<$0.001] & {}[$<$0.001]\\
+temperature &  & 0.000 &  &  &  & \\
+ &  & (0.000) &  &  &  & \\
+ &  & {}[0.834] &  &  &  & \\
+precipitation &  & -0.183 &  &  &  & \\
+ &  & (0.005) &  &  &  & \\
+ &  & {}[$<$0.001] &  &  &  & \\
+\hline
+Num.Obs. & 1239534 & 1239534 & 1009458 & 211533 & 1239534 & 1239534\\
+FE: date & X & X & X & X &  & X\\
+FE: date x state &  &  &  &  & X & \\
+FE: county x m.o.y. & X & X & X & X & X & \\
+FE: county x m.o.s. &  &  &  &  &  & X\\
+\hline
+\end{tabular}
+\end{table}

@@ -1,0 +1,17 @@
+\begin{table}
+\centering
+\caption{\textbf{Health protection results are largely robust to alternate search words in English and Spanish}. Each column is a separate regression using the word in the column header as the search term. All models include the same fixed effects but different numbers of observations, as Google Trends does not return information for areas where search volume was low. Observations are marketing area by week. Standard errors are shown in parentheses, clustered at marketing area month, and p-values on two-sided t-test are shown in brackets.}
+\footnotesize
+\begin{tabular}[t]{lcccccc}
+\multicolumn{1}{r}{\textbf{Outcome:}}  & air filter & air purifier & purple air & smoke mask & purificador de aire & filtro de aire\\
+\hline
+smoke \pmt & 0.453 & 0.540 & 0.535 & 0.350 & 0.485 & 0.020\\
+ & (0.078) & (0.069) & (0.103) & (0.089) & (0.163) & (0.102)\\
+ & {}[$<$0.001] & {}[$<$0.001] & {}[$<$0.001] & {}[$<$0.001] & {}[0.004] & {}[0.848]\\
+\hline
+Num.Obs. & 51644 & 50343 & 29493 & 8091 & 2088 & 4959\\
+FE: date & X & X & X & X & X & X\\
+FE: DMA x month & X & X & X & X & X & X\\
+\hline
+\end{tabular}
+\end{table}

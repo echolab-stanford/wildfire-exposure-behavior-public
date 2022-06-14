@@ -1,0 +1,27 @@
+\begin{table}[h]
+\centering
+\caption{\textbf{Daily EPA reference monitor PM$_{2.5}$ concentrations versus smoke plumes overhead}. Models with any plumes and models with plumes disaggregated by density both include EPA monitor by month fixed effects and day-of-sample fixed effects. Standard errors are clustered at the county level, and p-values on two-sided t-test are shown in brackets.}
+
+\begin{tabular}{lcc}
+\textbf{Smoke Metric}:
+&Smoke-Day &Smoke by Density\\
+
+\midrule &   &  \\
+smoke-day (plume of any density overhead)&3.975$^{***}$ &   \\
+  &(0.1289) &   \\
+ & [$<$0.001] &  \\
+low density plume overhead&   & 2.439$^{***}$\\
+  &   & (0.0500)\\
+ & & [$<$0.001]   \\
+medium density plume overhead&   & 3.623$^{***}$\\
+  &   & (0.1903)\\
+ & & [$<$0.001]   \\
+high density plume overhead&   & 16.29$^{***}$\\
+  &   & (1.031)\\
+ & & [$<$0.001]   \\
+\midrule Num. Obs.& 4,332,465  &  4,332,465\\
+FE: monitor by m.o.y. & Yes & Yes\\
+FE: date & Yes & Yes\\
+\midrule
+\end{tabular}
+\end{table}

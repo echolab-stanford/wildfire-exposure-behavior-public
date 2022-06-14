@@ -1,0 +1,27 @@
+\begin{sidewaystable}
+\centering
+\caption{\textbf{Heterogeneity in sentiment and mobility measures.} Each column is a separate regression using the word in the column header as the moderator (interaction term in the regression). Sentiment is the outcome in the first four columns and mobility (\% of devices fully at home) the outcome in the last four. Moderators are centered at their mean value. Columns marked ``all" include all three moderators interacted with smoke \pmt.  Observations are county-day. Standard errors are shown in parentheses, clustered at county-month, and p-values on two-sided t-test are shown in brackets.}
+\footnotesize
+\begin{tabular}[t]{lcccc | cccc}
+\multicolumn{1}{r}{\textbf{Outcome:}} & \multicolumn{4}{c}{\textbf{sentiment}} & \multicolumn{4}{c}{\textbf{\% completely at home }} \\
+\multicolumn{1}{r}{\textbf{Interaction variable:}}  & income & avg smoke \pmt & avg \pmt & all & income & avg smoke \pmt & avg \pmt & all\\
+\hline
+smoke \pmt & -0.070 & -0.097 & -0.083 & -0.058 & 0.006 & 0.032 & 0.027 & 0.009\\
+ & (0.013) & (0.012) & (0.012) & (0.018) & (0.003) & (0.005) & (0.004) & (0.004)\\
+ & {}[$<$0.001] & {}[$<$0.001] & {}[$<$0.001] & {}[0.001] & {}[0.012] & {}[$<$0.001] & {}[$<$0.001] & {}[0.046]\\
+smoke \pmt × income & -0.001 &  &  & -0.002 & 0.002 &  &  & 0.002\\
+ & (0.000) &  &  & (0.001) & (0.000) &  &  & (0.000)\\
+ & {}[0.001] &  &  & {}[0.004] & {}[$<$0.001] &  &  & {}[$<$0.001]\\
+smoke \pmt × avg smoke \pmt &  & 0.050 &  & -0.026 &  & -0.048 &  & 0.003\\
+ &  & (0.042) &  & (0.049) &  & (0.011) &  & (0.008)\\
+ &  & {}[0.233] &  & {}[0.588] &  & {}[$<$0.001] &  & {}[0.719]\\
+smoke \pmt × avg \pmt &  &  & 0.016 & 0.016 &  &  & 0.006 & 0.007\\
+ &  &  & (0.004) & (0.004) &  &  & (0.002) & (0.002)\\
+ &  &  & {}[$<$0.001] & {}[$<$0.001] &  &  & {}[0.001] & {}[$<$0.001]\\
+\hline
+Num.Obs. & 1239534 & 1239534 & 1117020 & 1117020 & 678971 & 678971 & 608832 & 608832\\
+FE: date & X & X & X & X & X & X & X & X\\
+FE: county x month & X & X & X & X & X & X & X & X\\
+\hline
+\end{tabular}
+\end{sidewaystable}

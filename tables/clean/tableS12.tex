@@ -1,0 +1,19 @@
+\begin{table}[h]
+\centering
+\caption{\textbf{Hourly EPA reference monitor PM$_{2.5}$ concentrations versus different constructions of Purple Air PM$_{2.5}$ concentrations}. Each column is a separate linear regression with hourly PM$_{2.5}$ concentration at an EPA reference monitor as the dependent variable and a different version of Purple Air derived PM$_{2.5}$ concentration as the independent variable. All models include EPA monitor fixed effects, hour-of-day fixed effects, and month-of-sample fixed effects. Standard errors are shown in parentheses, and p-values on two-sided t-test are shown in brackets.}
+
+\begin{tabular}[t]{lccc}
+\textbf{Purple Air PM$_{2.5}$ Construction:} &CF\_1 & Barkjohn et al correction & particle count derived\\
+\hline
+Purple Air \pmt & 0.560*** & 1.064*** & 2.196***\\
+ & (0.035) & (0.070) & (0.109) \\
+ & [$<$0.001] & [$<$0.001] & [$<$0.001] \\
+\hline
+R$^2$ & 0.68& 0.68&0.72 \\
+Num.Obs. & 199,394 & 199,394&199,050 \\
+FE: EPA monitor & X & X &X \\
+FE: hour-of-day & X & X&X \\
+FE: month-of-sample & X & X&X \\
+\hline
+\end{tabular}
+\end{table}

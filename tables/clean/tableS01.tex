@@ -1,0 +1,19 @@
+\begin{table}[h]
+\centering
+\caption{\textbf{Salience results are robust to alternate search words in English and Spanish}. Each column is a separate linear regression using the phrase in the column header as the search term, and smoke \pmt as the regressor. All models include the same fixed effects but different numbers of observations, as Google Trends does not return information for areas where search volume was low. Observations are marketing area by week. Standard errors are shown in parentheses, clustered at marketing area month, and p-values on two-sided t-test are shown in brackets.}
+
+\begin{tabular}[t]{lccccc}
+
+\multicolumn{1}{r}{\textbf{Outcome:}}  & air quality & smoke & air pollution & calidad del aire & humo\\
+\hline
+smoke \pmt & 0.689 & 0.567 & 0.325 & 0.622 & 0.118\\
+ & (0.095) & (0.052) & (0.069) & (0.114) & (0.060)\\
+ & {}[$<$0.001] & {}[$<$0.001] & {}[$<$0.001] & {}[$<$0.001] & {}[0.049]\\
+
+\hline
+Num.Obs. & 50600 & 51900 & 44618 & 5220 & 22707\\
+FE: date & X & X & X & X & X\\
+FE: DMA x m.o.y & X & X & X & X & X\\
+\hline
+\end{tabular}
+\end{table}

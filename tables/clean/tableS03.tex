@@ -1,0 +1,22 @@
+\begin{table}[h]
+    \centering
+    \caption{\textbf{Both general air quality related searches as well as smoke-specific searches respond to smoke \pmt exposure, but neither vary as a function of distance to active fire.} Each column is a separate linear regression of search activity on smoke \pmt, distance to fire (in km), and smoke \pmt interacted with distance to fire. Interaction coefficients are close to zero and not statistically significant. Results provide additional evidence that smoke exposure itself, rather than proximity to active fires, is the cause of changing search activity.  But results do not shed light on whether individuals recognize that it is smoke that is causing poor air quality. Standard errors are shown in parenthesis, clustered at the county-month, and p-values on two-sided t-test are shown in brackets.}
+ \begin{tabular}[t]{lccc}
+\multicolumn{1}{r}{\textbf{Outcome:}}  & air quality & air pollution & smoke\\
+\hline
+smoke \pmt & 1.065 & 0.489 & 0.741\\
+ & (0.115) & (0.116) & (0.084)\\
+ & {}[$<$0.001] & {}[$<$0.001] & {}[$<$0.001]\\
+distance to fire (km) & -0.001 & 0.000 & 0.000\\
+ & (0.001) & (0.001) & (0.000)\\
+ & {}[0.032] & {}[0.529] & {}[0.844]\\
+smoke \pmt × distance to fire & 0.000 & 0.000 & 0.000\\
+ & (0.000) & (0.000) & (0.000)\\
+ & {}[0.758] & {}[0.783] & {}[0.178]\\
+ \hline
+Num.Obs. & 40913 & 36072 & 41963\\
+FE: date & X & X & X\\
+FE: DMA x m.o.y. & X & X & X\\
+\hline
+\end{tabular}
+\end{table}

@@ -1,0 +1,25 @@
+\begin{sidewaystable}
+\centering
+\caption{\textbf{Salience and health protection measures are robust to alternate samples, FE, and controls}. Each column is a separate linear regression of either salience or health protection on smoke \pmt, with dependent variable noted in the top line. Column 1 is baseline specification, column 2 includes controls for daily temperature and precipitation, columns 3-4 restrict panel to county-days $<$ or $>$ 50km from an active wildfire fire, column 5-6 uses more restrictive time FE; m.o.s = month of sample, m.o.y = month of year. Column 7 uses average smoke \pmt over the previous week as the regressor. Last four columns repeat similar regression for \% fully away. Smoke \pmt is measured in $\mu$g/m$^3$, with coefficients multiplied by 1000 to make them legible. Dependent variable is average sentiment on a county-day. Included fixed effects in each regression are shown at bottom. Standard errors are shown in parenthesis, clustered at the county-month, and p-values on two-sided t-test are shown in brackets.}
+\footnotesize
+\begin{tabular}[t]{lccccc|ccccc}
+\multicolumn{1}{r}{\textbf{Outcome:}} & \multicolumn{5}{c}{\textbf{Searches for 'air quality'}} & \multicolumn{4}{c}{\textbf{Searches for 'air filter'}} \\
+\multicolumn{1}{r}{\textbf{Model:}}  & baseline & +controls & distance > 50 & distance < 50 & alt FE & baseline & +controls &distance > 50 &distance < 50 & alt FE\\
+\hline
+smoke \pmt & 0.689 & 0.681 & 1.322 & 0.903 & 0.770 & 0.453 & 0.299 & 0.455 & 0.346 & 0.399\\
+ & (0.095) & (0.118) & (0.230) & (0.100) & (0.107) & (0.078) & (0.078) & (0.230) & (0.080) & (0.074)\\
+ & {}[$<$0.001] & {}[$<$0.001] & {}[$<$0.001] & {}[$<$0.001] & {}[$<$0.001] & {}[$<$0.001] & {}[$<$0.001] & {}[0.048] & {}[$<$0.001] & {}[$<$0.001]\\
+temperature &  & 0.277 &  &  &  &  & 0.474 &  &  & \\
+ &  & (0.077) &  &  &  &  & (0.067) &  &  & \\
+ &  & {}[$<$0.001] &  &  &  &  & {}[$<$0.001] &  &  & \\
+precipitation &  & -6.808 &  &  &  &  & -3.872 &  &  & \\
+ &  & (2.798) &  &  &  &  & (3.458) &  &  & \\
+ &  & {}[0.015] &  &  &  &  & {}[0.263] &  &  & \\
+\hline
+Num.Obs. & 50600 & 43814 & 33085 & 7828 & 50600 & 51644 & 44858 & 33749 & 8008 & 51644\\
+FE: date & X & X & X & X & X & X & X & X & X & X\\
+FE: DMA x m.o.y & X & X & X & X &  & X & X & X & X & \\
+FE: DMA x m.o.s &  &  &  &  & X &  &  &  &  & X\\
+\hline
+\end{tabular}
+\end{sidewaystable}
