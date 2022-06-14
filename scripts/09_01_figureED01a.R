@@ -4,7 +4,7 @@
 #-------------------------------------------------------------------------------
 # Load counties
 counties = readRDS(file.path(path_dropbox, "all_national_counties.RDS"))
-counties = counties[!counties$STATEFP %in% c("02", 15, 57:78), ]
+counties = counties[!counties$STATEFP %in% str_pad(c(2, 15, 57:78), 2, "left", 0), ]
 
 # Get EPA stations
 epa = readRDS(file.path(path_dropbox, "epa_station_level_pm25_data.rds"))
