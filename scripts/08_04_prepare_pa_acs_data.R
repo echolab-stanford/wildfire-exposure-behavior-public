@@ -73,8 +73,8 @@ dat_acs <- dat_acs %>%
 # Read in cooling/heating degree days data
 files <- list.files(file.path(path_dropbox, "temperature/"), 
                     pattern = "^tract_level", full.names = TRUE)
-years <- as.numeric(substr(files, 69, 72))
-variable <- substr(files, 65, 67)
+years <- as.numeric(substr(basename(files), 17, 20))
+variable <- substr(basename(files), 13, 15)
 degree_days <- files %>% lapply(read.csv)
 degree_days <- mapply(mutate, year = years, vbl = variable, degree_days, SIMPLIFY = FALSE) %>% 
   bind_rows() %>% 

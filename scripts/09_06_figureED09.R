@@ -28,7 +28,7 @@ if (!dir.exists(path_purpleair)) dir.create(path_purpleair)
 # Run commented out lines using HPC because file too large to load in memory
 outdoor_file = file.path(path_dropbox, "outdoor_monitor_data_clean_part1.rds")
 outdoor_subset_file = paste0(file_path_sans_ext(basename(outdoor_file)), "_", 
-                             chosen_year, "_", paste(str_pad(chosen_months, 2, "left", 0), 
+                             chosen_year, "-", paste(str_pad(chosen_months, 2, "left", 0), 
                                                      collapse = "-"), ".rds")
 outdoor_subset_file = file.path(path_purpleair, outdoor_subset_file)
 # outdoor = readRDS(outdoor_file) %>%
@@ -51,7 +51,7 @@ outdoor = readRDS(outdoor_subset_file)
 # Subset indoor data based on time
 indoor_file = file.path(path_dropbox, "indoor_monitor_data_clean.rds")
 indoor_subset_file = paste0(file_path_sans_ext(basename(indoor_file)), "_",
-                            chosen_year, "_", paste(str_pad(chosen_months, 2, "left", 0), 
+                            chosen_year, "-", paste(str_pad(chosen_months, 2, "left", 0), 
                                                     collapse = "-"), ".rds")
 indoor_subset_file = file.path(path_purpleair, indoor_subset_file)
 # indoor = readRDS(indoor_file) %>%
