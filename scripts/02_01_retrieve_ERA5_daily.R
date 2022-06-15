@@ -1,7 +1,7 @@
 # use_condaenv("r-reticulate")
 if (!py_module_available("cdsapi")) py_install("cdsapi", pip = TRUE)
 if (!py_module_available("tenacity")) py_install("tenacity", pip = TRUE)
-source_python(file.path(path_github, "scripts/supplementary/define_CDS_API_request.py"))
+source_python(file.path(path_supplementary, "define_CDS_API_request.py"))
 
 #-------------------------------------------------------------------------------
 # Retrieve ERA5(-Land) Daily Aggregates
@@ -26,9 +26,6 @@ north <- 49.92
 south <- 24.43
 east <- -66.62
 west <- -125.5
-
-# Output directory
-path_out <- file.path(path_dropbox, "ERA5/")
 
 #-------------------------------------------------------------------------------
 #### Retrieve data ####
@@ -66,7 +63,7 @@ retrieve_era5 <- function(variable, statistic, dataset, path_log = "~/Desktop/")
         month = month,
         time_zone = time_zone,
         area = area,
-        folder = file.path(path_out, variable)
+        folder = file.path(path_era5, variable)
       )
 
       run_time <- print_time(start_time)

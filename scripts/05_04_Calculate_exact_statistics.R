@@ -7,7 +7,7 @@
 options("modelsummary_format_numeric_latex" = "plain")
 
 # Load main datasets
-dt <- read_rds(file.path(path_dropbox, 'panel_county_pm_smoke_day.RDS'))
+dt <- read_rds(file.path(path_smokePM, 'panel_county_pm_smoke_day.RDS'))
 dt$fips <- as.character(dt$county)
 dt <- dt %>% 
   mutate(month=month(date), 
@@ -46,11 +46,11 @@ print(paste("t-test(df=",df,")=",round(ct[3],3),", p=",ct[4],", eff. size =",
 # Google Trends
 goog <- read_rds(file.path(path_gtrends, "google_trends_smoke_DMA_normalized_with_covariates.RDS"))
 goog <- goog %>% mutate(month=month(date), year=year(date)) %>% mutate(dmamonth = paste(dma,month,sep="_"), dmamonthyear=paste(dma,year,month,sep="_"))
-goog_panel <- read_rds(file.path(path_dropbox, 'panel_dma_pm_smoke_day_weekly.RDS'))
+goog_panel <- read_rds(file.path(path_smokePM, 'panel_dma_pm_smoke_day_weekly.RDS'))
 avgsmokepm <- goog_panel %>% mutate(year=year(week)) %>% filter(year<2016) %>% 
   group_by(dma) %>% summarise(avgsmokepm=mean(smokePM,na.rm=T), avgpm = mean(pm25,na.rm=T))
 goog <- left_join(goog,avgsmokepm)
-gf <- read_rds(file.path(path_dropbox, "fire", "processed", 'dma_weekly_dist_to_fire_cluster.RDS'))
+gf <- read_rds(file.path(path_fire, "distance_to_fire", 'dma_weekly_dist_to_fire_cluster.RDS'))
 gf <- gf %>% rename(date=week)
 goog <- left_join(goog,gf)
 

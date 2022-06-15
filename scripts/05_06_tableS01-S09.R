@@ -5,7 +5,7 @@
 options("modelsummary_format_numeric_latex" = "plain")
 
 # Load main datasets and merge with distance to fire
-dt <- read_rds(file.path(path_dropbox, "panel_county_pm_smoke_day.RDS"))
+dt <- read_rds(file.path(path_smokePM, "panel_county_pm_smoke_day.RDS"))
 dt$fips <- as.character(dt$county)
 dt <- dt %>% 
   mutate(wday = wday(date), 
@@ -16,7 +16,7 @@ dt <- dt %>%
          dayofmonth=day(date), 
          state=substr(county,1,2)) %>%
   arrange(fips,date)
-df <- read_fst(file.path(path_dropbox, "fire", "processed", "county_pop_weighted_dist_to_fire_2006_2020.fst"))
+df <- read_fst(file.path(path_fire, "distance_to_fire", "county_pop_weighted", "county_pop_weighted_dist_to_fire_2006_2020.fst"))
 dt <- left_join(dt,df)
 
 # Avg smoke PM exposure pre 2016
@@ -28,7 +28,7 @@ avgsmokepm <- dt %>%
 dt <- left_join(dt,avgsmokepm)
 
 # Region mapping
-regions <- read_rds(file.path(path_dropbox, 'stateFIPS_epaREGION_crosswalk.rds')) %>% 
+regions <- read_rds(file.path(path_boundaries, 'stateFIPS_epaREGION_crosswalk.rds')) %>% 
   select(`State Code`,`EPA Region`) %>% 
   rename(state=`State Code`, epa_region=`EPA Region`) %>%
   distinct()
@@ -55,7 +55,7 @@ goog <- goog %>%
          year=year(date)) %>% 
   mutate(dmamonth = paste(dma,month,sep="_"), 
          dmamonthyear=paste(dma,year,month,sep="_"))
-goog_panel <- read_rds(file.path(path_dropbox, 'panel_dma_pm_smoke_day_weekly.RDS'))
+goog_panel <- read_rds(file.path(path_smokePM, 'panel_dma_pm_smoke_day_weekly.RDS'))
 avgsmokepm <- goog_panel %>% 
   mutate(year=year(week)) %>% 
   filter(year<2016) %>% 
@@ -63,7 +63,7 @@ avgsmokepm <- goog_panel %>%
   summarise(avgsmokepm=mean(smokePM,na.rm=T), 
             avgpm = mean(pm25,na.rm=T))
 goog <- left_join(goog,avgsmokepm)
-gf <- read_rds(file.path(path_dropbox, "fire", "processed", "dma_weekly_dist_to_fire_cluster.RDS"))
+gf <- read_rds(file.path(path_fire, "distance_to_fire", "dma_weekly_dist_to_fire_cluster.RDS"))
 gf <- gf %>% rename(date=week)
 goog <- left_join(goog,gf)
 
@@ -80,7 +80,7 @@ models[["distance < 50"]] <- feols(sent ~ smokePMscale | fipsmonth + date, data=
 models[["FE1"]] <- feols(sent ~ smokePMscale | fipsmonth + date^state, data=dt, weights = dt$population)
 models[["FE2"]] <- feols(sent ~ smokePMscale | fipsmonthyear + date, data=dt, weights = dt$population)
 modelsummary(models,stars=F, statistic=c("({std.error})","[{p.value}]"),
-             fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',output = file.path(path_github, 'tables/raw/tableS05.tex'))
+             fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',output = file.path(path_tables, 'tableS05.tex'))
 
 # Table S7
 df1 <- filter(safe_dt,km_dist>50)
@@ -98,7 +98,7 @@ models[["away_week"]] <- feols(completely_away_perc ~ smokePM_lastweek | fipsmon
 models[["away_FE1"]] <- feols(completely_away_perc ~ smokePM | fipsmonth + date^State_FIPS, data=safe_dt, weights=safe_dt$population)
 models[["away_FE2"]] <- feols(completely_away_perc ~ smokePM | fipsmonthyear + date, data=safe_dt, weights=safe_dt$population)
 modelsummary(models,stars=F, statistic=c("({std.error})","[{p.value}]"),
-             fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',output = file.path(path_github, 'tables/raw/tableS07.tex'))
+             fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',output = file.path(path_tables, 'tableS07.tex'))
 
 # Table S2
 df <- filter(goog,keyword=="air quality")
@@ -120,7 +120,7 @@ models[["AF_distance > 50"]] <- feols(hits ~ smokePM | dmamonth + date, weights=
 models[["AF_distance < 50"]] <- feols(hits ~ smokePM | dmamonth + date, weights=df2$population, data=df2)
 models[["AF_FE"]] <- feols(hits ~ smokePM | dmamonthyear + date, weights=df$population, data=df)
 modelsummary(models,stars=F, statistic=c("({std.error})","[{p.value}]"),
-             fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',output = file.path(path_github, 'tables/raw/tableS02.tex'))
+             fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',output = file.path(path_tables, 'tableS02.tex'))
 
 # Table S1
 models <- list()
@@ -130,7 +130,7 @@ for (y in ys) {
   models[[y]] <- feols(hits ~ smokePM | dmamonth + date, weights=df$population, data=df)
 }
 modelsummary(models,stars=F, statistic=c("({std.error})","[{p.value}]"),
-             fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',output = file.path(path_github, 'tables/raw/tableS01.tex'))
+             fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',output = file.path(path_tables, 'tableS01.tex'))
 
 # Table S6
 models <- list()
@@ -141,7 +141,7 @@ for (y in ys) {
 }
 options("modelsummary_format_numeric_latex" = "plain")
 modelsummary(models,stars=F, statistic=c("({std.error})","[{p.value}]"),
-             fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',output = file.path(path_github, 'tables/raw/tableS06.tex'))
+             fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',output = file.path(path_tables, 'tableS06.tex'))
 
 # Table S4
 models <- list()
@@ -155,7 +155,7 @@ goog_pm <- goog %>% filter(smokePM==0 & keyword=="smoke")
 models[["smoke"]] <- feols(hits ~ pm25 | dmamonth + date, weights=df$population, data=df)
 options("modelsummary_format_numeric_latex" = "plain")
 modelsummary(models,stars=F, statistic=c("({std.error})","[{p.value}]"),
-             fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',output = file.path(path_github, 'tables/raw/tableS04.tex'))
+             fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',output = file.path(path_tables, 'tableS04.tex'))
 
 # Table S3
 models <- list()
@@ -166,7 +166,7 @@ for (y in ys) {
 }
 options("modelsummary_format_numeric_latex" = "plain")
 modelsummary(models,stars=F, statistic=c("({std.error})","[{p.value}]"),
-             fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',output = file.path(path_github, 'tables/raw/tableS03.tex'))
+             fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',output = file.path(path_tables, 'tableS03.tex'))
 
 #-------------------------------------------------------------------------------
 # Heterogenetiy analyses
@@ -197,7 +197,7 @@ hetmodels[["prot_avgsmoke"]] <- feols(hits ~ smokevar*avgsmokepm | dmamonth + da
 hetmodels[["prot_avgpm"]] <- feols(hits ~ smokevar*avgpm | dmamonth + date, weights=df$population, data=df)
 hetmodels[["prot_all"]] <- feols(hits ~ smokevar*(median_income + avgsmokepm + avgpm) | dmamonth + date, weights=df$population, data=df)
 modelsummary(hetmodels,stars=F, statistic=c("({std.error})","[{p.value}]"),
-             fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',coef_omit = "^(?!.*smokevar)",output = file.path(path_github, 'tables/raw/tableS08.tex'))
+             fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',coef_omit = "^(?!.*smokevar)",output = file.path(path_tables, 'tableS08.tex'))
 
 # Table S9
 hetmodels <- list()
@@ -212,4 +212,4 @@ hetmodels[["mob_avgpm"]] <- feols(completely_home_device_perc ~ smokevar*avgpm |
 hetmodels[["mob_all"]] <- feols(completely_home_device_perc ~ smokevar*(median_income + avgsmokepm + avgpm) | fipsmonth + date, data=safe_dt, weights=safe_dt$population,lean = T)
 
 modelsummary(hetmodels,stars=F, statistic=c("({std.error})","[{p.value}]"),
-             fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',coef_omit = "^(?!.*smokevar)",output = file.path(path_github, 'tables/raw/tableS09.tex'))
+             fmt=3,gof_omit = 'R2*|Log.Lik.|Std.Errors|R2|AIC|BIC',coef_omit = "^(?!.*smokevar)",output = file.path(path_tables, 'tableS09.tex'))

@@ -6,8 +6,8 @@
 # optimizing combinations for tuning (low nrounds) and training (low eta).
 #-------------------------------------------------------------------------------
 # Read in train and test data
-dat_train <- readRDS(file.path(path_infiltration, pm_path, post_path, "dat_train.rds"))
-dat_test <- readRDS(file.path(path_infiltration, pm_path, post_path, "dat_test.rds"))
+dat_train <- readRDS(file.path(path_infiltration, "heterogeneity", pm_path, post_path, "dat_train.rds"))
+dat_test <- readRDS(file.path(path_infiltration, "heterogeneity", pm_path, post_path, "dat_test.rds"))
 
 # Choose lag configuration in 00_utils: est_ldv (default), est_dl, est_nl, est_al
 est <- paste0("est_", lag_structure)

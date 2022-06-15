@@ -3,7 +3,7 @@
 # Written by: Anne Driscoll
 #-------------------------------------------------------------------------------
 # Load grid
-grid = readOGR(file.path(path_dropbox, "10km_grid"), "10km_grid")
+grid = readOGR(file.path(path_boundaries, "10km_grid"), "10km_grid")
 county_proj = "+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs"
 grid = spTransform(grid, CRS(county_proj))
 
@@ -50,7 +50,7 @@ data = merge(grid_geo, betas, by="id", all=T)
 data = data %>% arrange(id, piece, order)
 
 # Read in EPA locations
-epa_ll = readOGR(file.path(path_dropbox, "epa_station_locations"), 
+epa_ll = readOGR(file.path(path_epa, "epa_station_locations"), 
                  "epa_station_locations") 
 epa_ll = epa_ll[epa_ll$lon >= -125.18 & epa_ll$lon <= -66.63 &
                   epa_ll$lat >= 24.64 & epa_ll$lat <= 49.41,]
@@ -71,5 +71,5 @@ g = ggplot() + # the data
         axis.title=element_blank(),
         panel.background = element_blank()) + 
   coord_map("bonne", mean(data$lat)) + labs(fill="")
-ggsave(file.path(path_github, "figures/raw/figure01a.pdf"),
+ggsave(file.path(path_figures, "figure01a.pdf"),
        plot = g, width=10, height=5, units="in")

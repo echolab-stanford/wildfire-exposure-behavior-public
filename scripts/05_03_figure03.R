@@ -3,7 +3,7 @@
 # Written by: Marshall Burke
 #-------------------------------------------------------------------------------
 # Load datasets to generate exposure histograms and sample counts
-dt <- read_rds(file.path(path_dropbox, 'panel_county_pm_smoke_day.RDS'))
+dt <- read_rds(file.path(path_smokePM, 'panel_county_pm_smoke_day.RDS'))
 dt$fips <- as.character(dt$county)
 twit <- read_fst(file.path(path_twitter, "county-sentiment.fst"))
 twit$date <- as.Date(twit$date)
@@ -50,12 +50,12 @@ mkplot2 <- function(toplot,
 
 #-------------------------------------------------------------------------------
 # Plot
-pdf(file.path(path_github, 'figures/raw/figure03.pdf'),width=8,height=8)
+pdf(file.path(path_figures, 'figure03.pdf'),width=8,height=8)
 par(mfrow=c(2,2),mar=c(4,4,1,3))
 
 # Salience
 outc <- "air quality"
-toplot <- read_csv(file.path(path_output, paste0("bootstraps_gtrends_",outc,"_incomeinteract.csv")))
+toplot <- read_csv(file.path(path_beh_bootstraps, paste0("bootstraps_gtrends_",outc,"_incomeinteract.csv")))
 df <- goog %>% 
   filter(keyword==outc) %>% 
   mutate(date=as.Date(date),dma=geo) %>% 
@@ -74,7 +74,7 @@ mkplot2(toplot,ylab=expression(paste("effect of 50",mu,"g day on searches for 'a
 axis(1, at=seq(30,100,10)*1000,seq(30,100,10))
 
 # Sentiment
-toplot <- read_csv(file.path(path_output, "bootstraps_twitter_incomeinteract.csv"))
+toplot <- read_csv(file.path(path_beh_bootstraps, "bootstraps_twitter_incomeinteract.csv"))
 twit <- twit %>% mutate(fipsmonth=paste(fips,month(date),sep="_"),wday=wday(date),state=substr(fips,1,2))
 mod <- feols(sent ~ smokePM*median_household_income  | fipsmonth + date, data=twit, weights = twit$population)
 b=round(coef(mod)["smokePM:median_household_income"]*10000*50,3)
@@ -90,7 +90,7 @@ axis(1, at=seq(30,100,10)*1000,seq(30,100,10))
 
 # Health protection
 outc <- "air filter"
-toplot <- read_csv(file.path(path_output, paste0("bootstraps_gtrends_",outc,"_incomeinteract.csv")))
+toplot <- read_csv(file.path(path_beh_bootstraps, paste0("bootstraps_gtrends_",outc,"_incomeinteract.csv")))
 df <- goog %>% 
   filter(keyword==outc) %>% 
   mutate(date=as.Date(date),dma=geo) %>% 
@@ -110,7 +110,7 @@ axis(1, at=seq(30,100,10)*1000,seq(30,100,10))
 
 # Mobility
 safe <- safe %>% mutate(fipsmonth=paste(fips,month(date),sep="_"))
-toplot <- read_csv(file.path(path_output, "bootstraps_safegraph_incomeinteract_home_simpleFE.csv"))
+toplot <- read_csv(file.path(path_beh_bootstraps, "bootstraps_safegraph_incomeinteract_home_simpleFE.csv"))
 mod <- feols(completely_home_device_perc ~ smokePM*median_household_income | fipsmonth + date, data=safe, weights=safe$population)
 b=round(coef(mod)["smokePM:median_household_income"]*10000*50,1)
 pval=fixest::pvalue(mod)["smokePM:median_household_income"]

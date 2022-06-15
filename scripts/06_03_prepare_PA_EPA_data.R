@@ -21,7 +21,7 @@ max_reps <- 24 * 3 - 1
 #-------------------------------------------------------------------------------
 #### PA ####
 # Read in PA data
-dat_pa <- readRDS(file.path(path_dropbox, "outdoor_monitor_data_clean.rds")) %>%
+dat_pa <- readRDS(file.path(path_purpleair, "outdoor_monitor_data_clean.rds")) %>%
   select(ID_out, time_hours, year, month, day, hour, Lon_out, Lat_out, pm25_out) %>%
   rename(id = ID_out, date_time = time_hours, lon = Lon_out, lat = Lat_out, pm25 = pm25_out)
 
@@ -43,13 +43,13 @@ dat_pa <- dat_pa %>%
 #### EPA ####
 # Figure out which years PA and EPA data might overlap
 years_pa <- unique(dat_pa$year)
-years_epa <- list.files(file.path(path_dropbox, "hourly_epa")) %>%
+years_epa <- list.files(file.path(path_epa, "hourly_epa")) %>%
   substr(14, 17) %>%
   as.numeric()
 years <- max(min(years_pa), min(years_epa)):min(max(years_pa), max(years_epa))
 
 # Read in EPA data
-dat_epa <- file.path(path_dropbox, "hourly_epa", paste0("hourly_88101_", years, ".csv")) %>%
+dat_epa <- file.path(path_epa, "hourly_epa", paste0("hourly_88101_", years, ".csv")) %>%
   map_dfr(read.csv) %>%
   select(State.Code, County.Code, Site.Num, Date.GMT, Time.GMT, 
          Longitude, Latitude, Sample.Measurement) %>%
@@ -81,5 +81,5 @@ dat_pa <- dat_pa %>% filter(date_time %in% dt_epa)
 dat_epa <- dat_epa %>% filter(date_time %in% dt_pa)
 
 # Save data
-saveRDS(dat_pa, file.path(path_dropbox, "dat_pa_pm25.rds"))
-saveRDS(dat_epa, file.path(path_dropbox, "dat_epa_pm25.rds"))
+saveRDS(dat_pa, file.path(path_purpleair, "dat_pa_pm25.rds"))
+saveRDS(dat_epa, file.path(path_epa, "dat_epa_pm25.rds"))

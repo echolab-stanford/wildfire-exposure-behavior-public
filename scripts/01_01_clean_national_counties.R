@@ -4,7 +4,7 @@
 #-------------------------------------------------------------------------------
 #### All national counties ####
 # Read in TIGER line file
-counties = readOGR(file.path(path_dropbox, "tl_2019_us_county"), "tl_2019_us_county")
+counties = readOGR(file.path(path_boundaries, "tl_2019_us_county"), "tl_2019_us_county")
 
 # Simplify
 c = gSimplify(counties, 0.008, topologyPreserve=F)
@@ -16,14 +16,14 @@ c$INTPTLAT = as.numeric(as.character(c$INTPTLAT))
 c$INTPTLON = as.numeric(as.character(c$INTPTLON))
 
 # Save
-counties_file = file.path(path_dropbox, "all_national_counties.rds")
+counties_file = file.path(path_boundaries, "all_national_counties.rds")
 if (!file.exists(counties_file)) saveRDS(c, counties_file)
 
 #-------------------------------------------------------------------------------
 #### CONUS counties ####
 # As used in Burke et al 2021 "The changing risk and burden of wildfire in the United States"
 # Read in TIGER line file
-counties = readOGR(file.path(path_dropbox, "tl_2019_us_county"), "tl_2019_us_county")
+counties = readOGR(file.path(path_boundaries, "tl_2019_us_county"), "tl_2019_us_county")
 
 # Convert lat/lon to numeric
 counties$AWATER = as.numeric(as.character(counties$AWATER))
@@ -39,5 +39,5 @@ counties_simp = gSimplify(counties, 0.05, topologyPreserve=T)
 counties_simp = SpatialPolygonsDataFrame(counties_simp, counties@data)
 
 # Save
-counties_file = file.path(path_dropbox, "counties.RDS")
+counties_file = file.path(path_boundaries, "counties.RDS")
 if (!file.exists(counties_file)) saveRDS(counties_simp, counties_file)

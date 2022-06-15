@@ -11,7 +11,7 @@ start_date = "20060101"
 end_date = "20201231"
 
 # Read in smokePM values at station-days
-smokePM = readRDS(file.path(path_dropbox, "smokePM_forMarshall.rds")) %>% 
+smokePM = readRDS(file.path(path_smokePM, "smokePM_forMarshall.rds")) %>% 
   filter(date >= ymd(start_date),
          date <= ymd(end_date)) %>% 
   drop_na(smokePM) %>% 
@@ -53,4 +53,4 @@ res = mclapply(1:nrow(station_pairs), function(p) {
 }, mc.cores = num_cores)
 print_time(start_time)
 res = bind_rows(res)
-saveRDS(res, file.path(path_dropbox, "station_pair_smokePM_correlation.rds"))
+saveRDS(res, file.path(path_smokePM, "station_pair_smokePM_correlation.rds"))

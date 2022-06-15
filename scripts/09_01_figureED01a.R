@@ -3,11 +3,11 @@
 # Written by: Anne Driscoll
 #-------------------------------------------------------------------------------
 # Load counties
-counties = readRDS(file.path(path_dropbox, "all_national_counties.RDS"))
+counties = readRDS(file.path(path_boundaries, "all_national_counties.RDS"))
 counties = counties[!counties$STATEFP %in% str_pad(c(2, 15, 57:78), 2, "left", 0), ]
 
 # Get EPA stations
-epa = readRDS(file.path(path_dropbox, "epa_station_level_pm25_data.rds"))
+epa = readRDS(file.path(path_epa, "epa_station_level_pm25_data.rds"))
 epa = epa %>% filter(year %in% 2016:2020)
 epa_ll =  epa[!duplicated(epa$id), c("lon", "lat", "id")]
 epa_ll = SpatialPointsDataFrame(epa_ll[, c("lon", "lat")], data=epa_ll)
@@ -19,7 +19,7 @@ o = over(epa_ll, counties)
 counties_inc = unique(o$GEOID)
 
 # Plot
-pdf(file.path(path_github, "figures/raw/figureED01a.pdf"), 
+pdf(file.path(path_figures, "figureED01a.pdf"), 
      width=8, height=5)
 plot(counties)
 plot(add=T, counties[counties$GEOID %in% counties_inc, ], col="red")
@@ -27,7 +27,7 @@ dev.off()
 
 #-------------------------------------------------------------------------------
 # Calculate population in these counties
-pop = raster(file.path(path_dropbox, "gpw_v4_population_count_rev11_2015_2pt5_min.tif"))
+pop = raster(file.path(path_population, "gpw_v4_population_count_rev11_2015_2pt5_min.tif"))
 counties = spTransform(counties, crs(pop))
 counties$pop = exact_extract(pop, counties, 
                              fun = function(x, w) {sum(x*w, na.rm=T)})

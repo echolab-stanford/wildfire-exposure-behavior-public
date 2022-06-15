@@ -71,7 +71,7 @@ dat_acs <- dat_acs %>%
 
 #-------------------------------------------------------------------------------
 # Read in cooling/heating degree days data
-files <- list.files(file.path(path_dropbox, "temperature/"), 
+files <- list.files(file.path(path_prism, "temperature"), 
                     pattern = "^tract_level", full.names = TRUE)
 years <- as.numeric(substr(basename(files), 17, 20))
 variable <- substr(basename(files), 13, 15)
@@ -91,7 +91,7 @@ dat_acs <- merge(dat_acs, degree_days, by = "GEOID")
 
 #-------------------------------------------------------------------------------
 # Read in physiographic province data
-physio <- readOGR(file.path(path_dropbox, "physio_shp/physio.shp"))
+physio <- readOGR(file.path(path_boundaries, "physio_shp", "physio.shp"))
 
 # Combine boundaries since not all are covered
 # Provinces are only combined with those adjacent to them and in the same division
@@ -105,6 +105,6 @@ physio <- physio[!is.na(physio$DIVISION),]
 
 #-------------------------------------------------------------------------------
 # Save data sets
-saveRDS(dat_pa, file.path(path_infiltration, pm_path, post_path, "dat_pa_inf.rds"))
-saveRDS(dat_acs, file.path(path_dropbox, "dat_acs_chars.rds"))
-saveRDS(physio, file.path(path_dropbox, "physio.rds"))
+saveRDS(dat_pa, file.path(path_infiltration, "heterogeneity", pm_path, post_path, "dat_pa_inf.rds"))
+saveRDS(dat_acs, file.path(path_infiltration, "heterogeneity", "dat_acs_chars.rds"))
+saveRDS(physio, file.path(path_boundaries, "physio.rds"))

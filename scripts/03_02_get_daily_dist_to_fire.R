@@ -1,4 +1,4 @@
-if (!dir.exists(file.path(path_fire, "processed", "grid_dist_fire"))) dir.create(file.path(path_fire, "processed", "grid_dist_fire"), recursive = T)
+if (!dir.exists(file.path(path_fire, "distance_to_fire", "grid_dist_fire"))) dir.create(file.path(path_fire, "distance_to_fire", "grid_dist_fire"), recursive = T)
 
 #-------------------------------------------------------------------------------
 # Get Distance to Fire Over 10km Grid
@@ -9,7 +9,7 @@ if (!dir.exists(file.path(path_fire, "processed", "grid_dist_fire"))) dir.create
 years = 2006:2020
 
 # Load 10km grid
-grid = readRDS(file.path(path_dropbox, "grid.RDS"))
+grid = readRDS(file.path(path_boundaries, "grid.RDS"))
 poly_grid = gBuffer(grid, byid=T, width=5000, capStyle="SQUARE") #slow
 
 # loop through years
@@ -32,7 +32,7 @@ for (i in 1:length(years)) {
     file = paste0("hms_fire", days[j], ".shp")
     
     if (file %in% fire_files) {
-      fires = readOGR(file.path(path_fire, paste0("hms_fire", days[j], ".shp")), 
+      fires = readOGR(file.path(path_fire, paste0("points/hms_fire", days[j], ".shp")), 
                       paste0("hms_fire", days[j]), verbose=F)
       crs(fires) = "+proj=longlat +datum=WGS84 +no_defs"
       fires = fires[fires$Lon > -144 & fires$Lon < -32 & 
@@ -51,7 +51,7 @@ for (i in 1:length(years)) {
   }
   
   out = rbindlist(out)
-  saveRDS(out, file.path(path_fire, "processed", "grid_dist_fire", paste0("dist_to_fire_", year, ".RDS")))
+  saveRDS(out, file.path(path_fire, "distance_to_fire", "grid_dist_fire", paste0("dist_to_fire_", year, ".RDS")))
   
   print(year)
   

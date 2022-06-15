@@ -88,7 +88,7 @@ for (i in 1:length(years)) {
     row.names(year_fire_df) = year_fire_df$ID
     year_fire = SpatialPolygonsDataFrame(SpatialPolygons(year_fire), year_fire_df)
     crs(year_fire) = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
-    saveRDS(year_fire, file.path(path_fire, paste0("clusters_", y, ".RDS")))
+    saveRDS(year_fire, file.path(path_fire, paste0("clusters/clusters_", y, ".RDS")))
   
     print(y)
 }

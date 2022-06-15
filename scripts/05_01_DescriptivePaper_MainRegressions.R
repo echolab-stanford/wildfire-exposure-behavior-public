@@ -70,7 +70,7 @@ bootinteract <- function(data,
 
 #-------------------------------------------------------------------------------
 # Load main datasets and merge with distance to fire
-dt <- read_rds(file.path(path_dropbox, 'panel_county_pm_smoke_day.RDS'))
+dt <- read_rds(file.path(path_smokePM, 'panel_county_pm_smoke_day.RDS'))
 dt$fips <- as.character(dt$county)
 dt <- dt %>% 
   mutate(wday = wday(date), 
@@ -106,7 +106,7 @@ goog <- goog %>%
   mutate(month=month(date), 
          year=year(date)) %>% 
   mutate(dmamonth = paste(dma,month,sep="_"))
-goog_panel <- read_rds(file.path(path_dropbox, 'panel_dma_pm_smoke_day_weekly.RDS'))
+goog_panel <- read_rds(file.path(path_smokePM, 'panel_dma_pm_smoke_day_weekly.RDS'))
 avgsmokepm <- goog_panel %>% 
   mutate(year=year(week)) %>% 
   filter(year<2016) %>% 
@@ -127,7 +127,7 @@ toplot <- bootspline(dts,
                      controls="",
                      boot=1000,
                      fe="fipsmonth + date")
-write.csv(toplot,file=file.path(path_output, "bootstraps_twitter_spline.csv"),row.names = F)
+write.csv(toplot,file=file.path(path_beh_bootstraps, "bootstraps_twitter_spline.csv"),row.names = F)
 
 toplot <- bootinteract(dts,
                        yvar="sent",
@@ -138,7 +138,7 @@ toplot <- bootinteract(dts,
                        fe="fipsmonth + date",
                        intervar = "median_household_income",
                        xx=seq(20000,140000,5000))
-write.csv(toplot,file=file.path(path_output, "bootstraps_twitter_incomeinteract.csv"),row.names = F)
+write.csv(toplot,file=file.path(path_beh_bootstraps, "bootstraps_twitter_incomeinteract.csv"),row.names = F)
 
 
 # Mobility bootstraps
@@ -158,7 +158,7 @@ toplot <- bootspline(dts,
                      controls="",
                      boot=1000,
                      fe="fipsmonth + date")
-write.csv(toplot,file=file.path(path_output, "bootstraps_safegraph_home_spline_simpleFE.csv"),row.names = F)
+write.csv(toplot,file=file.path(path_beh_bootstraps, "bootstraps_safegraph_home_spline_simpleFE.csv"),row.names = F)
 toplot <- bootinteract(dts,
                        yvar="completely_home_device_perc",
                        xvar="smokePM",
@@ -168,7 +168,7 @@ toplot <- bootinteract(dts,
                        fe="fipsmonth + date",
                        intervar = "median_household_income",
                        xx=seq(20000,140000,5000))
-write.csv(toplot,file=file.path(path_output, "bootstraps_safegraph_incomeinteract_home_simpleFE.csv"),row.names = F)
+write.csv(toplot,file=file.path(path_beh_bootstraps, "bootstraps_safegraph_incomeinteract_home_simpleFE.csv"),row.names = F)
 
 toplot <- bootspline(dts,
                      yvar="completely_away_perc",
@@ -177,7 +177,7 @@ toplot <- bootspline(dts,
                      controls="",
                      boot=1000,
                      fe="fipsmonth + date")
-write.csv(toplot,file=file.path(path_output, "bootstraps_safegraph_away_spline_simpleFE.csv"),row.names = F)
+write.csv(toplot,file=file.path(path_beh_bootstraps, "bootstraps_safegraph_away_spline_simpleFE.csv"),row.names = F)
 toplot <- bootinteract(dts,
                        yvar="completely_away_perc",
                        xvar="smokePM",
@@ -187,7 +187,7 @@ toplot <- bootinteract(dts,
                        fe="fipsmonth + date",
                        intervar = "median_household_income",
                        xx=seq(20000,140000,5000))
-write.csv(toplot,file=file.path(path_output, "bootstraps_safegraph_incomeinteract_away_simpleFE.csv"),row.names = F)
+write.csv(toplot,file=file.path(path_beh_bootstraps, "bootstraps_safegraph_incomeinteract_away_simpleFE.csv"),row.names = F)
 
 # Smoke week
 toplot <- bootspline(dts,
@@ -197,7 +197,7 @@ toplot <- bootspline(dts,
                      controls="",
                      boot=1000,
                      fe="fipsmonth + date")
-write.csv(toplot,file=file.path(path_output, "bootstraps_safegraph_home_smokeweek_spline_simpleFE.csv"),row.names = F)
+write.csv(toplot,file=file.path(path_beh_bootstraps, "bootstraps_safegraph_home_smokeweek_spline_simpleFE.csv"),row.names = F)
 toplot <- bootinteract(dts,
                        yvar="completely_home_device_perc",
                        xvar="smokePM_lastweek",
@@ -207,7 +207,7 @@ toplot <- bootinteract(dts,
                        fe="fipsmonth + date",
                        intervar = "median_household_income",
                        xx=seq(20000,140000,5000))
-write.csv(toplot,file=file.path(path_output, "bootstraps_safegraph_incomeinteract_home_smokeweek_simpleFE.csv"),row.names = F)
+write.csv(toplot,file=file.path(path_beh_bootstraps, "bootstraps_safegraph_incomeinteract_home_smokeweek_simpleFE.csv"),row.names = F)
 
 toplot <- bootspline(dts,
                      yvar="completely_away_perc",
@@ -216,7 +216,7 @@ toplot <- bootspline(dts,
                      controls="",
                      boot=1000,
                      fe="fipsmonth + date")
-write.csv(toplot,file=file.path(path_output, "bootstraps_safegraph_away_smokeweek_spline_simpleFE.csv"),row.names = F)
+write.csv(toplot,file=file.path(path_beh_bootstraps, "bootstraps_safegraph_away_smokeweek_spline_simpleFE.csv"),row.names = F)
 toplot <- bootinteract(dts,
                        yvar="completely_away_perc",
                        xvar="smokePM_lastweek",
@@ -226,7 +226,7 @@ toplot <- bootinteract(dts,
                        fe="fipsmonth + date",
                        intervar = "median_household_income",
                        xx=seq(20000,140000,5000))
-write.csv(toplot,file=file.path(path_output, "bootstraps_safegraph_incomeinteract_away_smokeweek_simpleFE.csv"),row.names = F)
+write.csv(toplot,file=file.path(path_beh_bootstraps, "bootstraps_safegraph_incomeinteract_away_smokeweek_simpleFE.csv"),row.names = F)
 
 toplot <- bootinteract(safe_dt,
                        yvar="completely_home_device_perc",
@@ -237,7 +237,7 @@ toplot <- bootinteract(safe_dt,
                        fe="fipsmonth + date^state + wday",
                        intervar = "median_household_income",
                        xx=seq(20000,140000,5000))
-write.csv(toplot,file=file.path(path_output, "bootstraps_safegraph_incomeinteract_home_smokeweek.csv"),row.names = F)
+write.csv(toplot,file=file.path(path_beh_bootstraps, "bootstraps_safegraph_incomeinteract_home_smokeweek.csv"),row.names = F)
 toplot <- bootinteract(safe_dt,
                        yvar="completely_away_perc",
                        xvar="smokePM_lastweek",
@@ -247,7 +247,7 @@ toplot <- bootinteract(safe_dt,
                        fe="fipsmonth + date^state + wday",
                        intervar = "median_household_income",
                        xx=seq(20000,140000,5000))
-write.csv(toplot,file=file.path(path_output, "bootstraps_safegraph_incomeinteract_away_smokeweek.csv"),row.names = F)
+write.csv(toplot,file=file.path(path_beh_bootstraps, "bootstraps_safegraph_incomeinteract_away_smokeweek.csv"),row.names = F)
 
 # Google Trends
 goog <- goog %>% drop_na(hits,smokePM)
@@ -261,13 +261,13 @@ for (outc in vars) {
                        boot=1000,
                        fe="dmamonth + date",
                        xunit="dma")
-  write.csv(toplot,file=file.path(path_output, paste0("bootstraps_gtrends_",outc,".csv")),row.names = F)
+  write.csv(toplot,file=file.path(path_beh_bootstraps, paste0("bootstraps_gtrends_",outc,".csv")),row.names = F)
   toplot <- bootinteract(gdt,
                          controls="",
                          boot=1000,
                          xx=seq(30000,100000,1000),
                          fe="dmamonth + date",
                          xunit="dma")
-  write.csv(toplot,file=file.path(path_output, paste0("bootstraps_gtrends_",outc,"_incomeinteract.csv")),row.names = F)
+  write.csv(toplot,file=file.path(path_beh_bootstraps, paste0("bootstraps_gtrends_",outc,"_incomeinteract.csv")),row.names = F)
   print(outc)
 }

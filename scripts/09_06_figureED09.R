@@ -26,7 +26,7 @@ if (!dir.exists(path_purpleair)) dir.create(path_purpleair)
 
 # Subset outdoor based on time
 # Run commented out lines using HPC because file too large to load in memory
-outdoor_file = file.path(path_dropbox, "outdoor_monitor_data_clean_part1.rds")
+outdoor_file = file.path(path_purpleair, "outdoor_monitor_data_clean_part1.rds")
 outdoor_subset_file = paste0(file_path_sans_ext(basename(outdoor_file)), "_", 
                              chosen_year, "-", paste(str_pad(chosen_months, 2, "left", 0), 
                                                      collapse = "-"), ".rds")
@@ -49,7 +49,7 @@ outdoor_subset_file = file.path(path_purpleair, outdoor_subset_file)
 outdoor = readRDS(outdoor_subset_file)
 
 # Subset indoor data based on time
-indoor_file = file.path(path_dropbox, "indoor_monitor_data_clean.rds")
+indoor_file = file.path(path_purpleair, "indoor_monitor_data_clean.rds")
 indoor_subset_file = paste0(file_path_sans_ext(basename(indoor_file)), "_",
                             chosen_year, "-", paste(str_pad(chosen_months, 2, "left", 0), 
                                                     collapse = "-"), ".rds")
@@ -151,13 +151,13 @@ p_indoor = base_map +
   labs(color = "AQI Category")
 
 l = get_legend(p_outdoor)
-ggsave(file.path(path_github, "figures/raw/figureED09_legend.pdf"),
+ggsave(file.path(path_figures, "figureED09_legend.pdf"),
        plot = l, width = 3, height = 3, units = "in")
 
 p_outdoor = p_outdoor + theme(legend.position = "none")
-ggsave(file.path(path_github, "figures/raw/figureED09a.pdf"),
+ggsave(file.path(path_figures, "figureED09a.pdf"),
        plot = p_outdoor, width = 10, height = 5, units = "in")
 
 p_indoor = p_indoor + theme(legend.position = "none")
-ggsave(file.path(path_github, "figures/raw/figureED09b.pdf"),
+ggsave(file.path(path_figures, "figureED09b.pdf"),
        plot = p_indoor, width = 10, height = 5, units = "in")

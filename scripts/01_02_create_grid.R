@@ -10,7 +10,7 @@ county_proj = "+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs"
 res = 10000
 
 # Create grid
-counties = readRDS(file.path(path_dropbox, "all_national_counties.rds"))
+counties = readRDS(file.path(path_boundaries, "all_national_counties.rds"))
 counties = counties[!counties$STATEFP %in% 
                       c("02", "15", "60", "66", "69", "72", "78"), ]
 counties = spTransform(counties, proj)
@@ -22,11 +22,11 @@ grid = spTransform(grid, proj)
 keep = over(grid, c)
 keep = which(!is.na(keep))
 data_ll = grid[keep, ]
-saveRDS(data_ll, file.path(path_dropbox, "grid.RDS"))
+saveRDS(data_ll, file.path(path_boundaries, "grid.RDS"))
 
 # Make into an actual grid rather than points
 data_ll = spTransform(data_ll, proj)
 data_ll = gBuffer(data_ll, byid=T, width=res/2, capStyle="SQUARE")
 data_ll = st_as_sf(data_ll)
-st_write(obj=data_ll, dsn=paste0(path_dropbox, "10km_grid"),
+st_write(obj=data_ll, dsn=paste0(path_boundaries, "10km_grid"),
          layer="10km_grid", driver="ESRI Shapefile", append=F)

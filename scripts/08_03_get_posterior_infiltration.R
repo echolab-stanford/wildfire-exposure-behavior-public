@@ -27,7 +27,7 @@ stan_data <- list(
 set.seed(222)
 stan_fit <- stan(
   # Stan program
-  file = file.path(path_github, "scripts/supplementary/define_bayesian_hierarchical_model.stan"),
+  file = file.path(path_supplementary, "define_bayesian_hierarchical_model.stan"),
   data = stan_data,
   chains = 4,             # number of Markov chains
   warmup = 1000,          # number of warm-up iterations per chain
@@ -63,7 +63,7 @@ stan_data <- list(
 set.seed(222)
 stan_fit <- stan(
   # Stan program
-  file = file.path(path_github, "scripts/supplementary/define_bayesian_hierarchical_model.stan"),
+  file = file.path(path_supplementary, "define_bayesian_hierarchical_model.stan"),
   data = stan_data,
   chains = 4,             # number of Markov chains
   warmup = 1000,          # number of warm-up iterations per chain

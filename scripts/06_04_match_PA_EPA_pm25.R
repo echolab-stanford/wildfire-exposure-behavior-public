@@ -6,8 +6,8 @@
 # distance and at the same date-time.
 #-------------------------------------------------------------------------------
 # Read in PA and EPA data
-dat_pa <- readRDS(file.path(path_dropbox, "dat_pa_pm25.rds"))
-dat_epa <- readRDS(file.path(path_dropbox, "dat_epa_pm25.rds"))
+dat_pa <- readRDS(file.path(path_purpleair, "dat_pa_pm25.rds"))
+dat_epa <- readRDS(file.path(path_epa, "dat_epa_pm25.rds"))
 
 # Get date-times
 dts <- unique(dat_pa$date_time)
@@ -43,4 +43,4 @@ dat_matched <- foreach(dts_i = split_chunks(dts, num_cores), .combine = bind_row
 }
 print_time(start_time)
 stopImplicitCluster()
-saveRDS(dat_matched, file.path(path_dropbox, "dat_pa_epa_pm25_nn.rds"))
+saveRDS(dat_matched, file.path(path_epa, "dat_pa_epa_pm25_nn.rds"))

@@ -5,7 +5,7 @@
 #-------------------------------------------------------------------------------
 #### Read in and clean up briefly ####
 # Read in data and rename pm25_out
-data <- read_rds(file.path(path_infiltration, "analysis_data_clean_all.rds")) %>% mutate(pm25_out = pm25_out_mean)
+data <- read_rds(file.path(path_purpleair, "analysis_data_clean_all.rds")) %>% mutate(pm25_out = pm25_out_mean)
 
 # Add woy and doy so we have option to include them as FE 
 data <- data %>% mutate(
@@ -21,7 +21,7 @@ drop_ids <- count_obs %>% dplyr::filter(n_obs<200 | var_in < 1 | var_out <1 ) %>
 data <- data %>% dplyr::filter(ID_in %in% drop_ids == F)
 
 # Get ACS info
-if (!file.exists(file.path(path_infiltration, "purpleAir_indoor_acs_medianIncome.rds"))) {
+if (!file.exists(file.path(path_purpleair, "purpleAir_indoor_acs_medianIncome.rds"))) {
   states <- tigris::states() %>% st_as_sf()
   monloc <- data %>% dplyr::select(ID_in, Lon_in, Lat_in) %>% distinct() %>% dplyr::filter(!is.na(Lon_in))
   monloc_sf <- sfheaders::sf_point(monloc[,c("Lon_in","Lat_in")])
@@ -56,10 +56,10 @@ if (!file.exists(file.path(path_infiltration, "purpleAir_indoor_acs_medianIncome
   
   options(tigris_use_cache = FALSE)
   
-  write_rds(monloc_df, file = file.path(path_infiltration, "purpleAir_indoor_acs_medianIncome.rds"))
+  write_rds(monloc_df, file = file.path(path_purpleair, "purpleAir_indoor_acs_medianIncome.rds"))
 }
 
-income <- read_rds(file.path(path_infiltration, "purpleAir_indoor_acs_medianIncome.rds"))
+income <- read_rds(file.path(path_purpleair, "purpleAir_indoor_acs_medianIncome.rds"))
 
 # Bring in income data
 data <- left_join(data, income) #%>% dplyr::filter(!is.na(income_median))
@@ -79,7 +79,7 @@ pandat <- panel(data, panel.id = c("ID_in","time_hours"), duplicate.method = "fi
 rm(data) 
 
 # Only want to include single family residences:
-sfr <- read_rds(file.path(path_infiltration, "purpleair_infiltration_estimates_by_model.rds")) %>% 
+sfr <- read_rds(file.path(path_infiltration, "estimates", "purpleair_infiltration_estimates_by_model.rds")) %>% 
   rename(ID_in = id) %>% 
   dplyr::select(ID_in, building_type)
 pandat <- left_join(pandat, sfr) %>% dplyr::filter(building_type == "sfr")
@@ -93,7 +93,7 @@ pandat$pm25_out_pc_mean[pandat$pm25_out_pc_mean > 1000 ]<- NA
 pandat$pm25_in_pc[pandat$pm25_in_pc < -5 ]<- NA
 pandat$pm25_in_pc[pandat$pm25_in_pc > 1000 ]<- NA
 
-smoke <- read_rds(file.path(path_infiltration, "smoke_by_PAmonitor_density.rds")) %>% rename(day = dom)
+smoke <- read_rds(file.path(path_purpleair, "smoke_by_PAmonitor_density.rds")) %>% rename(day = dom)
 pandat <- left_join(pandat, smoke)
 pandat$heavy = as.numeric(pandat$density==27)
 
@@ -106,7 +106,7 @@ pandat$income3 <- pandat$medincome^3
 pandat$income4 <- pandat$medincome^4  
 
 ## Short-run PM
-smoke_day <- read_rds(file.path(path_infiltration, "smoke_by_PAmonitor.rds")) %>% rename(day = dom)
+smoke_day <- read_rds(file.path(path_purpleair, "smoke_by_PAmonitor.rds")) %>% rename(day = dom)
 
 pandat <- left_join(pandat, smoke_day)
 
@@ -117,7 +117,7 @@ pandat$pm25_out4 <- pandat$pm25_out^4
 # x_pm <- 0:17
 # bootsamp_pm <- matrix(nrow = 4, ncol = 100)
 
-if (!file.exists(file.path(path_infiltration, "infiltration_smoke_pm_bootstrap_run_results_smokeday.rds"))) {
+if (!file.exists(file.path(path_infiltration, "bootstraps", "infiltration_smoke_pm_bootstrap_run_results_smokeday.rds"))) {
   var <- sort(unique(pandat$ID_in))
   
   bootsamp_pm <- list()
@@ -134,7 +134,7 @@ if (!file.exists(file.path(path_infiltration, "infiltration_smoke_pm_bootstrap_r
     print(i)
     
   }
-  write_rds(bootsamp_pm, file = file.path(path_infiltration, "infiltration_smoke_pm_bootstrap_run_results_smokeday.rds"))
+  write_rds(bootsamp_pm, file = file.path(path_infiltration, "bootstraps", "infiltration_smoke_pm_bootstrap_run_results_smokeday.rds"))
 }
 
 ## [3] Income
@@ -142,7 +142,7 @@ if (!file.exists(file.path(path_infiltration, "infiltration_smoke_pm_bootstrap_r
 # xi <- seq(22000,250000, 1000)
 
 pandat$income_smoke <- pandat$income*pandat$heavy
-if (!file.exists(file.path(path_infiltration, "infiltration_smoke_income_bootstrap_run_results_linear_smokeday.rds"))) {
+if (!file.exists(file.path(path_infiltration, "bootstraps", "infiltration_smoke_income_bootstrap_run_results_linear_smokeday.rds"))) {
   bootsamp_inc <- list()
   
   var <- sort(unique(pandat$ID_in))
@@ -158,13 +158,13 @@ if (!file.exists(file.path(path_infiltration, "infiltration_smoke_income_bootstr
     print(i)
     
   }
-  write_rds(bootsamp_inc, file = file.path(path_infiltration, "infiltration_smoke_income_bootstrap_run_results_linear_smokeday.rds"))
+  write_rds(bootsamp_inc, file = file.path(path_infiltration, "bootstraps", "infiltration_smoke_income_bootstrap_run_results_linear_smokeday.rds"))
 }
 
 #-------------------------------------------------------------------------------
 #### Load data for figure ####
 ## Panel a - PM by smoke
-bs_pm_list <- read_rds(file.path(path_infiltration, "infiltration_smoke_pm_bootstrap_run_results_smokeday.rds"))
+bs_pm_list <- read_rds(file.path(path_infiltration, "bootstraps", "infiltration_smoke_pm_bootstrap_run_results_smokeday.rds"))
 
 xp1 <- (round(quantile(pandat$pm25_out[pandat$heavy==1], .01 , na.rm = T))):(round(quantile(pandat$pm25_out[pandat$heavy==1], .975 , na.rm = T)))
 xp0 <- (round(quantile(pandat$pm25_out[pandat$heavy==0], .01 , na.rm = T))):(round(quantile(pandat$pm25_out[pandat$heavy==0], .99 , na.rm = T)))
@@ -202,7 +202,7 @@ histbin <- statar::xtile(pandat$pm25_out[pandat$heavy==0], cutpoints = seq(0,74,
 hist_ht_p0 <- data.frame(xleft = seq(0,76,2)-1,xright = seq(0,76,2)+1, ht = as.numeric(table(histbin)))
 
 ## Panel b - income by smoke (income doesn't really differ by smoke)
-bs_inc_list <- read_rds(file.path(path_infiltration, "infiltration_smoke_income_bootstrap_run_results_linear_smokeday.rds"))
+bs_inc_list <- read_rds(file.path(path_infiltration, "bootstraps", "infiltration_smoke_income_bootstrap_run_results_linear_smokeday.rds"))
 xi1 <- seq(37000,235000, 2000)
 xi0 <- seq(37000,235000, 2000)
 
@@ -238,10 +238,10 @@ plot_poly <- function(x,ylow, yhigh, col){
 #-------------------------------------------------------------------------------
 #### Calculations reported in paper ####
 # How many monitors in final regression?
-if (!file.exists(file.path(path_infiltration, "final_monitor_list.rds"))) {
+if (!file.exists(file.path(path_purpleair, "final_monitor_list.rds"))) {
   final_monitor_list <- unique(pandat$ID_in)
   length(final_monitor_list)
-  write_rds(final_monitor_list, file = file.path(path_infiltration, "final_monitor_list.rds")) # Write out to make sure elsewhere we are using same set of monitors
+  write_rds(final_monitor_list, file = file.path(path_purpleair, "final_monitor_list.rds")) # Write out to make sure elsewhere we are using same set of monitors
 }
 
 # Average infiltration from pooled model
@@ -259,7 +259,7 @@ ci <- c(est + qnorm(0.025)*se, est + qnorm(0.975)*se)
 poly_col0 <-add.alpha(wes_palette("Zissou1")[2], .6)
 poly_col1 <-add.alpha(wes_palette("Zissou1")[3], .75)
 
-pdf(file.path(path_github, "figures/raw/figure04a-b.pdf"), width =12.5, height = 6)
+pdf(file.path(path_figures, "figure04a-b.pdf"), width =12.5, height = 6)
 
 par(mar = c(4,5,2,2))
 par(mfrow = c(1,2))

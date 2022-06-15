@@ -15,7 +15,7 @@ years = 2006:2020
 smoke = readRDS(file.path(path_smoke, "smoke_plumes_spdf.RDS"))
 
 # Get grid over which to query for smoke
-poly_grid = readRDS(file.path(path_dropbox, "grid.RDS"))
+poly_grid = readRDS(file.path(path_boundaries, "grid.RDS"))
 poly_grid = gBuffer(poly_grid, byid=T, width=5000, capStyle="SQUARE")
 
 #-------------------------------------------------------------------------------
@@ -35,8 +35,7 @@ poly_grid = spTransform(poly_grid, crs(smoke))
 
 # Get the plumes over each grid id for all time
 # Takes ~11 hours 40 minutes
-path_intermediate = file.path(path_smoke, "intermediate")
-if (!dir.exists(path_intermediate)) dir.create(path_intermediate)
+if (!dir.exists(file.path(path_smoke, "intermediate"))) dir.create(file.path(path_smoke, "intermediate"))
 start_time = Sys.time()
 for (i in 1:length(years)) {
   
@@ -77,7 +76,7 @@ for (i in 1:length(years)) {
     
     # Save
     saveRDS(overlap, 
-            file.path(path_intermediate, 
+            file.path(path_smoke, "intermediate", 
                       paste0("smoke_grid_", years[i], "_", j, ".RDS")))
     print(j)
   }
@@ -86,11 +85,11 @@ end_time = Sys.time()
 end_time - start_time
 
 # Combine
-files = list.files(path_intermediate)
+files = list.files(file.path(path_smoke, "intermediate"))
 combined = as.list(rep(NA, length(files)))
 
 for (i in 1:length(files)) {
-  combined[[i]] = readRDS(file.path(path_intermediate, files[i]))
+  combined[[i]] = readRDS(file.path(path_smoke, "intermediate", files[i]))
 }
 combined = rbindlist(combined, fill=T)
 combined = combined %>% mutate(date = as.character(date))

@@ -18,16 +18,16 @@ dat_acs <- get_acs(geography = "tract",
                    geometry = TRUE) %>% 
   select(GEOID, matches("^B.*E$"))
 names(dat_acs)[2] <- "median_income"
-saveRDS(dat_acs, file.path(path_dropbox, "ACS_data.rds"))
+saveRDS(dat_acs, file.path(path_purpleair, "ACS_data.rds"))
 
 # Get PA locations
-pa_ll <- readRDS(file.path(path_dropbox, "PA_locations_all.rds")) %>% 
+pa_ll <- readRDS(file.path(path_purpleair, "PA_locations_all.rds")) %>% 
   st_as_sf(coords = c("Lon", "Lat"), crs = 4269, remove = FALSE) %>% 
   st_transform(st_crs(dat_acs))
 
 # Merge ACS and PA
 dat_merged <- pa_ll %>% st_join(dat_acs, left = FALSE)
-saveRDS(dat_merged, file.path(path_dropbox, "ACS_PA_data.rds"))
+saveRDS(dat_merged, file.path(path_purpleair, "ACS_PA_data.rds"))
 
 # Lose 7 monitors that are on Alactraz Island, coastline, or country border
 # leaflet(pa_ll) %>%
@@ -37,11 +37,11 @@ saveRDS(dat_merged, file.path(path_dropbox, "ACS_PA_data.rds"))
 
 # ------------------------------------------------------------------------------
 # Monitors matched to ACS
-df <- read_rds(file.path(path_dropbox, 'ACS_PA_data.rds')) %>% 
+df <- read_rds(file.path(path_purpleair, 'ACS_PA_data.rds')) %>% 
   as.data.frame() %>% 
   select(-geometry)
 # All tracts
-acs <- read_rds(file.path(path_dropbox, 'ACS_data.rds'))
+acs <- read_rds(file.path(path_purpleair, 'ACS_data.rds'))
 
 # Collapse monitors to track obs so we count them correctly
 df <- df %>% 
@@ -49,7 +49,7 @@ df <- df %>%
   summarise(median_income=mean(median_income))
 
 # Plot
-pdf(file=file.path(path_github, 'figures/raw/figureED05.pdf'),width=7,height=5)
+pdf(file=file.path(path_figures, 'figureED05.pdf'),width=7,height=5)
 hist(acs$median_income/1000,breaks=50,las=1,main="",xlab="median household income (1000s)",border=NA,ylab="",axes=F)
 axis(1)
 abline(v=median(acs$median_income/1000,na.rm=T),lty=2)

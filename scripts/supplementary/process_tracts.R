@@ -2,13 +2,13 @@
 # Clean Tracts
 # Written by: Anne Driscoll
 #-------------------------------------------------------------------------------
-tract_files = list.files(file.path(path_dropbox, "tracts"))
+tract_files = list.files(file.path(path_boundaries, "tracts"))
 tract_list = as.list(rep(NA, length(tract_files)))
 
 prog = txtProgressBar(max=length(tract_files), style=3)
 for (i in 1:length(tract_files)) {
     t = tract_files[i]
-    t = readOGR(file.path(path_dropbox, t), t)
+    t = readOGR(file.path(path_boundaries, "tracts", t), t)
     
     ts = gSimplify(t, 0.005, topologyPreserve=T)
     
@@ -26,6 +26,6 @@ for (i in 1:length(tract_files)) {
 
 combo = do.call("rbind", c(args = tract_list, makeUniqueIDs = TRUE))
 
-saveRDS(combo, file.path(path_dropbox, "all_national_tracts.rds"))
-if (!dir.exists(file.path(path_dropbox, "all_national_tracts"))) dir.create(file.path(path_dropbox, "all_national_tracts"))
-writeOGR(combo, dsn = file.path(path_dropbox, "all_national_tracts"), layer = "all_national_tracts", driver = "ESRI Shapefile")
+saveRDS(combo, file.path(path_boundaries, "all_national_tracts.rds"))
+if (!dir.exists(file.path(path_boundaries, "all_national_tracts"))) dir.create(file.path(path_boundaries, "all_national_tracts"))
+writeOGR(combo, dsn = file.path(path_boundaries, "all_national_tracts"), layer = "all_national_tracts", driver = "ESRI Shapefile")

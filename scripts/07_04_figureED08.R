@@ -4,7 +4,7 @@
 #-------------------------------------------------------------------------------
 #### Read in and clean up briefly ####
 # Read in data and rename pm25_out
-data <- read_rds(file.path(path_infiltration, "analysis_data_clean_all.rds")) %>% mutate(pm25_out = pm25_out_mean)
+data <- read_rds(file.path(path_purpleair, "analysis_data_clean_all.rds")) %>% mutate(pm25_out = pm25_out_mean)
 
 # Add woy and doy so we have option to include them as FE 
 data <- data %>% mutate(
@@ -32,7 +32,7 @@ io <- pandat %>%
   mutate(io_ratio = pm25_in/pm25_out) %>% 
   group_by(ID_in) %>% 
   summarise(io_ratio = mean(io_ratio, na.rm = T))
-dido <- read_rds(file.path(path_infiltration, "PA_monitor_level_infiltration_estimates_sfr_clean_pc.rds")) %>% 
+dido <- read_rds(file.path(path_infiltration, "estimates", "PA_monitor_level_infiltration_estimates_sfr_clean_pc.rds")) %>% 
   filter(est_dl > 0 & est_dl <1 & !is.na(est_dl))
 io <- io %>% rename(id = ID_in)
 
@@ -42,7 +42,7 @@ m <- summary(lm(est_dl ~ io_ratio, data= dat))
 
 #-------------------------------------------------------------------------------
 # Plot
-pdf(file = file.path(path_github, "figures/raw/figureED08.pdf"),width = 6, height = 6)
+pdf(file = file.path(path_figures, "figureED08.pdf"),width = 6, height = 6)
 plot(dat$io_ratio, dat$est_dl, xlim = c(0,1), ylim= c(0,1), pch = 21, bg = add.alpha('gray', 0.5), col ='gray30',axes = F, xlab = "",ylab = "")
 abline(a = coef(m)[1], b = coef(m)[2], col = 'red')
 abline(v = mean(dat$io_ratio), col = 'blue',lty=2)

@@ -3,7 +3,7 @@
 # Written by: Marshall Burke
 #-------------------------------------------------------------------------------
 # Load data
-dt <- read_rds(file.path(path_dropbox, 'bay_area_fig4_wf_indoor_outdoor_pm.rds'))
+dt <- read_rds(file.path(path_purpleair, 'bay_area_fig4_wf_indoor_outdoor_pm.rds'))
 
 bins = seq(0,100,5)
 dt$bin <- xtile(dt$pm_out,cutpoints=bins)
@@ -14,7 +14,7 @@ dt <- filter(dt,pm_out<=80)
 bns <- unique(dt$bin)
 
 # Plot
-pdf(file=file.path(path_github, 'figures/raw/figureED10.pdf'),width=7,height=5,useDingbats = F)
+pdf(file=file.path(path_figures, 'figureED10.pdf'),width=7,height=5,useDingbats = F)
 plot(1,type="n",xlim=c(1,length(bns)+1),ylim=c(0,40),xlab="avg outdoor PM during smoke event", ylab="avg indoor PM during smoke event",axes=F)
 axis(2,las=1)
 for (i in 1:length(bns)) {

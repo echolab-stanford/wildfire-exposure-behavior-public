@@ -45,7 +45,7 @@ mkplot <- function(toplot,
 
 #-------------------------------------------------------------------------------
 # Load datasets to generate exposure histograms and sample counts
-dt <- read_rds(file.path(path_dropbox, 'panel_county_pm_smoke_day.RDS'))
+dt <- read_rds(file.path(path_smokePM, 'panel_county_pm_smoke_day.RDS'))
 dt$fips <- as.character(dt$county)
 twit <- read_fst(file.path(path_twitter, "county-sentiment.fst"))
 twit$date <- as.Date(twit$date)
@@ -57,13 +57,13 @@ safe <- left_join(safe,dt,by=c("fips","date"))
 
 #-------------------------------------------------------------------------------
 # Plot
-pdf(file.path(path_github, 'figures/raw/figure02.pdf'),width=8,height=8)
+pdf(file.path(path_figures, 'figure02.pdf'),width=8,height=8)
 par(mfrow=c(2,2),mar=c(4,4,1,4))
 cll <- apply(sapply(c("orange"), col2rgb)/255, 2, function(x) rgb(x[1], x[2], x[3], alpha=0.5)) 
 
 # Salience
 outc <- "air quality"
-toplot <- read_csv(file.path(path_output, paste0("bootstraps_gtrends_",outc,".csv")))
+toplot <- read_csv(file.path(path_beh_bootstraps, paste0("bootstraps_gtrends_",outc,".csv")))
 df <- goog %>% filter(keyword==outc) %>% drop_na('smokePM','hits')
 n=dim(df)[1]
 mkplot(toplot,ylim=c(-10,60),xlim=c(0,50),ylab="searches for 'air quality' (index)",
@@ -72,7 +72,7 @@ mkplot(toplot,ylim=c(-10,60),xlim=c(0,50),ylab="searches for 'air quality' (inde
 axis(2,las=1,at=seq(0,60,10),labels=seq(0,60,10))
 
 # Sentiment
-toplot <- read_csv(file.path(path_output, "bootstraps_twitter_spline.csv"))
+toplot <- read_csv(file.path(path_beh_bootstraps, "bootstraps_twitter_spline.csv"))
 df <- twit %>% drop_na('smokePM','sent')
 n=dim(df)[1]
 mkplot(toplot,ylab="sentiment",ylim=c(-0.06,0.02),samptext = "US counties, daily 2017-20", 
@@ -81,7 +81,7 @@ axis(2,las=1,at=seq(-0.05,0.02,0.01),labels=seq(-0.05,0.02,0.01))
 
 # Health protection
 outc <- "air filter"
-toplot <- read_csv(file.path(path_output, paste0("bootstraps_gtrends_",outc,".csv")))
+toplot <- read_csv(file.path(path_beh_bootstraps, paste0("bootstraps_gtrends_",outc,".csv")))
 df <- goog %>% filter(keyword==outc) %>% drop_na('smokePM','hits')
 n=dim(df)[1]
 mkplot(toplot,ylim=c(-10,50),xlim=c(0,50),ylab="searches for 'filter' (index)",
@@ -90,7 +90,7 @@ mkplot(toplot,ylim=c(-10,50),xlim=c(0,50),ylab="searches for 'filter' (index)",
 axis(2,las=1,at=seq(0,50,10),labels = seq(0,50,10))
 
 # Mobility
-toplot <- read_csv(file.path(path_output, "bootstraps_safegraph_home_spline_simpleFE.csv"))
+toplot <- read_csv(file.path(path_beh_bootstraps, "bootstraps_safegraph_home_spline_simpleFE.csv"))
 df <- safe %>% drop_na('smokePM','completely_home_device_perc')
 n=dim(df)[1]
 mkplot(toplot,ylab="% completely at home", ylim=c(-1,5),samptext="US counties, daily 2019-2020", 

@@ -3,7 +3,7 @@
 # Written by: Sam Heft-Neal
 #-------------------------------------------------------------------------------
 # Histogram of infiltration
-inf_dist <- read_rds(file.path(path_infiltration, "PA_monitor_level_infiltration_estimates_sfr_clean_pc.rds"))
+inf_dist <- read_rds(file.path(path_infiltration, "estimates", "PA_monitor_level_infiltration_estimates_sfr_clean_pc.rds"))
 
 # Set up data frame with info needed to make plot (I do barplots instead of histogram here just because I have more control)
 bincounts <- statar::xtile(inf_dist$est_dl, cutpoints = seq(.025,.575,.025)) %>% table() %>% as.numeric() #create counts of data in each bin
@@ -11,7 +11,7 @@ bardata <- data.frame(xleft = seq(.025,.6,.025)-.0125,xright = seq(.025,.6,.025)
 bardata[nrow(bardata),"ht"]<-33 #fix wrong count in top bin
 
 # Plot
-pdf(file.path(path_github, "figures/raw/figure04c.pdf"), width =11, height = 3)
+pdf(file.path(path_figures, "figure04c.pdf"), width =11, height = 3)
 
 par(mar =c(3,3,0,0))
 

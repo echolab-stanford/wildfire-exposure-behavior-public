@@ -5,7 +5,7 @@
 #-------------------------------------------------------------------------------
 #### Read in and clean up briefly ####
 # Read in data and rename pm25_out
-data <- read_rds(file.path(path_infiltration, "analysis_data_clean_all.rds")) %>% rename(pm25_out = pm25_out_mean)
+data <- read_rds(file.path(path_purpleair, "analysis_data_clean_all.rds")) %>% rename(pm25_out = pm25_out_mean)
 
 # Add woy and doy so we have option to include them as FE 
 data <- data %>% mutate(
@@ -24,18 +24,18 @@ data <- data %>% dplyr::filter(ID_in %in% drop_ids == F)
 pandat <- panel(data, panel.id = c("ID_in","time_hours"), duplicate.method = "first") 
 
 # Bring in monitor level info on state      
-stlist <- read_rds(file.path(path_infiltration, "us_sensor_list.rds"))
+stlist <- read_rds(file.path(path_purpleair, "us_sensor_list.rds"))
 stlist <- stlist[stlist$ID %in% pandat$ID_in,]
 stlist <- stlist %>% dplyr::select(ID_in = ID, state)
 pandat <- left_join(pandat, stlist)  
 
 # Bring in monitor building classification so we can limit to single family residences (SFR)
-sfr <- read_csv(file.path(path_infiltration, "locationTypeCategorizing/locationTypeCategorized.csv")) %>% rename(building_type = type)  
+sfr <- read_csv(file.path(path_purpleair, "locationTypeCategorizing/locationTypeCategorized.csv")) %>% rename(building_type = type)  
 
 # Subset to monitors in the bay area
-stlist <- read_rds(file.path(path_infiltration, "us_sensor_list.rds")) %>% dplyr::filter(ID %in% unique(pandat$ID_in))
+stlist <- read_rds(file.path(path_purpleair, "us_sensor_list.rds")) %>% dplyr::filter(ID %in% unique(pandat$ID_in))
 
-ca <- read_rds(file.path(path_dropbox, "ca_county_boundaries.rds"))
+ca <- read_rds(file.path(path_boundaries, "ca_county_boundaries.rds"))
 bay <- ca[ca@data$NAME_2 %in% c("Alameda","Contra Costa","Marin","San Francisco","San Mateo","Sonoma","Napa","Solano","Santa Cruz","Santa Clara"),]
 
 station_loc <- SpatialPoints(stlist[,c("Lon","Lat")])
@@ -47,7 +47,7 @@ bay_stations <- stlist[!is.na(overlap$PID),]
 
 ### SLOW #######################################################################
 # For each monitor estimate infiltration leaving out this wildfire period    
-if(!file.exists(file.path(path_infiltration, "figure4_purpleair_infiltration_estimates.rds"))){      
+if(!file.exists(file.path(path_infiltration, "estimates", "figure4_purpleair_infiltration_estimates.rds"))){      
   
   #run lagged dependent variable model omitting this wildfire period
   run_reg_ldv <- function(id){ 
@@ -78,8 +78,8 @@ if(!file.exists(file.path(path_infiltration, "figure4_purpleair_infiltration_est
   
   res_ldv <- data.frame(data.table::rbindlist(res)) # Combine all results into single data frame
   
-  write_rds(res_ldv, file = file.path(path_infiltration, "figure4_purpleair_infiltration_estimates.rds"))
-}else{res_ldv <- read_rds(file.path(path_infiltration, "figure4_purpleair_infiltration_estimates.rds"))}
+  write_rds(res_ldv, file = file.path(path_infiltration, "estimates", "figure4_purpleair_infiltration_estimates.rds"))
+}else{res_ldv <- read_rds(file.path(path_infiltration, "estimates", "figure4_purpleair_infiltration_estimates.rds"))}
 ################################################################################
 
 # Prepare monitor-level infiltration estimates for plotting
@@ -145,7 +145,7 @@ COL1 <- 'navy'
 COL2 <- 'red3'
 
 # Plot
-pdf(file = file.path(path_github, "figures/raw/figure04d-f.pdf"),width =12.5, height = 7.5)  
+pdf(file = file.path(path_figures, "figure04d-f.pdf"),width =12.5, height = 7.5)  
 
 layout(matrix(byrow = T,nrow = 4, ncol = 4, data=c(1,1,2,2,1,1,2,2,1,1,3,3,1,1,3,3) )  )
 
@@ -209,7 +209,7 @@ in_low1 <- avesmon1 %>% group_by(ID_in) %>% summarise(pm_in = mean(pm_in, na.rm 
 in_high1 <- avesmon3 %>% group_by(ID_in) %>% summarise(pm_in = mean(pm_in, na.rm = T)) %>% arrange(pm_in)
 
 # Plot the right parts of panel
-pdf(file.path(path_github, "figures/raw/figure04e-f_right.pdf"),width = 1.5, height = 4)
+pdf(file.path(path_figures, "figure04e-f_right.pdf"),width = 1.5, height = 4)
 par(mfrow = c(2,1))
 par(mar = c(2,2,2,2))
 

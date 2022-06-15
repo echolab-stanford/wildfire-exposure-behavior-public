@@ -1,6 +1,7 @@
 #-------------------------------------------------------------------------------
 # Compare PurpleAir and EPA PM2.5
 # Written by: Sam Heft-Neal
+# Requires large computer memory.
 #-------------------------------------------------------------------------------
 # Set maximum distance (m) for matching
 within_m <- 1000
@@ -9,11 +10,11 @@ within_m <- 1000
 min_obs <- 24 * 30
 
 # Comes from matching PurpleAir and EPA PM2.5 data
-dat_matched <- readRDS(file.path(path_dropbox, "dat_pa_epa_pm25_nn.rds"))
+dat_matched <- readRDS(file.path(path_epa, "dat_pa_epa_pm25_nn.rds"))
 
 # Now we want to use update (ie corrected) outdoor PA PM in this comparison so 
 # take this data and join with corrected hourly PA
-pa_corrected <- readRDS(file.path(path_dropbox, "outdoor_monitor_data_clean_part1.rds"))
+pa_corrected <- readRDS(file.path(path_purpleair, "outdoor_monitor_data_clean_part1.rds"))
 
 pa_corrected <- pa_corrected[pa_corrected$ID_out %in% dat_matched$id_pa,]
 pa_corrected<-pa_corrected %>% rename(id_pa = ID_out, date_time = time_hours)
@@ -23,7 +24,7 @@ pa_corrected <- pa_corrected[,c("id_pa","date_time","pm25_uncorrected_out","pm25
 dat_matched2 <- left_join(dat_matched, pa_corrected)
 
 
-pa_corrected1 <- readRDS(file.path(path_dropbox, "outdoor_monitor_data_clean.rds"))
+pa_corrected1 <- readRDS(file.path(path_purpleair, "outdoor_monitor_data_clean.rds"))
 pa_corrected1 <- pa_corrected1[pa_corrected1$ID_out %in% dat_matched$id_pa,]
 pa_corrected1<-pa_corrected1 %>% rename(id_pa = ID_out, date_time = time_hours)
 pa_corrected1 <- pa_corrected1[,c("id_pa","date_time","pm25_out_pc")]
@@ -85,7 +86,7 @@ etable(md1, md2, md3,
                 id_pa = "Purple Air monitor",
                 hour = "hour-of-day",
                 month_sample = "month-of-sample"),
-       file = file.path(path_github, "tables/raw/tableS12.tex"),
+       file = file.path(path_tables, "tableS12.tex"),
        style.tex = style.tex(depvar.title = "",
                              model.title = "\\textbf{Purple Air PM2.5 Construction:}",
                              line.top = "",

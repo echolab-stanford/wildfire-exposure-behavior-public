@@ -93,22 +93,22 @@ for (i in 1:length(keywords)) {
   nulls = is.na(variable)
   variable = rbindlist(variable[!nulls])
   out_word = word # out_word = gsub(" ", "_", word)
-  saveRDS(variable, file.path(path_gtrends, paste0("google_trends_smoke_DMA_normalized_keyword_", 
+  saveRDS(variable, file.path(path_gtrends, paste0("keyword/google_trends_smoke_DMA_normalized_keyword_", 
                            out_word, ".RDS")))
 }
 
 #-------------------------------------------------------------------------------
 #### Combine all the searches ####
-f = list.files(path_gtrends)
+f = list.files(file.path(path_gtrends, "keyword"))
 f = f[grepl("smoke_DMA_normalized_keyword", f)]
 f = f[!grepl('\"', f)]
 t = as.list(rep(NA, length(f)))
 
-temp = readRDS(file.path(path_gtrends, f[1]))
+temp = readRDS(file.path(path_gtrends, "keyword", f[1]))
 panel = expand.grid(geo=locs$sub_code, keyword=NA, date=unique(temp$date))
 
 for (i in 1:length(t)) {
-  cur = readRDS(file.path(path_gtrends, f[i]))
+  cur = readRDS(file.path(path_gtrends, "keyword", f[i]))
   print(summary(cur))
   
   geos = unique(cur$geo)
@@ -147,7 +147,7 @@ for (i in 1:length(t)) {
 t = rbindlist(t)
 saveRDS(t, file.path(path_gtrends, "google_trends_smoke_DMA_normalized_complete.RDS"))
 
-dma_data = readRDS(file.path(path_dropbox, "panel_dma_pm_smoke_day_weekly.RDS"))
+dma_data = readRDS(file.path(path_smokePM, "panel_dma_pm_smoke_day_weekly.RDS"))
 combined = t %>% 
   mutate(dma = as.factor(gsub("[a-zA-Z\\-]", "", geo)), 
          date = as.Date(date)) %>%

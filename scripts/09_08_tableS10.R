@@ -3,7 +3,7 @@
 # Written by: Sam Heft-Neal
 #-------------------------------------------------------------------------------
 # Load data
-dat <- read_rds(file.path(path_dropbox, "epa_smoke_clean.rds"))
+dat <- read_rds(file.path(path_epa, "epa_smoke_clean.rds"))
 
 dat$unitFE <- dat$id
 dat$unitmonthFE <- as.numeric(as.factor(paste(dat$id, dat$month, sep = "-")))
@@ -25,7 +25,7 @@ dat$high_dummy[is.na(dat$high_count)]<-NA
 mod2 <- (feols(pm25 ~ low_dummy + med_dummy + high_dummy |   unitmonthFE + timeFE, data = dat[!is.na(dat$low_count),], cluster = "county"))
 
 # Save
-etable(mod1, mod2, file = file.path(path_github, "tables/raw/tableS10.tex"))
+etable(mod1, mod2, file = file.path(path_tables, "tableS10.tex"))
 
 xx = dat[!is.na(dat$low_count),]
 

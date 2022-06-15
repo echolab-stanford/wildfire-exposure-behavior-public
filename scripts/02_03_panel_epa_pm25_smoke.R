@@ -3,7 +3,7 @@
 # Written by: Anne Driscoll
 #-------------------------------------------------------------------------------
 # Load EPA PM2.5 data
-epa = readRDS(file.path(path_dropbox, "epa_station_level_pm25_data.rds"))
+epa = readRDS(file.path(path_epa, "epa_station_level_pm25_data.rds"))
 
 # Create a panel of all date-ID combos
 dates = seq(as.Date("2006-01-01"), as.Date("2020-12-31"), by="days")
@@ -22,8 +22,8 @@ epa = epa %>%
 epa = merge(epa, panel, by=c("id", "date"), all=T)
 
 # Figure out the grid_id for each EPA ID
-grid = readRDS(file.path(path_dropbox, "grid.RDS"))
-epa_ll = readOGR(file.path(path_dropbox, "epa_station_locations"), "epa_station_locations")
+grid = readRDS(file.path(path_boundaries, "grid.RDS"))
+epa_ll = readOGR(file.path(path_epa, "epa_station_locations"), "epa_station_locations")
 epa_ll = spTransform(epa_ll, crs(grid))
 knn_ids = get.knnx(coordinates(grid), coordinates(epa_ll), k=1)$nn.index
 matches = data.frame(id = epa_ll$id, grid_id = grid$ID[knn_ids])
@@ -65,12 +65,12 @@ for (i in 1:length(years)) {
   print(year)
 }
 
-saveRDS(epa, file.path(path_dropbox, "panel_station_pm_smoke_day.RDS"))
+saveRDS(epa, file.path(path_smokePM, "panel_station_pm_smoke_day.RDS"))
 
 #-------------------------------------------------------------------------------
 #### Get the EPA panel connected to county geo ####
 # Get the counties
-counties = readRDS(file.path(path_dropbox, "counties.RDS"))
+counties = readRDS(file.path(path_boundaries, "counties.RDS"))
 epa_ll = spTransform(epa_ll, crs(counties))
 over_c = over(epa_ll, counties)
 matches = data.frame(id = epa_ll$id, 
@@ -89,12 +89,12 @@ matches[is.na(matches$county), ] = data.frame(id = epa_ll$id[w],
                                               state = counties$STATEFP[knn_ids])
 
 epa_c = merge(epa, matches, by = "id", all.x=T)
-saveRDS(epa_c, file.path(path_dropbox, "panel_station_pm_smoke_day_w_county.RDS"))
+saveRDS(epa_c, file.path(path_smokePM, "panel_station_pm_smoke_day_w_county.RDS"))
 
 #-------------------------------------------------------------------------------
 #### Aggregate to county level and add county data ####
 # Load EPA panel merged with county
-epa_c = readRDS(file.path(path_dropbox, "panel_station_pm_smoke_day_w_county.RDS"))
+epa_c = readRDS(file.path(path_smokePM, "panel_station_pm_smoke_day_w_county.RDS"))
 
 # Calculate background PM2.5
 # Code originally from Marissa Childs
@@ -149,4 +149,4 @@ epa_c = epa_c %>% select(county, date, n, nas, pm25, pm25_med_3yr, smokePM,
                          smoke_day, temperature, precipitation, 
                          median_household_income, population) %>%
   filter(!is.na(epa_c$county))
-saveRDS(epa_c, file.path(path_dropbox, "panel_county_pm_smoke_day.RDS"))
+saveRDS(epa_c, file.path(path_smokePM, "panel_county_pm_smoke_day.RDS"))

@@ -4,7 +4,7 @@
 # Requires large computer memory.
 #-------------------------------------------------------------------------------
 #### Read in and clean up briefly ####
-data <- read_rds(file.path(path_infiltration, "analysis_data_clean_all.rds")) %>% mutate(pm25_out = pm25_out_mean)
+data <- read_rds(file.path(path_purpleair, "analysis_data_clean_all.rds")) %>% mutate(pm25_out = pm25_out_mean)
 
 # Add woy and doy so we have option to include them as FE 
 data <- data %>% mutate(
@@ -19,7 +19,7 @@ count_obs <- data %>% group_by(ID_in) %>% summarise(n_obs = sum(!is.na(pm25_in) 
 drop_ids <- count_obs %>% dplyr::filter(n_obs<200 | var_in < 1 | var_out <1 ) %>% dplyr::select(ID_in) %>% unlist()
 data <- data %>% dplyr::filter(ID_in %in% drop_ids == F)
 
-income <- read_rds(file.path(path_infiltration, "purpleAir_indoor_acs_medianIncome.rds"))
+income <- read_rds(file.path(path_purpleair, "purpleAir_indoor_acs_medianIncome.rds"))
 
 # Bring in income data
 data <- left_join(data, income) #%>% dplyr::filter(!is.na(income_median))
@@ -28,7 +28,7 @@ pandat <- panel(data, panel.id = c("ID_in","time_hours"), duplicate.method = "fi
 rm(data) 
 
 # Only want to include single family residences:
-sfr <- read_rds(file.path(path_infiltration, "purpleair_infiltration_estimates_by_model.rds")) %>% rename(ID_in = id) %>% dplyr::select(ID_in, building_type)
+sfr <- read_rds(file.path(path_infiltration, "estimates", "purpleair_infiltration_estimates_by_model.rds")) %>% rename(ID_in = id) %>% dplyr::select(ID_in, building_type)
 pandat <- left_join(pandat, sfr) %>% dplyr::filter(building_type == "sfr")
 
 pandat$pm25_out[pandat$pm25_out < -5 ]<- NA
@@ -40,17 +40,17 @@ pandat$pm25_out_pc_mean[pandat$pm25_out_pc_mean > 1000 ]<- NA
 pandat$pm25_in_pc[pandat$pm25_in_pc < -5 ]<- NA
 pandat$pm25_in_pc[pandat$pm25_in_pc > 1000 ]<- NA
 
-smoke <- read_rds(file.path(path_infiltration, "smoke_by_PAmonitor_density.rds")) %>% rename(day = dom)
+smoke <- read_rds(file.path(path_purpleair, "smoke_by_PAmonitor_density.rds")) %>% rename(day = dom)
 pandat <- left_join(pandat, smoke)
 pandat$heavy = as.numeric(pandat$density==27)
 
 # Bring in smoke   
-smoke_day <- read_rds(file.path(path_infiltration, "smoke_by_PAmonitor.rds")) %>% rename(day = dom)
+smoke_day <- read_rds(file.path(path_purpleair, "smoke_by_PAmonitor.rds")) %>% rename(day = dom)
 
 pandat <- left_join(pandat, smoke_day)
 
-prism <- read_rds(file.path(path_infiltration, "hourly_prism.rds"))
-grid <- raster(file.path(path_dropbox, "prism_grid/PRISM_tmin_early_4kmD2_20201001_bil/PRISM_tmin_early_4kmD2_20201001_bil.bil")) %>% raster()
+prism <- read_rds(file.path(path_prism, "hourly_prism.rds"))
+grid <- raster(file.path(path_prism, "prism_grid/PRISM_tmin_early_4kmD2_20201001_bil/PRISM_tmin_early_4kmD2_20201001_bil.bil")) %>% raster()
 latlon <- pandat %>% group_by(ID_in) %>% summarise(Lon_in2 = mean(Lon_in, na.rm = T), Lat_in2 = mean(Lat_in, na.rm = T))
 pandat <- left_join(pandat, latlon)
 
@@ -152,7 +152,7 @@ res <- list(res_full,res_rain,res_night,res_lowtime) %>% lapply( function(x){qua
 rdat <- data.frame(type = c("full","rain","night","low-time"),  low = NA,est = NA,high = NA)
 for(i in 1:4){rdat[i,c("low","est","high")]<-as.numeric(res[[i]])}
 # lets just double check full results used elsewhere in paper similar to full sample results re-estimated here
-inf <- readRDS(file.path(path_infiltration, "PA_monitor_level_infiltration_estimates_sfr_clean_pc.rds"))
+inf <- readRDS(file.path(path_infiltration, "estimates", "PA_monitor_level_infiltration_estimates_sfr_clean_pc.rds"))
 quantile(inf$est_nl, c(0.25, .5, .75), na.rm = T)
 rdat[rdat$type=="full",c("low","est","high")]
 
@@ -206,7 +206,7 @@ rdat3$high_per <- rdat3$high/rdat$est
 
 #-------------------------------------------------------------------------------
 # Plot
-pdf(file = file.path(path_github, "figures/raw/figureED07d-f.pdf"), width = 12, height = 4)
+pdf(file = file.path(path_figures, "figureED07d-f.pdf"), width = 12, height = 4)
 par(mfrow = c(1,3))
 plot(1:4, rdat$est,xlim = c(0.5, 4.5),ylim = c(0, .3),axes = F, xlab = "",ylab = "",col = NA)
 segments(x0 = 1:4, y0 = rdat$low, y1 = rdat$high, col = 'gray75', lwd = 1.25)

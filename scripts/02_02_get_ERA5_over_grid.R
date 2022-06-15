@@ -3,10 +3,10 @@
 # Written by: Jessica Li
 #-------------------------------------------------------------------------------
 # Read in project grid
-project_grid0 <- readRDS(file.path(path_dropbox, "grid.RDS"))
+project_grid0 <- readRDS(file.path(path_boundaries, "grid.RDS"))
 
 # Define function for getting an ERA5 variable over 10 km grid
-get_over_grid <- function(dataset, variable, statistic, time_zone, folder, path_era5 = file.path(path_dropbox, "ERA5")) {
+get_over_grid <- function(dataset, variable, statistic, time_zone, folder, path_era5 = file.path(path_era5)) {
   # Confirm dataset
   stopifnot(dataset %in% c("global", "land"))
   dataset_dir <- str_to_title(dataset)

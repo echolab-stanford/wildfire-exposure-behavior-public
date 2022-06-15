@@ -3,8 +3,8 @@
 # Written by: Jessica Li
 #-------------------------------------------------------------------------------
 # Read in PA and ACS data
-dat_pa <- readRDS(file.path(path_infiltration, pm_path, post_path, "dat_pa_inf.rds"))
-dat_acs <- readRDS(file.path(path_dropbox, "dat_acs_chars.rds"))
+dat_pa <- readRDS(file.path(path_infiltration, "heterogeneity", pm_path, post_path, "dat_pa_inf.rds"))
+dat_acs <- readRDS(file.path(path_infiltration, "heterogeneity", "dat_acs_chars.rds"))
 
 #-------------------------------------------------------------------------------
 #### Match PA monitors to Census tracts ####
@@ -13,7 +13,7 @@ points_pa <- SpatialPoints(dat_pa[c("lon", "lat")])
 
 # Get Census tract polygons for continental US
 conus <- sort(setdiff(states()$STUSPS, c("AK", "AS", "GU", "HI", "MP", "PR", "VI")))
-file_tracts_conus = file.path(path_dropbox, "tracts_conus.rds")
+file_tracts_conus = file.path(path_boundaries, "tracts_conus.rds")
 if (!file.exists(file_tracts_conus)) {
   tracts_conus <- vector("list", length(conus))
   for (i in 1:length(conus)) tracts_conus[[i]] <- tracts(conus[i], class = "sp", year = 2019)
@@ -52,7 +52,7 @@ rm(tracts_conus)
 #-------------------------------------------------------------------------------
 #### Match PA monitors to physiographic provinces ####
 # Read in physiographic province data
-physio <- readRDS(file.path(path_dropbox, "physio.rds"))
+physio <- readRDS(file.path(path_boundaries, "physio.rds"))
 physio <- SpatialPolygonsDataFrame(SpatialPolygons(physio@polygons), physio@data)
 
 # Match by overlaying and finding nearest polygon where no overlap found
@@ -69,8 +69,8 @@ nrow(matches_physio)
 
 #-------------------------------------------------------------------------------
 # Read in averaged CL data
-matches_cl_ctf = readRDS(file.path(path_dropbox, "matches_cl_ctf.rds"))
-matches_cl_nn = readRDS(file.path(path_dropbox, "matches_cl_nn.rds"))
+matches_cl_ctf = readRDS(file.path(path_infiltration, "heterogeneity", "CoreLogic", "matches_cl_ctf.rds"))
+matches_cl_nn = readRDS(file.path(path_infiltration, "heterogeneity", "CoreLogic", "matches_cl_nn.rds"))
 
 # Join matches together
 matches_cl_ctf <- left_join(matches_cl_ctf, matches_cl_nn[c("id", "yrbuilt_fac")], by = "id") %>% 
@@ -96,7 +96,7 @@ count(dat_matched, cutoff)
 
 #-------------------------------------------------------------------------------
 # Merge in mean outdoor PM2.5 at each indoor monitor
-dat_outdoor <- readRDS(paste0(path_dropbox, "purpleAir_meanOutdoorPM_by_indoorMonitor.rds"))
+dat_outdoor <- readRDS(paste0(path_purpleair, "purpleAir_meanOutdoorPM_by_indoorMonitor.rds"))
 dat_merged <- left_join(dat_matched, dat_outdoor, by = c("id" = "ID_in"))
 
 #-------------------------------------------------------------------------------
@@ -124,4 +124,4 @@ dat_merged <- dat_merged %>%
 
 #-------------------------------------------------------------------------------
 # Save matched data
-saveRDS(dat_merged, file.path(path_infiltration, pm_path, post_path, "dat_pa_inf_cl_acs_chars_avg.rds"))
+saveRDS(dat_merged, file.path(path_infiltration, "heterogeneity", pm_path, post_path, "dat_pa_inf_cl_acs_chars_avg.rds"))

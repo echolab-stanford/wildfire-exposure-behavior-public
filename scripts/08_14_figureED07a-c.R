@@ -7,13 +7,13 @@ est <- paste0("est_", lag_structure)
 
 #### Panel a ####
 # Get prior and posterior infiltration estimates
-ests_prior <- readRDS(file.path(path_infiltration, pm_path, "not_posterior", "dat_pa_inf.rds")) %>% select(id, est_prior = est)
-ests_posterior <- readRDS(file.path(path_infiltration, pm_path, "posterior", "dat_pa_inf.rds")) %>% select(id, est_posterior = est)
+ests_prior <- readRDS(file.path(path_infiltration, "heterogeneity", pm_path, "not_posterior", "dat_pa_inf.rds")) %>% select(id, est_prior = est)
+ests_posterior <- readRDS(file.path(path_infiltration, "heterogeneity", pm_path, "posterior", "dat_pa_inf.rds")) %>% select(id, est_posterior = est)
 ests <- ests_prior %>% full_join(ests_posterior)
 
 #### Panels b and c ####
 # Load models
-models <- readRDS(file.path(path_infiltration, "models.rds"))
+models <- readRDS(file.path(path_infiltration, "heterogeneity", "models", "models.rds"))
 
 # Get R2 by model configuration details
 r2 <- lapply(models, function(x) x[-1][-(which(names(x) == "dY") - 1)]) %>% 
@@ -65,7 +65,7 @@ dy <- dy %>% mutate(vbl = factor(vbl, levels = vbl_order))
 
 #-------------------------------------------------------------------------------
 #### Plot ####
-out_file <- file.path(path_github, "figures/raw/figureED07a-c.pdf")
+out_file <- file.path(path_figures, "figureED07a-c.pdf")
 pdf(out_file, width = 13, height = 6)
 
 # Partition space among panels

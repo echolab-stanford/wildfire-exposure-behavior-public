@@ -3,8 +3,8 @@
 # Written by: Jessica Li
 #-------------------------------------------------------------------------------
 # Read in train and test data
-dat_train <- readRDS(file.path(path_infiltration, pm_path, post_path, "dat_train.rds"))
-dat_test <- readRDS(file.path(path_infiltration, pm_path, post_path, "dat_test.rds"))
+dat_train <- readRDS(file.path(path_infiltration, "heterogeneity", pm_path, post_path, "dat_train.rds"))
+dat_test <- readRDS(file.path(path_infiltration, "heterogeneity", pm_path, post_path, "dat_test.rds"))
 
 # Choose lag configuration in 00_utils: est_ldv (default), est_dl, est_nl, est_al
 est <- paste0("est_", lag_structure)
@@ -169,10 +169,10 @@ sink(type = "message")
 close(log_file)
 
 # Save models
-saveRDS(mdls, file.path(path_infiltration, paste0("models/models_", pm_method, "_RF.rds")))
+saveRDS(mdls, file.path(path_infiltration, "heterogeneity", paste0("models/models_", pm_method, "_RF.rds")))
 
 # Add to list of models
-file_models <- file.path(path_infiltration, "models.rds")
+file_models <- file.path(path_infiltration, "heterogeneity", "models/models.rds")
 if (file.exists(file_models)) mdls <- readRDS(file_models) %>% setdiff(mdls) %>% c(mdls)
 
 # Save all models

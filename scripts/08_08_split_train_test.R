@@ -3,7 +3,7 @@
 # Written by: Jessica Li
 #-------------------------------------------------------------------------------
 # Read in matched data
-dat_matched <- readRDS(file.path(path_infiltration, pm_path, post_path, "dat_pa_inf_cl_acs_chars_avg.rds"))
+dat_matched <- readRDS(file.path(path_infiltration, "heterogeneity", pm_path, post_path, "dat_pa_inf_cl_acs_chars_avg.rds"))
 
 # Split train/test
 set.seed(5377)
@@ -14,5 +14,5 @@ dat_test <- dat_matched %>%
 dat_train <- dat_matched %>% setdiff(dat_test)
 
 # Save data
-saveRDS(dat_train, file.path(path_infiltration, pm_path, post_path, "dat_train.rds"))
-saveRDS(dat_test, file.path(path_infiltration, pm_path, post_path, "dat_test.rds"))
+saveRDS(dat_train, file.path(path_infiltration, "heterogeneity", pm_path, post_path, "dat_train.rds"))
+saveRDS(dat_test, file.path(path_infiltration, "heterogeneity", pm_path, post_path, "dat_test.rds"))
