@@ -1,4 +1,4 @@
-if (!dir.exists(file.path(path_fire, "distance_to_fire/county_pop_weighted"))) dir.create(file.path(path_fire, "distance_to_fire/county_pop_weighted"))
+if (!dir.exists(file.path(path_fire, "distance_to_fire", "county_pop_weighted"))) dir.create(file.path(path_fire, "distance_to_fire", "county_pop_weighted"))
 
 #-------------------------------------------------------------------------------
 # Get County Distance to Fire

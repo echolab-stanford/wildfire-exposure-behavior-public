@@ -1,10 +1,7 @@
 #-------------------------------------------------------------------------------
 # Plot Map of Indoor and Outdoor PM2.5
 # Written by: Jessica Li
-# 
-# Plot a map of PM2.5 at indoor and outdoor PurpleAir monitors in the Bay Area 
-# at a particular date-time.
-# Commented out parts require large computer memory.
+# Requires large computer memory.
 #-------------------------------------------------------------------------------
 # Choose subset of data based on time
 chosen_year = 2020
@@ -31,21 +28,23 @@ outdoor_subset_file = paste0(file_path_sans_ext(basename(outdoor_file)), "_",
                              chosen_year, "-", paste(str_pad(chosen_months, 2, "left", 0), 
                                                      collapse = "-"), ".rds")
 outdoor_subset_file = file.path(path_purpleair, outdoor_subset_file)
-# outdoor = readRDS(outdoor_file) %>%
-#   filter(year == chosen_year,
-#          month %in% chosen_months) %>%
-#   select(ID_out, Lon_out, Lat_out, time_hours, pm25_out) %>%
-#   mutate(
-#     # bottom code at 0
-#     pm25_out = pmax(pm25_out, 0),
-#     # top code any values 500-1000 at 500
-#     pm25_out = ifelse(pm25_out >= 500 & pm25_out <= 1000, 500, pm25_out),
-#     # set any values > 1000 to NA
-#     pm25_out = ifelse(pm25_out > 1000, NA, pm25_out)
-#   ) %>%
-#   # Drop missing hourly observations
-#   drop_na(pm25_out)
-# saveRDS(outdoor, outdoor_subset_file)
+if (!file.exists(outdoor_subset_file)) {
+  outdoor = readRDS(outdoor_file) %>%
+    filter(year == chosen_year,
+           month %in% chosen_months) %>%
+    select(ID_out, Lon_out, Lat_out, time_hours, pm25_out) %>%
+    mutate(
+      # bottom code at 0
+      pm25_out = pmax(pm25_out, 0),
+      # top code any values 500-1000 at 500
+      pm25_out = ifelse(pm25_out >= 500 & pm25_out <= 1000, 500, pm25_out),
+      # set any values > 1000 to NA
+      pm25_out = ifelse(pm25_out > 1000, NA, pm25_out)
+    ) %>%
+    # Drop missing hourly observations
+    drop_na(pm25_out)
+  saveRDS(outdoor, outdoor_subset_file)
+}
 outdoor = readRDS(outdoor_subset_file)
 
 # Subset indoor data based on time
@@ -54,21 +53,23 @@ indoor_subset_file = paste0(file_path_sans_ext(basename(indoor_file)), "_",
                             chosen_year, "-", paste(str_pad(chosen_months, 2, "left", 0), 
                                                     collapse = "-"), ".rds")
 indoor_subset_file = file.path(path_purpleair, indoor_subset_file)
-# indoor = readRDS(indoor_file) %>%
-#   filter(year == chosen_year,
-#          month %in% chosen_months) %>%
-#   select(ID_in, Lon_in, Lat_in, time_hours, pm25_in = pm25_corrected_in) %>%
-#   mutate(
-#     # bottom code at 0
-#     pm25_in = pmax(pm25_in, 0),
-#     # top code any values 500-1000 at 500
-#     pm25_in = ifelse(pm25_in >= 500 & pm25_in <= 1000, 500, pm25_in),
-#     # set any values > 1000 to NA
-#     pm25_in = ifelse(pm25_in > 1000, NA, pm25_in)
-#   ) %>%
-#   # Drop missing hourly observations
-#   drop_na(pm25_in)
-# saveRDS(indoor, indoor_subset_file)
+if (!file.exists(indoor_subset_file)) {
+  indoor = readRDS(indoor_file) %>%
+    filter(year == chosen_year,
+           month %in% chosen_months) %>%
+    select(ID_in, Lon_in, Lat_in, time_hours, pm25_in = pm25_corrected_in) %>%
+    mutate(
+      # bottom code at 0
+      pm25_in = pmax(pm25_in, 0),
+      # top code any values 500-1000 at 500
+      pm25_in = ifelse(pm25_in >= 500 & pm25_in <= 1000, 500, pm25_in),
+      # set any values > 1000 to NA
+      pm25_in = ifelse(pm25_in > 1000, NA, pm25_in)
+    ) %>%
+    # Drop missing hourly observations
+    drop_na(pm25_in)
+  saveRDS(indoor, indoor_subset_file)
+}
 indoor = readRDS(indoor_subset_file)
 
 # Zoom into snapshot area and specific date-time

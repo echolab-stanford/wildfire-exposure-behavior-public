@@ -1,3 +1,5 @@
+if (!dir.exists(file.path(path_infiltration, "bootstraps"))) dir.create(file.path(path_infiltration, "bootstraps"))
+
 #-------------------------------------------------------------------------------
 # Figure 4 Panels a-b
 # Written by: Sam Heft-Neal

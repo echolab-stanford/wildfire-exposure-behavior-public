@@ -1,3 +1,5 @@
+if (!dir.exists(file.path(path_fire, "clusters"))) dir.create(file.path(path_fire, "clusters"))
+
 #-------------------------------------------------------------------------------
 # Get Fire Clusters
 # Written by: Anne Driscoll
