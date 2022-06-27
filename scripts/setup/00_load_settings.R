@@ -8,7 +8,7 @@ num_cores = 6
 
 #-------------------------------------------------------------------------------
 # Set to location of Dropbox and GitHub folders
-path_dropbox = "~/BurkeLab Dropbox/Projects/wildfire-exposure-behavior/"
+path_dropbox = "~/BurkeLab Dropbox/Projects/wildfire-exposure-behavior/3 ORGANIZED/"
 path_github = "~/Documents/GitHub/wildfire-exposure-behavior-public/"
 
 # File paths based on root folders above
@@ -69,4 +69,6 @@ if (posterior) {
   post_path <- "posterior/"
 }
 pm_path <- paste0(pm_method, "/")
-if (!dir.exists(file.path(path_infiltration, "heterogeneity", pm_path, post_path))) dir.create(file.path(path_infiltration, "heterogeneity", pm_path, post_path), recursive = T)
+if (!dir.exists(file.path(path_infiltration, "heterogeneity", pm_path, post_path))) {
+  dir.create(file.path(path_infiltration, "heterogeneity", pm_path, post_path), recursive = T)
+}

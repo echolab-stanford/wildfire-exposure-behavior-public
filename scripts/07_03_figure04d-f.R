@@ -30,7 +30,7 @@ stlist <- stlist %>% dplyr::select(ID_in = ID, state)
 pandat <- left_join(pandat, stlist)  
 
 # Bring in monitor building classification so we can limit to single family residences (SFR)
-sfr <- read_csv(file.path(path_purpleair, "locationTypeCategorizing/locationTypeCategorized.csv")) %>% rename(building_type = type)  
+sfr <- read_csv(file.path(path_purpleair, "locationTypeCategorizing", "locationTypeCategorized.csv")) %>% rename(building_type = type)  
 
 # Subset to monitors in the bay area
 stlist <- read_rds(file.path(path_purpleair, "us_sensor_list.rds")) %>% dplyr::filter(ID %in% unique(pandat$ID_in))
@@ -79,7 +79,9 @@ if(!file.exists(file.path(path_infiltration, "estimates", "figure4_purpleair_inf
   res_ldv <- data.frame(data.table::rbindlist(res)) # Combine all results into single data frame
   
   write_rds(res_ldv, file = file.path(path_infiltration, "estimates", "figure4_purpleair_infiltration_estimates.rds"))
-}else{res_ldv <- read_rds(file.path(path_infiltration, "estimates", "figure4_purpleair_infiltration_estimates.rds"))}
+} else {
+  res_ldv <- read_rds(file.path(path_infiltration, "estimates", "figure4_purpleair_infiltration_estimates.rds"))
+}
 ################################################################################
 
 # Prepare monitor-level infiltration estimates for plotting

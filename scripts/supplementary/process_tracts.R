@@ -26,6 +26,10 @@ for (i in 1:length(tract_files)) {
 
 combo = do.call("rbind", c(args = tract_list, makeUniqueIDs = TRUE))
 
-saveRDS(combo, file.path(path_boundaries, "all_national_tracts.rds"))
-if (!dir.exists(file.path(path_boundaries, "all_national_tracts"))) dir.create(file.path(path_boundaries, "all_national_tracts"))
-writeOGR(combo, dsn = file.path(path_boundaries, "all_national_tracts"), layer = "all_national_tracts", driver = "ESRI Shapefile")
+if (!file.exists(file.path(path_boundaries, "all_national_tracts.rds"))) {
+    saveRDS(combo, file.path(path_boundaries, "all_national_tracts.rds"))
+}
+if (!dir.exists(file.path(path_boundaries, "all_national_tracts"))) {
+    dir.create(file.path(path_boundaries, "all_national_tracts"))
+    writeOGR(combo, dsn = file.path(path_boundaries, "all_national_tracts"), layer = "all_national_tracts", driver = "ESRI Shapefile")
+}

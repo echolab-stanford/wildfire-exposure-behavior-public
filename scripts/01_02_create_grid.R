@@ -22,11 +22,16 @@ grid = spTransform(grid, proj)
 keep = over(grid, c)
 keep = which(!is.na(keep))
 data_ll = grid[keep, ]
-saveRDS(data_ll, file.path(path_boundaries, "grid.RDS"))
+if (!file.exists(file.path(path_boundaries, "grid.RDS"))) {
+  saveRDS(data_ll, file.path(path_boundaries, "grid.RDS"))
+}
 
 # Make into an actual grid rather than points
 data_ll = spTransform(data_ll, proj)
 data_ll = gBuffer(data_ll, byid=T, width=res/2, capStyle="SQUARE")
 data_ll = st_as_sf(data_ll)
-st_write(obj=data_ll, dsn=paste0(path_boundaries, "10km_grid"),
-         layer="10km_grid", driver="ESRI Shapefile", append=F)
+if (!dir.exists(file.path(path_boundaries, "10km_grid"))) {
+  dir.create(file.path(path_boundaries, "10km_grid"))
+  st_write(obj=data_ll, dsn=file.path(path_boundaries, "10km_grid"),
+           layer="10km_grid", driver="ESRI Shapefile", append=F)
+}

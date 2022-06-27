@@ -16,8 +16,9 @@ c$INTPTLAT = as.numeric(as.character(c$INTPTLAT))
 c$INTPTLON = as.numeric(as.character(c$INTPTLON))
 
 # Save
-counties_file = file.path(path_boundaries, "all_national_counties.rds")
-if (!file.exists(counties_file)) saveRDS(c, counties_file)
+if (!file.exists(file.path(path_boundaries, "all_national_counties.rds"))) {
+  saveRDS(c, file.path(path_boundaries, "all_national_counties.rds"))
+}
 
 #-------------------------------------------------------------------------------
 #### CONUS counties ####
@@ -39,5 +40,6 @@ counties_simp = gSimplify(counties, 0.05, topologyPreserve=T)
 counties_simp = SpatialPolygonsDataFrame(counties_simp, counties@data)
 
 # Save
-counties_file = file.path(path_boundaries, "counties.RDS")
-if (!file.exists(counties_file)) saveRDS(counties_simp, counties_file)
+if (!file.exists(file.path(path_boundaries, "counties.RDS"))) {
+  saveRDS(counties_simp, file.path(path_boundaries, "counties.RDS"))
+}

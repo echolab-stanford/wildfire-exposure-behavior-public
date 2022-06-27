@@ -1,3 +1,7 @@
+if (!dir.exists(file.path(path_infiltration, "heterogeneity", "models"))) {
+  dir.create(file.path(path_infiltration, "heterogeneity", "models"))
+}
+
 #-------------------------------------------------------------------------------
 # Regress Infiltration on House and Community Characteristics w/ Random Forest
 # Written by: Jessica Li
@@ -169,11 +173,15 @@ sink(type = "message")
 close(log_file)
 
 # Save models
-saveRDS(mdls, file.path(path_infiltration, "heterogeneity", paste0("models/models_", pm_method, "_RF.rds")))
+saveRDS(mdls, file.path(path_infiltration, "heterogeneity", "models", paste0("models_", pm_method, "_RF.rds")))
 
 # Add to list of models
-file_models <- file.path(path_infiltration, "heterogeneity", "models/models.rds")
-if (file.exists(file_models)) mdls <- readRDS(file_models) %>% setdiff(mdls) %>% c(mdls)
+if (file.exists(file.path(path_infiltration, "heterogeneity", "models", "models.rds"))) {
+  mdls <- readRDS(file.path(path_infiltration, "heterogeneity", "models", 
+                            "models.rds")) %>% 
+    setdiff(mdls) %>% 
+    c(mdls)
+}
 
 # Save all models
 saveRDS(mdls, file_models)

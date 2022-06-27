@@ -17,7 +17,9 @@ o = over(epa_ll, counties)
 counties_inc = unique(o$GEOID)
 counties_inc = counties[counties$GEOID %in% counties_inc,]
 
-saveRDS(counties_inc, file.path(path_boundaries, "counties_included.rds"))
+if (!file.exists(file.path(path_boundaries, "counties_included.rds"))) {
+  saveRDS(counties_inc, file.path(path_boundaries, "counties_included.rds"))
+}
 
 # Calculate width
 county_area_sqkm = area(counties_inc)/1000/1000

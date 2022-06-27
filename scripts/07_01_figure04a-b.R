@@ -119,7 +119,9 @@ pandat$pm25_out4 <- pandat$pm25_out^4
 # x_pm <- 0:17
 # bootsamp_pm <- matrix(nrow = 4, ncol = 100)
 
-if (!file.exists(file.path(path_infiltration, "bootstraps", "infiltration_smoke_pm_bootstrap_run_results_smokeday.rds"))) {
+if (!file.exists(file.path(
+  path_infiltration, "bootstraps", 
+  "infiltration_smoke_pm_bootstrap_run_results_smokeday.rds"))) {
   var <- sort(unique(pandat$ID_in))
   
   bootsamp_pm <- list()
@@ -136,7 +138,9 @@ if (!file.exists(file.path(path_infiltration, "bootstraps", "infiltration_smoke_
     print(i)
     
   }
-  write_rds(bootsamp_pm, file = file.path(path_infiltration, "bootstraps", "infiltration_smoke_pm_bootstrap_run_results_smokeday.rds"))
+  write_rds(bootsamp_pm, file = file.path(
+    path_infiltration, "bootstraps", 
+    "infiltration_smoke_pm_bootstrap_run_results_smokeday.rds"))
 }
 
 ## [3] Income
@@ -144,7 +148,9 @@ if (!file.exists(file.path(path_infiltration, "bootstraps", "infiltration_smoke_
 # xi <- seq(22000,250000, 1000)
 
 pandat$income_smoke <- pandat$income*pandat$heavy
-if (!file.exists(file.path(path_infiltration, "bootstraps", "infiltration_smoke_income_bootstrap_run_results_linear_smokeday.rds"))) {
+if (!file.exists(file.path(
+  path_infiltration, "bootstraps", 
+  "infiltration_smoke_income_bootstrap_run_results_linear_smokeday.rds"))) {
   bootsamp_inc <- list()
   
   var <- sort(unique(pandat$ID_in))
@@ -160,13 +166,17 @@ if (!file.exists(file.path(path_infiltration, "bootstraps", "infiltration_smoke_
     print(i)
     
   }
-  write_rds(bootsamp_inc, file = file.path(path_infiltration, "bootstraps", "infiltration_smoke_income_bootstrap_run_results_linear_smokeday.rds"))
+  write_rds(bootsamp_inc, file = file.path(
+    path_infiltration, "bootstraps", 
+    "infiltration_smoke_income_bootstrap_run_results_linear_smokeday.rds"))
 }
 
 #-------------------------------------------------------------------------------
 #### Load data for figure ####
 ## Panel a - PM by smoke
-bs_pm_list <- read_rds(file.path(path_infiltration, "bootstraps", "infiltration_smoke_pm_bootstrap_run_results_smokeday.rds"))
+bs_pm_list <- read_rds(file.path(
+  path_infiltration, "bootstraps", 
+  "infiltration_smoke_pm_bootstrap_run_results_smokeday.rds"))
 
 xp1 <- (round(quantile(pandat$pm25_out[pandat$heavy==1], .01 , na.rm = T))):(round(quantile(pandat$pm25_out[pandat$heavy==1], .975 , na.rm = T)))
 xp0 <- (round(quantile(pandat$pm25_out[pandat$heavy==0], .01 , na.rm = T))):(round(quantile(pandat$pm25_out[pandat$heavy==0], .99 , na.rm = T)))
@@ -204,7 +214,9 @@ histbin <- statar::xtile(pandat$pm25_out[pandat$heavy==0], cutpoints = seq(0,74,
 hist_ht_p0 <- data.frame(xleft = seq(0,76,2)-1,xright = seq(0,76,2)+1, ht = as.numeric(table(histbin)))
 
 ## Panel b - income by smoke (income doesn't really differ by smoke)
-bs_inc_list <- read_rds(file.path(path_infiltration, "bootstraps", "infiltration_smoke_income_bootstrap_run_results_linear_smokeday.rds"))
+bs_inc_list <- read_rds(file.path(
+  path_infiltration, "bootstraps", 
+  "infiltration_smoke_income_bootstrap_run_results_linear_smokeday.rds"))
 xi1 <- seq(37000,235000, 2000)
 xi0 <- seq(37000,235000, 2000)
 
