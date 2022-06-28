@@ -1,18 +1,18 @@
 #-------------------------------------------------------------------------------
 # Provide your US Census API Key
-key <- readRDS("../../Registrations/US Census/us_census_data_api_key.rds")
+key <- "INSERT YOUR US CENSUS BUREAU API KEY HERE"
 census_api_key(key)
 
 # Set the number of cores to use in parallel computing
-num_cores = 6
+num_cores = 1 # default sequential
 
 # Choose whether to run tuning
 run_tuning = F
 
 #-------------------------------------------------------------------------------
 # Set to location of Dropbox and GitHub folders
-path_dropbox = "~/BurkeLab Dropbox/Projects/wildfire-exposure-behavior/4 TEST/"
-path_github = "~/Documents/GitHub/wildfire-exposure-behavior-public/"
+path_dropbox = "INSERT PATH TO DROPBOX FOLDER HERE"
+path_github = "INSERT PATH TO GITHUB REPO HERE"
 
 # File paths based on root folders above
 path_atus = file.path(path_dropbox, "ATUS")
