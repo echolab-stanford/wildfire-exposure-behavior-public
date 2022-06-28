@@ -1,19 +1,28 @@
-# source("scripts/setup/00_install_packages.R")
 source("scripts/setup/00_load_packages.R")
 source("scripts/setup/00_load_functions.R")
 source("scripts/setup/00_load_settings.R")
-
-
-
-# source("scripts/01_03_clean_national_counties.R")
-# source("scripts/01_04_create_grid.R")
-# source("scripts/01_05_get_smoke_days_over_grid.R")
-# source("scripts/01_07_get_epa_station_locations.R")
-# source("scripts/01_08_clean_national_states.R")
-
-# for (p in pm_paths) {
-#   # get posterior infiltration
-#   for (q in post_paths) {
-#     # prepare dat_pa_inf
-#   }
-# }
+source("scripts/main/01_build_grid.R")
+source("scripts/main/02_process_smoke_days.R")
+source("scripts/main/03_process_epa_station_locations.R")
+source("scripts/main/04_process_distance_to_fire.R")
+source("scripts/main/05_process_infiltration_heterogeneity.R")
+source("scripts/main/06_build_smokePM_panel.R")
+source("scripts/main/07_fit_behavioral_regressions.R")
+source("scripts/main/08_fit_infiltration_heterogeneity_models.R")
+source("scripts/main/09_figure01.R")
+source("scripts/main/10_figure02.R")
+source("scripts/main/11_figure03.R")
+source("scripts/main/12_figure04.R")
+source("scripts/main/13_figureED01.R")
+source("scripts/main/14_figureED02.R")
+source("scripts/main/15_figureED03.R")
+source("scripts/main/16_figureED04.R")
+source("scripts/main/17_figureED05.R")
+source("scripts/main/18_figureED06.R")
+source("scripts/main/19_figureED07.R")
+source("scripts/main/20_figureED08.R")
+source("scripts/main/21_figureED09.R")
+source("scripts/main/22_figureED10.R")
+source("scripts/main/23_tableS01-S09.R")
+source("scripts/main/24_tableS10.R")
+source("scripts/main/25_tableS12.R")

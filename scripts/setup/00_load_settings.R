@@ -8,7 +8,7 @@ num_cores = 6
 
 #-------------------------------------------------------------------------------
 # Set to location of Dropbox and GitHub folders
-path_dropbox = "~/BurkeLab Dropbox/Projects/wildfire-exposure-behavior/3 ORGANIZED/"
+path_dropbox = "~/BurkeLab Dropbox/Projects/wildfire-exposure-behavior/4 TEST/"
 path_github = "~/Documents/GitHub/wildfire-exposure-behavior-public/"
 
 # File paths based on root folders above
@@ -72,3 +72,14 @@ pm_path <- paste0(pm_method, "/")
 if (!dir.exists(file.path(path_infiltration, "heterogeneity", pm_path, post_path))) {
   dir.create(file.path(path_infiltration, "heterogeneity", pm_path, post_path), recursive = T)
 }
+
+pa_files = c(
+  file.path(path_infiltration, "estimates", "purpleair_infiltration_estimates_by_model.rds"),
+  file.path(path_infiltration, "estimates", "PA_monitor_level_infiltration_estimates_sfr_clean.rds"),
+  file.path(path_infiltration, "estimates", "PA_monitor_level_infiltration_estimates_sfr_clean_pc.rds")
+)
+post_files = paste0(file_path_sans_ext(pa_files), "_posterior.rds") %>% 
+  setNames(pa_files)
+pa_files = pa_files %>% setNames(post_files)
+pm_paths = c("PA", "EPA", "PC")
+post_paths = c("not_posterior", "posterior")
