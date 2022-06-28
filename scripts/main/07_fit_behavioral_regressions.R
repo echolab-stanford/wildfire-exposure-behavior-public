@@ -337,6 +337,7 @@ mod <- feols(sent ~ smokePMscale  | fipsmonth + date, data=dt, weights = dt$popu
 ct <- coeftable(mod)
 df <- degrees_freedom(mod,type="t")  # d.o.f in t-test, which is smaller than residual dof due to clustering of s.e. in fixest call
 ci <- confint(mod)
+print("Figure 2 statistics for sentiment:")
 print(paste("t-test(df=",df,")=",round(ct[3],3),", p=",ct[4],", eff. size =",
             round(ct[1],3),", CI:",as.numeric(round(confint(mod)[1],3)),",",
             as.numeric(round(confint(mod)[2],3)),")",sep=""))
@@ -349,6 +350,7 @@ mod <- feols(completely_home_device_perc ~ smokePM | fipsmonth + date, data=safe
 ct <- coeftable(mod)
 df <- degrees_freedom(mod,type="t")  # d.o.f in t-test, which is smaller than residual dof due to clustering of s.e. in fixest call
 ci <- confint(mod)
+print("Figure 2 statistics for mobility:")
 print(paste("t-test(df=",df,")=",round(ct[3],3),", p=",ct[4],", eff. size =",
             round(ct[1],3),", CI:",as.numeric(round(confint(mod)[1],3)),",",
             as.numeric(round(confint(mod)[2],3)),")",sep=""))
@@ -370,6 +372,7 @@ mod <- feols(hits ~ smokePM | dmamonth + date, weights=df$population, data=df)
 ct <- coeftable(mod)
 df <- degrees_freedom(mod,type="t")  # d.o.f in t-test, which is smaller than residual dof due to clustering of s.e. in fixest call
 ci <- confint(mod)
+print("Figure 2 statistics for salience:")
 print(paste("t-test(df=",df,")=",round(ct[3],3),", p=",ct[4],", eff. size =",
             round(ct[1],3),", CI:",as.numeric(round(confint(mod)[1],3)),",",
             as.numeric(round(confint(mod)[2],3)),")",sep=""))
@@ -380,6 +383,7 @@ mod <- feols(hits ~ smokePM | dmamonth + date, weights=df$population, data=df)
 ct <- coeftable(mod)
 df <- degrees_freedom(mod,type="t")  # d.o.f in t-test, which is smaller than residual dof due to clustering of s.e. in fixest call
 ci <- confint(mod)
+print("Figure 2 statistics for health protection:")
 print(paste("t-test(df=",df,")=",round(ct[3],3),", p=",ct[4],", eff. size =",
             round(ct[1],3),", CI:",as.numeric(round(confint(mod)[1],3)),",",
             as.numeric(round(confint(mod)[2],3)),")",sep=""))
@@ -404,6 +408,7 @@ df <- filter(goog,keyword=="air quality")
 mod <-feols(hits ~ smokevar*median_income | dmamonth + date, weights=df$population, data=df)
 ct <- coeftable(mod)
 ci <- confint(mod)
+print("Figure 3 statistics for salience:")
 print(paste("p=",ct[2,4],", effect size on linear interaction =",
             round(ct[2,1],3),", CI:",as.numeric(round(confint(mod)[2,1],3)),",",
             as.numeric(round(confint(mod)[2,2],3)),sep=""))
@@ -413,6 +418,7 @@ df <- filter(goog,keyword=="air filter")
 mod <-feols(hits ~ smokevar*median_income | dmamonth + date, weights=df$population, data=df)
 ct <- coeftable(mod)
 ci <- confint(mod)
+print("Figure 3 statistics for health protection:")
 print(paste("p=",ct[2,4],", effect size on linear interaction =",
             round(ct[2,1],3),", CI:",as.numeric(round(confint(mod)[2,1],3)),",",
             as.numeric(round(confint(mod)[2,2],3)),sep=""))
@@ -421,6 +427,7 @@ print(paste("p=",ct[2,4],", effect size on linear interaction =",
 mod <- feols(sent ~ smokevar*median_income  | fipsmonth + date, data=dt, weights = dt$population,lean = T)
 ct <- coeftable(mod)
 ci <- confint(mod)
+print("Figure 3 statistics for sentiment:")
 print(paste("p=",ct[2,4],", effect size on linear interaction =",
             round(ct[2,1],3),", CI:",as.numeric(round(confint(mod)[2,1],3)),",",
             as.numeric(round(confint(mod)[2,2],3)),sep=""))
@@ -429,6 +436,7 @@ print(paste("p=",ct[2,4],", effect size on linear interaction =",
 mod  <- feols(completely_home_device_perc ~ smokevar*median_income | fipsmonth + date, data=safe, weights=safe$population,lean = T)
 ct <- coeftable(mod)
 ci <- confint(mod)
+print("Figure 3 statistics for mobility:")
 print(paste("p=",ct[2,4],", effect size on linear interaction =",
             round(ct[2,1],3),", CI:",as.numeric(round(confint(mod)[2,1],3)),",",
             as.numeric(round(confint(mod)[2,2],3)),sep=""))

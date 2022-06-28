@@ -6,7 +6,7 @@ if (!dir.exists(file.path(path_epa, "epa_station_locations"))) {
   dir.create(file.path(path_epa, "epa_station_locations"))
 }
 
-if (!file.exists(file.path(path_epa, "epa_station_locations.shp"))) {
+if (!file.exists(file.path(path_epa, "epa_station_locations", "epa_station_locations.shp"))) {
   # Read in EPA PM2.5 data
   epa = readRDS(file.path(path_epa, "epa_station_level_pm25_data.rds"))
   
@@ -19,7 +19,7 @@ if (!file.exists(file.path(path_epa, "epa_station_locations.shp"))) {
   
   # Save
   writeOGR(epa_ll, 
-           path_epa_ll, 
+           file.path(path_epa, "epa_station_locations"), 
            "epa_station_locations",
            driver="ESRI Shapefile")
 }

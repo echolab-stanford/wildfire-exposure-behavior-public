@@ -155,7 +155,8 @@ if (!all(file.exists(file.path(path_fire, "distance_to_fire", "grid_dist_fire",
     }
     
     out = rbindlist(out)
-    saveRDS(out, file.path(path_fire, "distance_to_fire", "grid_dist_fire", paste0("dist_to_fire_", year, ".RDS")))
+    saveRDS(out, file.path(path_fire, "distance_to_fire", "grid_dist_fire", 
+                           paste0("dist_to_fire_", year, ".RDS")))
     
     print(year)
     
@@ -233,14 +234,14 @@ if (!all(file.exists(file.path(
       group_by(county, date) %>%
       summarise(km_dist = wtd.mean(km_dist, weights=pop))
     
-    saveRDS(dists, file.path(path_fire, "distance_to_fire/county_pop_weighted", 
+    saveRDS(dists, file.path(path_fire, "distance_to_fire", "county_pop_weighted", 
                              paste0("county_pop_weighted_dist_to_fire_", year, ".RDS")))
   }
   
   # Combine
   df <- c()
   for (i in 2006:2020) {
-    dt <- read_rds(file.path(path_fire, "distance_to_fire/county_pop_weighted", 
+    dt <- read_rds(file.path(path_fire, "distance_to_fire", "county_pop_weighted", 
                              paste0('county_pop_weighted_dist_to_fire_',i,".RDS")))
     df <- rbind(df,dt)
     print(i)

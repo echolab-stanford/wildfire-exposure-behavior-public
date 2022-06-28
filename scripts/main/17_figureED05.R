@@ -3,22 +3,26 @@
 # We Have PurpleAir Monitors
 # Written by: Marshall Burke, Jessica Li
 # ------------------------------------------------------------------------------
-# Get income at tract level
-vars_acs_all <- load_variables(year = 2019, dataset = "acs5", cache = TRUE)
-conus <- setdiff(states()$STUSPS, c("AK", "AS", "GU", "HI", "MP", "PR", "VI"))
-# income_vbl_name <- "B19001_001" # Total household income
-# income_vbl_name <- "B19301_001" # Per-capita income
-income_vbl_name <- "B19013_001" # Median household income
-dat_acs <- get_acs(geography = "tract",
-                   variables = income_vbl_name,
-                   output = "wide",
-                   year = 2019,
-                   survey = "acs5",
-                   state = conus,
-                   geometry = TRUE) %>% 
-  select(GEOID, matches("^B.*E$"))
-names(dat_acs)[2] <- "median_income"
-saveRDS(dat_acs, file.path(path_purpleair, "ACS_data.rds"))
+if (!file.exists(file.path(path_purpleair, "ACS_data.rds"))) {
+  # Get income at tract level
+  vars_acs_all <- load_variables(year = 2019, dataset = "acs5", cache = TRUE)
+  conus <- setdiff(states()$STUSPS, c("AK", "AS", "GU", "HI", "MP", "PR", "VI"))
+  # income_vbl_name <- "B19001_001" # Total household income
+  # income_vbl_name <- "B19301_001" # Per-capita income
+  income_vbl_name <- "B19013_001" # Median household income
+  dat_acs <- get_acs(geography = "tract",
+                     variables = income_vbl_name,
+                     output = "wide",
+                     year = 2019,
+                     survey = "acs5",
+                     state = conus,
+                     geometry = TRUE) %>% 
+    select(GEOID, matches("^B.*E$"))
+  names(dat_acs)[2] <- "median_income"
+  saveRDS(dat_acs, file.path(path_purpleair, "ACS_data.rds"))
+} else {
+  dat_acs = readRDS(file.path(path_purpleair, "ACS_data.rds"))
+}
 
 # Get PA locations
 pa_ll <- readRDS(file.path(path_purpleair, "PA_locations_all.rds")) %>% 
@@ -26,8 +30,12 @@ pa_ll <- readRDS(file.path(path_purpleair, "PA_locations_all.rds")) %>%
   st_transform(st_crs(dat_acs))
 
 # Merge ACS and PA
-dat_merged <- pa_ll %>% st_join(dat_acs, left = FALSE)
-saveRDS(dat_merged, file.path(path_purpleair, "ACS_PA_data.rds"))
+if (!file.exists(file.path(path_purpleair, "ACS_PA_data.rds"))) {
+  dat_merged <- pa_ll %>% st_join(dat_acs, left = FALSE)
+  saveRDS(dat_merged, file.path(path_purpleair, "ACS_PA_data.rds"))
+} else {
+  dat_merged = readRDS(file.path(path_purpleair, "ACS_PA_data.rds"))
+}
 
 # Lose 7 monitors that are on Alactraz Island, coastline, or country border
 # leaflet(pa_ll) %>%

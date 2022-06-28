@@ -6,6 +6,9 @@ census_api_key(key)
 # Set the number of cores to use in parallel computing
 num_cores = 6
 
+# Choose whether to run tuning
+run_tuning = F
+
 #-------------------------------------------------------------------------------
 # Set to location of Dropbox and GitHub folders
 path_dropbox = "~/BurkeLab Dropbox/Projects/wildfire-exposure-behavior/4 TEST/"
