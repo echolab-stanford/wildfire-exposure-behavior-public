@@ -1,5 +1,5 @@
 # wildfire-exposure-behavior-public
-Repo supporting Burke et al 2022 "Exposures and behavioral responses to wildfire smoke".
+Repo supporting [Burke et al 2022 "Exposures and behavioral responses to wildfire smoke"](https://www.nature.com/articles/s41562-022-01396-6).
 
 Results from the paper are in the `figures/clean` and `tables/clean` folders. Code to replicate results are in the `scripts` folder. Data are in [Dropbox](https://www.dropbox.com/sh/1q6ed2wu23wxv3m/AAC1iNXoisapYkyckFW8opKSa?dl=0).
 
