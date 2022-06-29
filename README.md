@@ -30,7 +30,7 @@ The following data are provided in raw or processed form:
 * US Census Bureau American Community Survey (ACS) socioeconomic and demographic data are retrieved using the R package [tidycensus](https://cran.r-project.org/web/packages/tidycensus/) and require a US Census Bureau API Key (which can be requested [here](https://api.census.gov/data/key_signup.html)). Some but not all data are provided in processed form.
 
 The following data are not included in Dropbox due to sharing restrictions:
-* Socioeconomic Data and Applications Center (SEDAC) 2.5-minute population data for 2010 and 2015 require [registration](https://sedac.ciesin.columbia.edu/user-registration) and are not provided but can be downloaded [here](https://sedac.ciesin.columbia.edu/data/set/gpw-v4-population-density-rev11/data-download).
+* Socioeconomic Data and Applications Center (SEDAC) Gridded Population of the World (GPW) 2.5-minute population data for 2010 and 2015 require [registration](https://sedac.ciesin.columbia.edu/user-registration) and are not provided but can be downloaded [here](https://sedac.ciesin.columbia.edu/data/set/gpw-v4-population-density-rev11/data-download).
 * Integrated Public Use Microdata Series (IPUMS) American Time Use Survey (ATUS) data are obtained as a microdata extract which cannot be redistributed and are not provided.
 * SafeGraph mobility data are proprietary and are not provided.
 * CoreLogic residential real estate data are proprietary and are not provided.
