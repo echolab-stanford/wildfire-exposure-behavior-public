@@ -73,3 +73,43 @@ g = ggplot() + # the data
   coord_map("bonne", mean(data$lat)) + labs(fill="")
 ggsave(file.path(path_figures, "figure01a.pdf"),
        plot = g, width=10, height=5, units="in")
+
+#-------------------------------------------------------------------------------
+# Figure 1 Panels b and c
+# Written by: Marshall Burke
+#-------------------------------------------------------------------------------
+# Load data
+df <- read_rds(file.path(path_smokePM, 'station_smoke_pm.rds'))
+df <- df %>% mutate(smokepm = smokepm*smoke_day)
+dfs <- df %>% mutate(year=year(date)) %>% group_by(epa_id,year) %>% summarise(smokepm=mean(smokepm,na.rm=T),region=first(region),division=first(division))
+
+# Plot percentiles over time in annual distribution
+yrs <- 2006:2020
+colz <- apply(sapply("purple", col2rgb)/255, 2, function(x) rgb(x[1], x[2], x[3], alpha=c(0.1,0.3,0.5,0.7)))
+pdf(file.path(path_figures, 'figure01b-c.pdf'),width=4,height=6)
+par(mfrow=c(2,1),mar=c(4,4,1,1))
+qts = c(0.01,0.05,0.1,0.25,0.5,0.75,0.9,0.95,0.99)
+pctl <- dfs %>% group_by(year) %>% filter(year<2021) %>% summarise(val = quantile(smokepm,probs=qts,na.rm=T))
+pctl$quant = rep(qts,length(yrs))
+plot(1,type = "n",ylim=c(0,14),xlim=c(1,length(yrs)+1),axes=F,xlab="year",ylab="annual smoke PM (ug/m3)")
+ll=length(yrs)
+for (i in 1:4) {
+  polygon(c(1:ll,ll:1),c(pctl$val[pctl$quant==qts[i]],rev(pctl$val[pctl$quant==qts[length(qts)-i+1]])),col=colz[i],border = NA)
+}
+lines(1:ll,pctl$val[pctl$quant==0.5])
+axis(2,las=1)
+yz = c(2006,2010,2014,2018,2020)
+axis(1,at=which(yrs%in%yz),yz,cex.axis=0.8)
+
+# Same thing but for daily distribution
+pctl <- df %>% group_by(year) %>% filter(year<2021 & smokepm>0) %>% summarise(val = quantile(smokepm,probs=qts,na.rm=T))
+pctl$quant = rep(qts,length(yrs))
+plot(1,type = "n",ylim=c(0,200),xlim=c(1,length(yrs)+1),axes=F,xlab="year",ylab="daily smoke PM (ug/m3)")
+ll=length(yrs)
+for (i in 1:4) {
+  polygon(c(1:ll,ll:1),c(pctl$val[pctl$quant==qts[i]],rev(pctl$val[pctl$quant==qts[length(qts)-i+1]])),col=colz[i],border = NA)
+}
+lines(1:ll,pctl$val[pctl$quant==0.5])
+axis(2,las=1)
+axis(1,at=which(yrs%in%yz),yz,cex.axis=0.8)
+dev.off()

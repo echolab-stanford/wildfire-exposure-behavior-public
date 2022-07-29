@@ -189,7 +189,8 @@ wildfire-exposure-behavior-public
 │   └── smoke_plumes_spdf.RDS
 └── smokePM
     ├── panel_dma_pm_smoke_day_weekly.RDS
-    └── smokePM_forMarshall.rds
+    ├── smokePM_forMarshall.rds
+    └── station_smoke_pm.rds
 </pre>
 
 ## Computational environment
