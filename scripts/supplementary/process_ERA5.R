@@ -1,6 +1,5 @@
-# use_condaenv("r-reticulate")
-if (!py_module_available("cdsapi")) py_install("cdsapi", pip = TRUE)
-if (!py_module_available("tenacity")) py_install("tenacity", pip = TRUE)
+if (!py_module_available("cdsapi")) py_install("cdsapi", forge = T)
+if (!py_module_available("tenacity")) py_install("tenacity", forge = T)
 source_python(file.path(path_supplementary, "define_CDS_API_request.py"))
 
 #-------------------------------------------------------------------------------

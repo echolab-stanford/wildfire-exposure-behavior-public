@@ -1,3 +1,10 @@
+# Uncomment the following lines if you would like to run ERA5 retrieval
+# env_name = "era5"
+# if (!(env_name %in% reticulate::conda_list()$name)) {
+#   reticulate::conda_create(env_name)
+# }
+# reticulate::use_condaenv(env_name, required = T)
+
 source("scripts/setup/00_load_packages.R")
 source("scripts/setup/00_load_functions.R")
 source("scripts/setup/00_load_settings.R")
