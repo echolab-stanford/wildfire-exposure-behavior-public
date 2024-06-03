@@ -5,7 +5,7 @@ Results from the paper are in the `figures/clean` and `tables/clean` folders. Co
 
 ## How to replicate results
 1. Download this repository.
-2. Download data from [Dropbox](https://www.dropbox.com/sh/1q6ed2wu23wxv3m/AAC1iNXoisapYkyckFW8opKSa?dl=0). Ensure that the data directory is structured according to the minimum necessary starting data directory structure described below.
+2. Download data from [Dropbox](https://www.dropbox.com/sh/av69h61bsyutf9k/AADkUm9H13bGPxWugEulGsjda?dl=0). Ensure that the data directory is structured according to the minimum necessary starting data directory structure described below.
 3. Change settings in `scripts/setup/00_load_settings.R`:
     1. Set `key` to the value of your US Census Bureau API Key (which can be requested [here](https://api.census.gov/data/key_signup.html)).
     2. Set `num_cores` to the number of cores to use in parallel computing.
